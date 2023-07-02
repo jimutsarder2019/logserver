@@ -1,0 +1,22 @@
+.help-block{
+	color:#FF0000;
+}
+
+.logout-btn{
+	border: none;
+    background: none;
+    display: inline !important;
+    width: 130px;
+    padding: -2px;
+    margin-left: -6px;
+	
+}
+
+.logo-wrapper{
+	font-size: 28px;
+}
+
+.logout-custom{
+	background: transparent !important;
+    border: 0px;
+}
