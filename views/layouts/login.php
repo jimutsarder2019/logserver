@@ -73,6 +73,10 @@ $favicon_logo = ApplicationHelper::getCompanyName('favicon');
 		background-color: #FFFFFF;
 	}
 	</style>
+	
+	<script>
+	    let company_name = '<?=$company_name?>';
+	</script>
 </head>
 
 <body>

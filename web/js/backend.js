@@ -16,7 +16,7 @@ let reportHeaders = [
     ];
 
 
-//document.addEventListener('contextmenu', event => event.preventDefault());
+document.addEventListener('contextmenu', event => event.preventDefault());
 
 $(document).ready(function(){
 

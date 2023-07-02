@@ -1,6 +1,6 @@
 <?php
 
-/*return [
+return [
     'class' => 'yii\db\Connection',
     'dsn' => 'mysql:host=localhost;dbname=logdb',
     'username' => 'loguser',
@@ -11,10 +11,10 @@
     //'enableSchemaCache' => true,
     //'schemaCacheDuration' => 60,
     //'schemaCache' => 'cache',
-];*/
+];
 
 
-return [
+/*return [
     'class' => 'yii\db\Connection',
     'dsn' => 'mysql:host=localhost;dbname=syslog',
     'username' => 'root',
@@ -25,4 +25,4 @@ return [
     //'enableSchemaCache' => true,
     //'schemaCacheDuration' => 60,
     //'schemaCache' => 'cache',
-];
+];*/
