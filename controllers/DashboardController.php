@@ -83,7 +83,7 @@ class DashboardController extends CustomController
 		$active_users = Yii::$app->db->createCommand( 'SELECT COUNT(*) FROM user WHERE status = 1 and role > 1' )->queryScalar();
 		
 		
-		/*
+		
 		// Geeting free CPU info
 		$cpuUsage = shell_exec("top -bn 2 -d 0.01 | grep '^%Cpu' | tail -n 1");
 		preg_match_all('/[0-9.]+/', $cpuUsage, $cpuUsageArray);
@@ -116,14 +116,14 @@ class DashboardController extends CustomController
 		$uptime = shell_exec('uptime');
 		preg_match('/up\s+(.*?),\s+(.*?)\s+/', $uptime, $matches);
 		$days = str_replace(',', '', $matches[1]);
-		$days = intval($days);*/
+		$days = intval($days);
 		
 		
-		$cpuUtilization = 0;
+		/*$cpuUtilization = 0;
 		$ramUtilization = 0;
 		$rootUtilization = 0;
 		$diskFree = 0;
-		$days = 0;
+		$days = 0;*/
 		
 		
 		

@@ -47,7 +47,7 @@ class LoginHistory extends \yii\db\ActiveRecord
             'id' => 'ID',
             'user_id' => 'User ID',
             'session_id' => 'Session ID',
-            'ip' => 'Ip',
+            'ip' => 'Ip Address',
             'username' => 'Username',
             'checkin' => 'Checkin',
         ];

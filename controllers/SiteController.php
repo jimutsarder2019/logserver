@@ -117,7 +117,12 @@ class SiteController extends CustomController
 	public function actionSystem()
     {
 		$this->layout = 'frontend';
-        return $this->render('system');
+		
+		$data = file_get_contents('../web/license.json');
+		
+		$license_data = json_decode($data, 1);
+		
+        return $this->render('system', ['license_data'=>$license_data]);
     }
 
     /**

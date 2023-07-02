@@ -9,6 +9,10 @@ $baseUrl = Url::base();
 	color:#FFFFFF;
     font-size:20px;
 }
+
+.font-white{
+	color: #FFFFFF !important;
+}
 </style>
 <div class="page-body">
 	<!-- Container-fluid starts-->
@@ -30,11 +34,11 @@ $baseUrl = Url::base();
 		<div class="row">
 			<div class="col-xxl-3 col-md-3 xl-25">
 				<div class="card o-hidden widget-cards">
-					<div class="warning-box card-body">
+					<div class="success-box card-body">
 						<div class="media static-top-widget align-items-center">
 							<div class="icons-widgets">
-								<div class="align-self-center text-center">
-									<i data-feather="users" class="font-warning"></i>
+								<div class="align-self-center text-center" style="background-color:#90EE90">
+									<i data-feather="users" class="font-white"></i>
 								</div>
 							</div>
 							<div class="media-body media-doller">
@@ -119,7 +123,7 @@ $baseUrl = Url::base();
 					<div class="secondary-box card-body">
 						<div class="media static-top-widget align-items-center">
 							<div class="icons-widgets">
-								<div class="align-self-center text-center">
+								<div class="align-self-center text-center" style="background-color:#0000FF">
 									<i class="fa fa-inbox"></i>
 								</div>
 							</div>
@@ -137,7 +141,7 @@ $baseUrl = Url::base();
 					<div class="primary-box card-body">
 						<div class="media static-top-widget align-items-center">
 							<div class="icons-widgets">
-								<div class="align-self-center text-center"><i class="fa fa-archive"></i></div>
+								<div class="align-self-center text-center" style="background-color:#FFFF00"><i class="fa fa-archive"></i></div>
 							</div>
 							<div class="media-body media-doller"><span class="m-0">Disk Usage</span>
 								<h3 class="mb-0"><span class="counter"><?=@$disk_use?></span>%</h3>
@@ -151,7 +155,7 @@ $baseUrl = Url::base();
 					<div class="danger-box card-body">
 						<div class="media static-top-widget align-items-center">
 							<div class="icons-widgets">
-								<div class="align-self-center text-center"><i data-feather="message-square"
+								<div class="align-self-center text-center" style="background-color:#A020F0"><i data-feather="message-square"
 										class="font-danger"></i></div>
 							</div>
 							<div class="media-body media-doller"><span class="m-0">Disk Free</span>
