@@ -76,6 +76,7 @@ $favicon_logo = ApplicationHelper::getCompanyName('favicon');
 	
 	<script>
 	    let company_name = '<?=$company_name?>';
+	    let base_url = '<?=$baseUrl?>';
 	</script>
 </head>
 

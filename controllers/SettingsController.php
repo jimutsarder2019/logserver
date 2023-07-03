@@ -100,6 +100,32 @@ class SettingsController extends CustomController
         $model = new Settings();
 		
 		if ($model->load($this->request->post())) {
+			
+			$model->file1 = UploadedFile::getInstance($model, 'file1');
+			$model->file2 = UploadedFile::getInstance($model, 'file2');
+			$model->file3 = UploadedFile::getInstance($model, 'file3');
+			
+			if($model->file1){
+			    $model->file1->saveAs('uploads/login_logo/' . $model->file1->baseName . '.' . $model->file1->extension);
+			    $model->login_logo = 'uploads/login_logo/' . $model->file1->baseName . '.' . $model->file1->extension;
+			}
+			
+			if($model->file2){
+			    $model->file2->saveAs('uploads/user_logo/' . $model->file2->baseName . '.' . $model->file2->extension);
+			    $model->user_logo = 'uploads/user_logo/' . $model->file2->baseName . '.' . $model->file2->extension;
+			}
+			
+		    if($model->file3){
+			    $model->file3->saveAs('uploads/favicon/' . $model->file3->baseName . '.' . $model->file3->extension);
+			    $model->favicon = 'uploads/favicon/' . $model->file3->baseName . '.' . $model->file3->extension;
+			}
+
+			if ($model->save()) {
+			    return $this->redirect(['view', 'id' => $model->id]);
+			}
+			
+			
+			/*
 			$model->login_logo = UploadedFile::getInstance($model, 'login_logo');
 			$model->user_logo = UploadedFile::getInstance($model, 'user_logo');
 			$model->login_logo->saveAs('uploads/login_logo/' . $model->login_logo->baseName . '.' . $model->login_logo->extension);
@@ -109,7 +135,7 @@ class SettingsController extends CustomController
             $model->user_logo = 'uploads/user_logo/' . $model->user_logo->baseName . '.' . $model->user_logo->extension;
 			if ($model->save()) {
 			   return $this->redirect(['view', 'id' => $model->id]);
-			}
+			}*/
 		}
 
         return $this->render('create', [

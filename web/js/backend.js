@@ -60,7 +60,7 @@ $(document).ready(function(){
 			event.preventDefault();
 			var search_value = $(this).val();
 			if(search_value.length > 2){
-		        window.location = 'http://log.ispmanager.com.bd/?r=syslog/index&search='+search_value;
+		        window.location = base_url+'/?r=syslog/index&search='+search_value;
 			}else{
 				alert('Please enter at least 3 characters');
 			}
@@ -70,7 +70,7 @@ $(document).ready(function(){
 	$(".global_search_btn").click(function(){
 		var search_value = $('.global_search').val();
 		if(search_value.length > 2){
-			window.location = 'http://log.ispmanager.com.bd/?r=syslog/index&search='+search_value;
+			window.location = base_url+'/?r=syslog/index&search='+search_value;
 			//window.location = 'http://localhost/logserver/?r=syslog/index&search='+search_value;
 		}else{
 			alert('Please enter at least 3 characters');
@@ -99,7 +99,7 @@ function generateLogData(type=false)
 {
 	$('.data-render').html('<tr><td style="color:#FF0000">Loading......</td></tr>');
 	$.ajax({  
-		url: 'http://log.ispmanager.com.bd/?r=elastic/get',
+		url: base_url+'/?r=elastic/get',
 		type: 'POST',
         dataType: 'JSON',
         data:getPostParams(),		
