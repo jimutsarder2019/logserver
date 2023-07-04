@@ -18,7 +18,11 @@ $isAdmin = ApplicationHelper::isAdmin();
 
 $baseUrl = Url::base();
 ?>
-
+<style>
+.table td a span{
+	color:red !important;
+}
+</style>
 <div class="page-body">
 	<!-- Container-fluid starts-->
 	<div class="container-fluid">
@@ -87,13 +91,13 @@ $baseUrl = Url::base();
 										 }
 									],
 									
-									[
+									/*[
 										'class' => 'yii\grid\ActionColumn',
 										'template' => '{update} {delete}',
 										'buttons' => [
 											'delete' => function($url, $model){
-												return Html::a('<span class="glyphicon glyphicon-trash">d</span>', ['delete', 'id' => $model->id], [
-													'class' => '',
+												return Html::a('<span class="fa fa-remove"></span>', ['delete', 'id' => $model->id], [
+													'class' => 'remove',
 													'data' => [
 														'confirm' => 'Are you absolutely sure ? You will lose all the information about this user with this action.',
 														'method' => 'post',
@@ -101,7 +105,7 @@ $baseUrl = Url::base();
 												]);
 											}
 										]
-									],
+									],*/
 								],
 							]); ?>
 						</div>

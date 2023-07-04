@@ -137,6 +137,7 @@ function generateLogData(type=false)
 					pdfPrint();
 				}
 			}else{
+				alert('No data found!');
                 $('.data-render').html('<tr><td style="color:#FF0000">No data found!</td></tr>');
 			}				
 		}  
@@ -147,12 +148,46 @@ function generateLogData(type=false)
 
 
 function generateReport(data){
+	
+	var date_start = $('.js_date_start').val();
+	var date_end = $('.js_date_end').val();
+	
+	
+	csvTitle = [];
+	csvTitle.push(company_name+' Log Report');
+	csv.push(csvTitle.join(","));
+	
+	csvTitle = [];
+	csvTitle.push('License Number:');
+	csv.push(csvTitle.join(","));
+	
+	csvTitle = [];
+	csvTitle.push('Address:');
+	csv.push(csvTitle.join(","));
+	
+	csvTitle = [];
+	csvTitle.push('Phone Number:');
+	csv.push(csvTitle.join(","));
+	
+	csvTitle = [];
+	
+	if(date_start && date_end){
+	    csvTitle.push('Log Report: '+date_start+' to '+date_end);
+	}else{
+		csvTitle.push('Log Report:');
+	}
+	csv.push(csvTitle.join(","));
+	
 	if(csvHeader.length == 0){
 		reportHeaders.forEach((header) => {
 			csvHeader.push(header.name);
 		});
 		csv.push(csvHeader.join(","));
 	}
+	
+    csvTitle = [];
+	csvTitle.push(' ');
+	csv.push(csvTitle.join(","));
 	
 	
 	$.each( data, function( key, value ) {
@@ -201,6 +236,42 @@ function excelReport(data) {
 	final_data = [];
 	excelRow = [];
 	excelHeader = [];
+	
+	var date_start = $('.js_date_start').val();
+	var date_end = $('.js_date_end').val();
+	
+	
+	csvTitle = [];
+	csvTitle.push(company_name+' Log Report');
+	final_data.push(csvTitle);
+	
+	csvTitle = [];
+	csvTitle.push('License Number:');
+	final_data.push(csvTitle);
+	
+	csvTitle = [];
+	csvTitle.push('Address:');
+	final_data.push(csvTitle);
+	
+	csvTitle = [];
+	csvTitle.push('Phone Number:');
+	final_data.push(csvTitle);
+	
+	csvTitle = [];
+	
+	if(date_start && date_end){
+	    csvTitle.push('Log Report: '+date_start+' to '+date_end);
+	}else{
+		csvTitle.push('Log Report:');
+	}
+	final_data.push(csvTitle);
+	
+	csvTitle = [];
+	csvTitle.push(' ');
+	final_data.push(csvTitle);
+	
+	
+	
 	
 	if(excelHeader.length == 0){
 		reportHeaders.forEach((header) => {

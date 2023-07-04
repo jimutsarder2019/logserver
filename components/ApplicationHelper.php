@@ -59,7 +59,7 @@ class ApplicationHelper
 	
 	public static function getCompanyName($field='company_name')
     {
-        $settings = Yii::$app->db->createCommand( 'SELECT '.$field.' FROM settings where id=1' )->queryScalar();
+        $settings = Yii::$app->db->createCommand( 'SELECT '.$field.' FROM settings where id > 0 limit 1' )->queryScalar();
 		return $settings;
     }
 	

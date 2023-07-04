@@ -2,7 +2,7 @@
 
 namespace app\controllers;
 
-
+use Yii;
 use yii\filters\AccessControl;
 use app\models\Settings;
 use app\models\SettingsSearch;
@@ -154,6 +154,8 @@ class SettingsController extends CustomController
     {
 		$this->layout = 'frontend';
 		
+		$id = Yii::$app->db->createCommand( 'SELECT id FROM settings where id > 0 limit 1' )->queryScalar();
+
         $model = $this->findModel($id);
 
         if ($model->load($this->request->post())) {
