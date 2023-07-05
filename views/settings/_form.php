@@ -41,6 +41,10 @@ input[type=file]::file-selector-button:hover {
 
     <?= $form->field($model, 'company_name')->textInput(['maxlength' => true]) ?>
 	
+    <?= $form->field($model, 'license_number')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'company_phone')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'company_address')->textInput(['maxlength' => true]) ?>
+	
 	
 	<?= $form->field($model, 'file2')->fileInput()->label('Company Dashboard Logo [Hints: width:60px; Height:50px]'); ?>
 	<?php if($model->user_logo){ ?>

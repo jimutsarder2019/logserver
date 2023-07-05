@@ -158,15 +158,15 @@ function generateReport(data){
 	csv.push(csvTitle.join(","));
 	
 	csvTitle = [];
-	csvTitle.push('License Number:');
+	csvTitle.push('License Number: '+license_number);
 	csv.push(csvTitle.join(","));
 	
 	csvTitle = [];
-	csvTitle.push('Address:');
+	csvTitle.push('Address: '+company_address);
 	csv.push(csvTitle.join(","));
 	
 	csvTitle = [];
-	csvTitle.push('Phone Number:');
+	csvTitle.push('Phone Number: '+company_phone);
 	csv.push(csvTitle.join(","));
 	
 	csvTitle = [];
@@ -221,10 +221,22 @@ function generateReport(data){
 
 
 function pdfPrint() {
+	var date_start = $('.js_date_start').val();
+	var date_end = $('.js_date_end').val();
+	
 	var divContents = document.getElementById("table-data").innerHTML;
 	var a = window.open('', '', 'height=500, width=500');
 	a.document.write('<html>');
 	a.document.write('<body ><h1>'+company_name+' Log Report</h1><br>');
+	a.document.write('<p>License Number: '+license_number+'</p>');
+	a.document.write('<p>Address: '+company_address+'</p>');
+	a.document.write('<p>Phone Number: '+company_phone+'</p>');
+	if(date_start && date_end){
+	    a.document.write('<p>Log Report: '+date_start+' to '+date_end+'</p>');
+	}else{
+		a.document.write('<p>Log Report:</p>');
+	}
+	a.document.write('<br>');
 	a.document.write(divContents);
 	a.document.write('</body></html>');
 	a.document.close();
@@ -246,15 +258,15 @@ function excelReport(data) {
 	final_data.push(csvTitle);
 	
 	csvTitle = [];
-	csvTitle.push('License Number:');
+	csvTitle.push('License Number: '+license_number);
 	final_data.push(csvTitle);
 	
 	csvTitle = [];
-	csvTitle.push('Address:');
+	csvTitle.push('Address: '+company_address);
 	final_data.push(csvTitle);
 	
 	csvTitle = [];
-	csvTitle.push('Phone Number:');
+	csvTitle.push('Phone Number: '+company_phone);
 	final_data.push(csvTitle);
 	
 	csvTitle = [];

@@ -20,11 +20,11 @@
 				<div class="card">
 					<div class="card-body">
 					    <div class="row">
-						    <div class="col-md-12" style="font-weight:bold; font-size:16px"> ------------------------------------- License Details -------------------------------------- </div>
+						    <div class="col-md-12" style="font-weight:bold; font-size:16px"> ----------------------------- License Details ---------------------------- </div>
 						</div>
 						</br>
 					    <div class="row">
-						    <div class="col-md-6">Registration Name:</div>
+						    <div class="col-md-6">ISP Name:</div>
 						    <div class="col-md-6"><?=@$license_data['registration_name']?></div>
 						</div>
 						<!-- <div class="row">

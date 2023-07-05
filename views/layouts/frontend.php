@@ -7,6 +7,11 @@ $baseUrl = Url::base();
 
 $company_name = ApplicationHelper::getCompanyName();
 $company_dashboard_logo = ApplicationHelper::getCompanyName('user_logo');
+
+$license_number = ApplicationHelper::getCompanyName('license_number');
+$company_address = ApplicationHelper::getCompanyName('company_address');
+$company_phone = ApplicationHelper::getCompanyName('company_phone');
+
 $favicon_logo = ApplicationHelper::getCompanyName('favicon');
 $user_picture = ApplicationHelper::getLoginUserInfo();
 $isAdmin = ApplicationHelper::isAdmin();
@@ -118,6 +123,9 @@ $isAdmin = ApplicationHelper::isAdmin();
 	<script>
 	    let company_name = '<?=$company_name?>';
 	    let base_url = '<?=$baseUrl?>';
+	    let license_number = '<?=$license_number?>';
+	    let company_address = '<?=$company_address?>';
+	    let company_phone = '<?=$company_phone?>';
 	</script>
 </head>
 

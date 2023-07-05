@@ -42,8 +42,9 @@ $this->params['breadcrumbs'][] = $this->title;
 								'columns' => [
 									//['class' => 'yii\grid\SerialColumn'],
 
-									'id',
-									'checkin',
+									//'id',
+									'username',
+									'ip',
 									[
 										'label' => 'Date',
 										'headerOptions' => ['style' => 'color:#ff4c3b'],
@@ -60,8 +61,8 @@ $this->params['breadcrumbs'][] = $this->title;
 											return @$dateTime[1];
 										}
 									],
-									'username',
-									'ip',
+									
+									'checkin',
 
 									
 									/*[

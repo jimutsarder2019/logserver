@@ -5,6 +5,10 @@ $baseUrl = Url::base();
 
 $company_name = ApplicationHelper::getCompanyName();
 $favicon_logo = ApplicationHelper::getCompanyName('favicon');
+
+$license_number = ApplicationHelper::getCompanyName('license_number');
+$company_address = ApplicationHelper::getCompanyName('company_address');
+$company_phone = ApplicationHelper::getCompanyName('company_phone');
 ?>
 
 
@@ -77,6 +81,9 @@ $favicon_logo = ApplicationHelper::getCompanyName('favicon');
 	<script>
 	    let company_name = '<?=$company_name?>';
 	    let base_url = '<?=$baseUrl?>';
+	    let license_number = '<?=$license_number?>';
+	    let company_address = '<?=$company_address?>';
+	    let company_phone = '<?=$company_phone?>';
 	</script>
 </head>
 
