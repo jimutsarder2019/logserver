@@ -16,12 +16,15 @@ let reportHeaders = [
     ];
 
 
-//document.addEventListener('contextmenu', event => event.preventDefault());
+document.addEventListener('contextmenu', event => event.preventDefault());
 
 $(document).ready(function(){
-
-	generateLogData();
 	
+	const queryString = window.location.search;
+	
+	if(queryString.includes('syslog/index')){
+	   generateLogData();
+	}
 	
 	$(".js_limit_change").change(function(){
 		generateLogData();
