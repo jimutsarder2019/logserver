@@ -262,6 +262,12 @@ class ElasticController extends Controller
 				foreach($all_data as $key=>$data){
 					$MESSAGE = $data['_source']['MESSAGE'];
 					$message_array = explode(", ",$MESSAGE);
+					
+							//print '<pre>';
+		//print_r($message_array);
+		//print '</pre>';
+		
+		//die;
 					$all_message[] = $message_array;
 					
 					$all_syslog_data[$key]['datetime'] = $data['_source']['@timestamp'];
@@ -292,11 +298,29 @@ class ElasticController extends Controller
 						}
 						
 						if($k === 3){
-							$ip_data = explode("->", $message);
-							$all_syslog_data[$key]['src_ip'] = @explode(":", @$ip_data[0])[0];
-							$all_syslog_data[$key]['src_port'] = @explode(":", @$ip_data[0])[1];
-							$all_syslog_data[$key]['destination_ip'] = @explode(":", @$ip_data[1])[0];
-							$all_syslog_data[$key]['destination_port'] = @explode(":", @$ip_data[1])[1];
+							
+							if (str_contains($message, '->[')) {
+								$ipv6_data = explode("->", @$message);
+								$ipv6_data_1 = explode("]:", @$ipv6_data[0]);
+								$src_ip = str_replace('[','',@$ipv6_data_1[0]);
+								$all_syslog_data[$key]['src_ip'] = $src_ip;
+								
+								$src_port = str_replace('[','',@$ipv6_data_1[1]);
+								$all_syslog_data[$key]['src_port'] = $src_port;
+								
+								$ipv6_data_2 = explode("]:", @$ipv6_data[1]);
+					            $dest_ip = str_replace('[','',@$ipv6_data_2[0]);
+								$all_syslog_data[$key]['destination_ip'] = $dest_ip;
+								
+								$dest_port = str_replace('[','',@$ipv6_data_2[1]);
+								$all_syslog_data[$key]['destination_port'] = $dest_port;
+                            }else{
+								$ip_data = explode("->", $message);
+								$all_syslog_data[$key]['src_ip'] = @explode(":", @$ip_data[0])[0];
+								$all_syslog_data[$key]['src_port'] = @explode(":", @$ip_data[0])[1];
+								$all_syslog_data[$key]['destination_ip'] = @explode(":", @$ip_data[1])[0];
+								$all_syslog_data[$key]['destination_port'] = @explode(":", @$ip_data[1])[1];
+							}
 						}
 						
 						
