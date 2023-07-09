@@ -287,7 +287,7 @@ $isAdmin = ApplicationHelper::isAdmin();
                         <li>
                             <a class="sidebar-header" href="javascript:void(0)">
                                 <i data-feather="users"></i>
-                                <span>Paner Users</span>
+                                <span>Panel Users</span>
                                 <i class="fa fa-angle-right pull-right"></i>
                             </a>
                             <ul class="sidebar-submenu">

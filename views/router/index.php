@@ -29,6 +29,7 @@ $baseUrl = Url::base();
 						<h3>Router</h3>
 					</div>
 				</div>
+				<?php if($isAdmin){ ?>
 				<div class="col-lg-6">
 					<ol class="breadcrumb pull-right">
 						<li class="breadcrumb-item">
@@ -39,6 +40,7 @@ $baseUrl = Url::base();
 						<li class="breadcrumb-item active">Add Router</li>
 					</ol>
 				</div>
+				<?php } ?>
 			</div>
 		</div>
 	</div>
@@ -49,11 +51,13 @@ $baseUrl = Url::base();
 		<div class="row">
 			<div class="col-md-12">
 				<div class="card">
+				    <?php if($isAdmin){ ?>
 					<div class="card-header">
 						<div class="card-header-right">
 							<a href="<?=Url::base()?>/?r=router/create" class="btn btn-primary">Add Router</a>
 						</div>
 					</div>
+					<?php } ?>
 					<div class="card-body">
 						<div class="user-status table-responsive latest-order-table">
 							<?= GridView::widget([
