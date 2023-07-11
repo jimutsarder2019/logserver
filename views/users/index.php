@@ -83,29 +83,30 @@ $baseUrl = Url::base();
 									],
 									'date',
 									
-									[
+									/*[
 										'class' => ActionColumn::className(),
 										'visible' => ($isAdmin)?true:false,
 										'urlCreator' => function ($action, Users $model, $key, $index, $column) {
 											return Url::toRoute([$action, 'id' => $model->id]);
 										 }
-									],
+									],*/
 									
-									/*[
+									
+									
+									[
 										'class' => 'yii\grid\ActionColumn',
-										'template' => '{update} {delete}',
+										'template' => '{view} {update} {delete}',
 										'buttons' => [
 											'delete' => function($url, $model){
-												return Html::a('<span class="fa fa-remove"></span>', ['delete', 'id' => $model->id], [
+												return Html::a('<span class="fa fa-remove"></span>', 'javascript:void(0)', [
 													'class' => 'remove',
 													'data' => [
-														'confirm' => 'Are you absolutely sure ? You will lose all the information about this user with this action.',
-														'method' => 'post',
+														'id' => $model->id,
 													],
 												]);
 											}
 										]
-									],*/
+									]
 								],
 							]); ?>
 						</div>

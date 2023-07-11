@@ -80,6 +80,15 @@ $(document).ready(function(){
 		}
 	});
 	
+	$(".remove").click(function(){
+		var id = $(this).data('id');
+		if(id){
+			if (confirm("Are you sure you want to delete this user?") == true) {
+			    window.location = base_url+'/?r=users/delete&id='+id;
+			}
+		}
+	});
+	
 });
 
 
