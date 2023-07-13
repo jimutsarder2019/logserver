@@ -73,7 +73,13 @@ $baseUrl = Url::base();
 										'ip',
 										'api_port',
 										'api_username',
-										'api_password',
+										[
+											'label' => 'Password',
+											'headerOptions' => ['style' => 'color:#ff4c3b'],
+											'content' => function ($model) {
+												return str_repeat("*", strlen($model->api_password)); 
+											}
+										],
 										'status',
 										'ipv6',
 										'connection',
