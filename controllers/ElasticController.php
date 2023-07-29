@@ -189,7 +189,7 @@ class ElasticController extends Controller
 			
 			$match  =	 [
 				"bool"=> [
-				  "should"=> $message_filter
+				  "must"=> $message_filter
 				]
 			];
 			$query->query = $match;
@@ -208,7 +208,7 @@ class ElasticController extends Controller
 
 			  $match  =	 [
 				"bool"=> [
-				  "should"=> $message_filter
+				  "must"=> $message_filter
 				]
 			  ];
 			  $query->query = $match;
