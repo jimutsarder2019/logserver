@@ -98,12 +98,14 @@ $baseUrl = Url::base();
 										'template' => '{view} {update} {delete}',
 										'buttons' => [
 											'delete' => function($url, $model){
+												if($model->role > 1 ){
 												return Html::a('<span class="fa fa-trash"></span>', 'javascript:void(0)', [
 													'class' => 'remove',
 													'data' => [
 														'id' => $model->id,
 													],
 												]);
+												}
 											}
 										]
 									]
