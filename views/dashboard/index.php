@@ -13,6 +13,10 @@ $baseUrl = Url::base();
 .font-white{
 	color: #FFFFFF !important;
 }
+
+.static-top-widget .media-body h3{
+	color: #a5a5a5 !important;
+}
 </style>
 <div class="page-body">
 	<!-- Container-fluid starts-->
