@@ -150,12 +150,12 @@ class DashboardController extends CustomController
 		$rootUtilization = 0;
 		$diskFree = 0;
 		$days = 0;*/
-		/*
+		
 		$config = (new Config())
-				->set('timeout', 1)
-				->set('host', '103.102.216.1')
-				->set('user', 'api')
-				->set('pass', 'log_api');
+						->set('timeout', 1)
+						->set('host', '103.102.216.1')
+						->set('user', 'api')
+						->set('pass', 'log_api');
 
 		// Initiate client with config object
 		$client = new Client($config);
@@ -168,9 +168,9 @@ class DashboardController extends CustomController
 		$active_user_count = 0;
 		if(!empty($secrets)){
 			$active_user_count = count($secrets);
-		}*/
+		}
 		
-		$active_user_count = 0;
+		//$active_user_count = 0;
 		
         return $this->render('index', ['router_data'=>$routers, 
 		'user_data'=>$users,
