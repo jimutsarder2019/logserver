@@ -2,6 +2,8 @@
 
 namespace app\controllers;
 
+require_once __DIR__ . '/../api/vendor/autoload.php';
+
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -9,7 +11,9 @@ use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\Router;
 use app\components\CustomController;
-
+use \RouterOS\Config;
+use \RouterOS\Client;
+use \RouterOS\Query;
 
 class DashboardController extends CustomController
 {
@@ -52,6 +56,28 @@ class DashboardController extends CustomController
                 ],
             ],
         ];
+    }
+	
+	public function actionDemo(){
+		$config = (new Config())
+						->set('timeout', 1)
+						->set('host', '103.102.216.1')
+						->set('user', 'api')
+						->set('pass', 'log_api');
+
+		// Initiate client with config object
+		$client = new Client($config);
+
+		// Get list of all available profiles with name Block
+		$query = new Query('/ppp/active/print');
+		$query->where('service', 'pppoe');
+		$secrets = $client->query($query)->read();
+
+        print '<pre>';
+	    print_r($secrets);
+        print '</pre>';
+	    die;
+ 
     }
 
     /**
@@ -124,12 +150,31 @@ class DashboardController extends CustomController
 		$rootUtilization = 0;
 		$diskFree = 0;
 		$days = 0;*/
+		/*
+		$config = (new Config())
+				->set('timeout', 1)
+				->set('host', '103.102.216.1')
+				->set('user', 'api')
+				->set('pass', 'log_api');
+
+		// Initiate client with config object
+		$client = new Client($config);
+
+		// Get list of all available profiles with name Block
+		$query = new Query('/ppp/active/print');
+		$query->where('service', 'pppoe');
+		$secrets = $client->query($query)->read();
 		
+		$active_user_count = 0;
+		if(!empty($secrets)){
+			$active_user_count = count($secrets);
+		}*/
 		
+		$active_user_count = 0;
 		
         return $this->render('index', ['router_data'=>$routers, 
-		'user_data'=>$users, 
-		'users_count'=>$active_users, 
+		'user_data'=>$users,
+		'users_count'=>$active_user_count, 
 		'router_count'=>count($routers),
 		'cpu'=>$cpuUtilization,
 		'ram'=>round($ramUtilization, 2),
