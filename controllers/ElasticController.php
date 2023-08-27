@@ -278,6 +278,8 @@ class ElasticController extends Controller
 					
 					foreach($message_array as $k=>$message){
 						
+						
+						$message_all[][] = $message;
 						if(strpos($message, "Internet_Log:") !== false && strpos($message, "in:<pppoe-") !== false){
 							//$message = 'syslog prerouting: in:<pppoe-icr.hasan> out:(unknown 0), connection-state:established src-mac d8:32:14:a0:4d:48, proto TCP (ACK,FIN), 10.45.3.253:7768->142.250.4.128:443, len 40';
 							$user_data = @explode("in:<pppoe-",$message);
@@ -288,8 +290,7 @@ class ElasticController extends Controller
 							        $all_syslog_data[$key]['user'] = $user;
 								}
 							}
-						}else if(strpos($message, "syslog prerouting:") !== false && strpos($message, "in:<pppoe-") !== false){
-							//die("ASDASDASD");
+						}else if(strpos($message, "prerouting:") !== false && strpos($message, "in:<pppoe-") !== false){
 							$user_data = @explode("in:<pppoe-",$message);
 							$last_user_data = @explode("out:", @$user_data[1]);
 							if(!empty($last_user_data)){
@@ -301,7 +302,7 @@ class ElasticController extends Controller
 						}
 						
 						if(strpos($message, "src-mac") !== false){
-							$all_syslog_data[$key]['mac'] = str_replace('src-mac ','',$message);
+							$all_syslog_data[$key]['mac'] = str_replace('src-mac ','',str_replace('connection-state:established','',$message));
 						}
 						
 						if(strpos($message, "proto") !== false){
@@ -342,6 +343,10 @@ class ElasticController extends Controller
 						    $all_syslog_data[$key]['nat_port'] = @explode(":", @$nat_ip_array)[1];
 						}
 					}
+					
+					//print_r($message_all);
+					
+					//die;
 								
 				}
 			}
