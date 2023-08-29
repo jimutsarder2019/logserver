@@ -238,7 +238,7 @@ function pdfPrint() {
 	
 	var divContents = document.getElementById("table-data").innerHTML;
 	var a = window.open('', '', 'height=500, width=500');
-	a.document.write('<html>');
+	a.document.write('<html><style>table{border-collapse: collapse;} table, td, th{border:1px solid #000000 !important; padding:2px !important;}</style>');
 	a.document.write('<body ><h1>'+company_name+' Log Report</h1><br>');
 	a.document.write('<p>License Number: '+license_number+'</p>');
 	a.document.write('<p>Address: '+company_address+'</p>');

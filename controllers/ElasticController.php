@@ -302,7 +302,12 @@ class ElasticController extends Controller
 						}
 						
 						if(strpos($message, "src-mac") !== false){
-							$all_syslog_data[$key]['mac'] = str_replace('src-mac ','',str_replace('connection-state:established','',$message));
+							$mac1 = str_replace('src-mac ','',str_replace('connection-state:established','',$message));
+							$mac1 = str_replace('connection-mark:speed','',$mac1);
+							$mac1 = str_replace('connection-mark:cdn_ggc','',$mac1);
+							$mac1 = str_replace('connection-mark:cdn_fna','',$mac1);
+							$mac1 = str_replace('connection-state:new','',$mac1);
+							$all_syslog_data[$key]['mac'] = $mac1;
 						}
 						
 						if(strpos($message, "proto") !== false){
