@@ -38,7 +38,7 @@ use yii\widgets\ActiveForm;
 
     <div class="form-group row">
 		<div class="col-xl-4 col-md-4">
-		    <?= $form->field($model, 'status')->textInput(['maxlength' => true]) ?>
+		    <?= $form->field($model, 'status')->dropDownList([1=>'Active',0=>'In active']); ?>
 		</div>
 		<div class="col-xl-4 col-md-4">
 		    <?= $form->field($model, 'connection')->textInput(['maxlength' => true]) ?>

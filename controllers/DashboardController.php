@@ -144,33 +144,51 @@ class DashboardController extends CustomController
 		$days = str_replace(',', '', $matches[1]);
 		$days = intval($days);
 		
-		
-		/*$cpuUtilization = 0;
+		/*
+		$cpuUtilization = 0;
 		$ramUtilization = 0;
 		$rootUtilization = 0;
 		$diskFree = 0;
 		$days = 0;*/
 		
-		$config = (new Config())
-						->set('timeout', 1)
-						->set('host', '103.102.216.1')
-						->set('user', 'api')
-						->set('pass', 'log_api');
-
-		// Initiate client with config object
-		$client = new Client($config);
-
-		// Get list of all available profiles with name Block
-		$query = new Query('/ppp/active/print');
-		$query->where('service', 'pppoe');
-		$secrets = $client->query($query)->read();
-		
 		$active_user_count = 0;
-		if(!empty($secrets)){
-			$active_user_count = count($secrets);
-		}
 		
-		//$active_user_count = 0;
+		if(!empty($routers)){
+			
+			foreach($routers as $router){
+				
+				if($router['status'] == 1){
+					if($router['ip'] && $router['api_username'] && $router['api_password']){
+						
+						try {
+						    $config = (new Config())
+								->set('timeout', 1)
+								->set('host', $router['ip'])
+								->set('user', $router['api_username'])
+								->set('pass', $router['api_password']);
+
+							// Initiate client with config object
+							$client = new Client($config);
+
+							// Get list of all available profiles with name Block
+							$query = new Query('/ppp/active/print');
+							$query->where('service', 'pppoe');
+							$secrets = $client->query($query)->read();
+							
+							if(!empty($secrets)){
+								$active_user_count += count($secrets);
+							}
+						}
+
+						catch(Exception $e) {
+						  //echo $e->getMessage();
+						}
+
+					}
+				}
+				
+			}
+		}
 		
         return $this->render('index', ['router_data'=>$routers, 
 		'user_data'=>$users,
