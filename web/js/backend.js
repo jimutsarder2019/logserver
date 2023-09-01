@@ -344,7 +344,7 @@ function excelReport(data) {
 function getUserCount()
 {
 	$.ajax({  
-		url: base_url+'/?r=elastic/user',
+		url: base_url+'/?r=api/user',
 		type: 'POST',
         dataType: 'JSON',
         data:{page:'dashboard'},		
