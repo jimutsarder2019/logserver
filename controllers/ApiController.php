@@ -88,7 +88,7 @@ class ApiController extends Controller
 		
 		$status = 'success';
 
-		die(json_encode(['status'=>$status, 'active_user_count'=>$active_user_count, 'alert'=>$is_alert_show, 'alert_msg'=>$alert_msg]));
+		die(json_encode(['status'=>$status, 'max_user_allow'=>$max_user_allow, 'max_user_first_allow'=>$max_user_first_allow, 'active_user_count'=>$active_user_count, 'alert'=>$is_alert_show, 'alert_msg'=>$alert_msg]));
 
 		
     }
