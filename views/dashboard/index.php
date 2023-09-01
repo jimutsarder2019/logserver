@@ -17,7 +17,58 @@ $baseUrl = Url::base();
 .static-top-widget .media-body h3{
 	color: #a5a5a5 !important;
 }
+
+
+
+/* The Modal (background) */
+.modal-alert {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content-alert {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 50%;
+}
+
+/* The Close Button */
+.close-alert {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close-alert:hover,
+.close-alert:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
 </style>
+<!-- The Modal -->
+<div id="myModal-alert" class="modal-alert">
+
+  <!-- Modal content -->
+  <div class="modal-content-alert">
+    <span class="close-alert">&times;</span>
+    <p class="alert-msg" style="color:#ff4c3b">Loading...</p>
+  </div>
+
+</div>
 <div class="page-body">
 	<!-- Container-fluid starts-->
 	<div class="container-fluid">
@@ -47,7 +98,7 @@ $baseUrl = Url::base();
 							</div>
 							<div class="media-body media-doller">
 								<span class="m-0">Active User</span>
-								<h3 class="mb-0"><span class="counter"><?=@$users_count?></span>
+								<h3 class="mb-0"><span class="counter js-user-counter"><?=@$users_count?></span>
 								</h3>
 							</div>
 						</div>

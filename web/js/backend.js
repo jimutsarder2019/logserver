@@ -26,9 +26,7 @@ $(document).ready(function(){
 	   generateLogData();
 	}
 	
-	alert(queryString);
-	
-	if(queryString.includes('dashboard/index')){
+	if(queryString.includes('dashboard/index') || queryString.includes('dashboard%2Findex')){
 	   getUserCount();
 	}
 	
@@ -93,6 +91,10 @@ $(document).ready(function(){
 			    window.location = base_url+'/?r=users/delete&id='+id;
 			}
 		}
+	});
+	
+	$(".close-alert").click(function(){
+		$("#myModal-alert").hide();
 	});
 	
 });
@@ -346,8 +348,12 @@ function getUserCount()
 		type: 'POST',
         dataType: 'JSON',
         data:{page:'dashboard'},		
-		success: function(response) {   
-			console.log(response);
+		success: function(response) {  
+			if(response.alert){
+				$(".js-user-counter").text(response.active_user_count);
+			    $(".alert-msg").html(response.alert_msg);
+			    $("#myModal-alert").show();
+			}
 		}  
 	});  
 	

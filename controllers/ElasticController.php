@@ -1,9 +1,16 @@
 <?php
 namespace app\controllers;
 
+ini_set('max_execution_time', '300');
+
+require_once __DIR__ . '/../api/vendor/autoload.php';
+
 use Yii;
 use yii\web\Controller;
 use yii\elasticsearch\Query;
+use \RouterOS\Config;
+use \RouterOS\Client;
+use \RouterOS\Query;
 
 class ElasticController extends Controller
 {	
@@ -372,8 +379,7 @@ class ElasticController extends Controller
 		
 		$active_user_count = 0;
 		
-		//if(!empty($routers)){
-		if(0){
+		if(!empty($routers)){
 			
 			foreach($routers as $router){
 				
@@ -410,6 +416,8 @@ class ElasticController extends Controller
 			}
 		}
 		
+		$is_alert_show = false;
+		
 		$data = file_get_contents('../web/license.json');
 		$license_data = json_decode($data, 1);
 		$max_user_allow = @$license_data['maximum_number_of_user_allow'];
@@ -417,7 +425,23 @@ class ElasticController extends Controller
 		
 		$max_user_first_allow = ($max_user_allow_perchantage * $max_user_allow)/100;
 		
-		die(json_encode(['status'=>'success']));
+		$alert = 0;
+		$alert_msg = '';
+		if(($active_user_count > $max_user_first_allow) || ($active_user_count > $max_user_allow)){
+			$alert_msg = 'Currently you are  using Cloud Hub log software.  We are requested to increase your user limit very soon.
+                        </br> Call: +8801617622600, +8809610203060
+                        </br> Email: sales@cloudhub.com.bd';
+			if($active_user_count > $max_user_allow){
+				$alert_msg = 'Currently you are  using Cloud Hub log software. You have already exceed your limit. We are requested to increase your user limit with in 48 hours.
+                        </br> Call: +8801617622600, +8809610203060
+                        </br> Email: sales@cloudhub.com.bd';
+			}
+			$is_alert_show = true;
+		}
+		
+		$status = 'success';
+
+		die(json_encode(['status'=>$status, 'active_user_count'=>$active_user_count, 'alert'=>$is_alert_show, 'alert_msg'=>$alert_msg]));
 
 		
     }
