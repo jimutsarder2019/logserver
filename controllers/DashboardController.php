@@ -2,6 +2,8 @@
 
 namespace app\controllers;
 
+ini_set('max_execution_time', '300');
+
 require_once __DIR__ . '/../api/vendor/autoload.php';
 
 use Yii;
@@ -109,7 +111,7 @@ class DashboardController extends CustomController
 		$active_users = Yii::$app->db->createCommand( 'SELECT COUNT(*) FROM user WHERE status = 1 and role > 1' )->queryScalar();
 		
 		
-		
+		/*
 		// Geeting free CPU info
 		$cpuUsage = shell_exec("top -bn 2 -d 0.01 | grep '^%Cpu' | tail -n 1");
 		preg_match_all('/[0-9.]+/', $cpuUsage, $cpuUsageArray);
@@ -142,18 +144,19 @@ class DashboardController extends CustomController
 		$uptime = shell_exec('uptime');
 		preg_match('/up\s+(.*?),\s+(.*?)\s+/', $uptime, $matches);
 		$days = str_replace(',', '', $matches[1]);
-		$days = intval($days);
+		$days = intval($days);*/
 		
-		/*
+		
 		$cpuUtilization = 0;
 		$ramUtilization = 0;
 		$rootUtilization = 0;
 		$diskFree = 0;
-		$days = 0;*/
+		$days = 0;
 		
 		$active_user_count = 0;
 		
-		if(!empty($routers)){
+		//if(!empty($routers)){
+		if(0){
 			
 			foreach($routers as $router){
 				
@@ -190,6 +193,13 @@ class DashboardController extends CustomController
 			}
 		}
 		
+		$data = file_get_contents('../web/license.json');
+		$license_data = json_decode($data, 1);
+		$max_user_allow = @$license_data['maximum_number_of_user_allow'];
+		$max_user_allow_perchantage = @$license_data['maximum_number_of_user_allow_alert_perchantage'];
+		
+		$max_user_first_allow = ($max_user_allow_perchantage * $max_user_allow)/100;
+		
         return $this->render('index', ['router_data'=>$routers, 
 		'user_data'=>$users,
 		'users_count'=>$active_user_count, 
@@ -198,7 +208,9 @@ class DashboardController extends CustomController
 		'ram'=>round($ramUtilization, 2),
 		'disk_use'=>round($rootUtilization, 2),
 		'disk_free'=>round($diskFree, 2),
-		'uptime'=>$days
+		'uptime'=>$days,
+		'max_user_first_allow'=>$max_user_first_allow,
+		'max_user_allow'=>$max_user_allow
 		]);
     }
 }

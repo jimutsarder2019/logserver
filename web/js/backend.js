@@ -16,7 +16,7 @@ let reportHeaders = [
     ];
 
 
-document.addEventListener('contextmenu', event => event.preventDefault());
+//document.addEventListener('contextmenu', event => event.preventDefault());
 
 $(document).ready(function(){
 	
@@ -24,6 +24,12 @@ $(document).ready(function(){
 	
 	if(queryString.includes('syslog/index')){
 	   generateLogData();
+	}
+	
+	alert(queryString);
+	
+	if(queryString.includes('dashboard/index')){
+	   getUserCount();
 	}
 	
 	$(".js_limit_change").change(function(){
@@ -329,4 +335,20 @@ function excelReport(data) {
 
 	  // (C3) "FORCE DOWNLOAD" XLSX FILE
 	XLSX.writeFile(workbook, company_name+"LogReport" + Date()+".xlsx");
+}
+
+
+
+function getUserCount()
+{
+	$.ajax({  
+		url: base_url+'/?r=elastic/user',
+		type: 'POST',
+        dataType: 'JSON',
+        data:{page:'dashboard'},		
+		success: function(response) {   
+			console.log(response);
+		}  
+	});  
+	
 }

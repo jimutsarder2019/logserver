@@ -364,4 +364,61 @@ class ElasticController extends Controller
 		
 		die(json_encode(['status'=>'success', 'data'=>$all_syslog_data, 'limit_date'=>$limit_date]));
     }
+	
+	
+	public function actionUser()
+    {
+		$routers = Yii::$app->db->createCommand( 'SELECT * FROM router ORDER BY id desc' )->queryAll();
+		
+		$active_user_count = 0;
+		
+		//if(!empty($routers)){
+		if(0){
+			
+			foreach($routers as $router){
+				
+				if($router['status'] == 1){
+					if($router['ip'] && $router['api_username'] && $router['api_password']){
+						
+						try {
+						    $config = (new Config())
+								->set('timeout', 1)
+								->set('host', $router['ip'])
+								->set('user', $router['api_username'])
+								->set('pass', $router['api_password']);
+
+							// Initiate client with config object
+							$client = new Client($config);
+
+							// Get list of all available profiles with name Block
+							$query = new Query('/ppp/active/print');
+							$query->where('service', 'pppoe');
+							$secrets = $client->query($query)->read();
+							
+							if(!empty($secrets)){
+								$active_user_count += count($secrets);
+							}
+						}
+
+						catch(Exception $e) {
+						  //echo $e->getMessage();
+						}
+
+					}
+				}
+				
+			}
+		}
+		
+		$data = file_get_contents('../web/license.json');
+		$license_data = json_decode($data, 1);
+		$max_user_allow = @$license_data['maximum_number_of_user_allow'];
+		$max_user_allow_perchantage = @$license_data['maximum_number_of_user_allow_alert_perchantage'];
+		
+		$max_user_first_allow = ($max_user_allow_perchantage * $max_user_allow)/100;
+		
+		die(json_encode(['status'=>'success']));
+
+		
+    }
 }
