@@ -65,30 +65,6 @@ class RouterController extends CustomController
      */
     public function actionIndex()
     {
-		mail("engrahuldeb@gmail.com","My subject","Hello");
-		
-		$post = [
-                    'name'=>'rahul', 
-                    'email'=>'info@zubairitexpert.net',
-                    'message'=>'test email',
-            ];
-                
-            $url = 'https://www.travellersguru.com.bd/rest-api/send-alert-mail';
-            $ch = curl_init();
-            $params = http_build_query($post);
-            curl_setopt($ch, CURLOPT_URL,$url);
-            curl_setopt($ch, CURLOPT_POST, 1);
-            curl_setopt($ch, CURLOPT_POSTFIELDS,
-                        $params);
-            
-            // Receive server response ...
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            
-            $server_output = curl_exec($ch);
-            
-            curl_close ($ch);
-			
-			
 		$this->layout = 'frontend';
         $searchModel = new RouterSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);

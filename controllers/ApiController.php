@@ -84,6 +84,8 @@ class ApiController extends Controller
                         </br> Email: sales@cloudhub.com.bd';
 			}
 			$is_alert_show = true;
+			
+			self::sendMail($alert_msg);
 		}
 		
 		$status = 'success';
@@ -92,4 +94,33 @@ class ApiController extends Controller
 
 		
     }
+	
+	
+	private function sendMail($body)
+	{
+			$post = [
+                    'from_name'=>'LogServer',
+                    'to_name'=>'Rahul',
+                    'to'=>'engrahuldeb@gmail.com',
+                    'from'=>'info@zubairitexpert.net',
+                    'message'=> $body,
+                    'subject'=> 'Max User Limit cross Alert',
+            ];
+                
+            $url = 'https://www.travellersguru.com.bd/rest-api/send-alert-mail';
+            $ch = curl_init();
+            $params = http_build_query($post);
+            curl_setopt($ch, CURLOPT_URL,$url);
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS,
+                        $params);
+            
+            // Receive server response ...
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            
+            $server_output = curl_exec($ch);
+            
+            curl_close ($ch);
+		
+	}
 }
