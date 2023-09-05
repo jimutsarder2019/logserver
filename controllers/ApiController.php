@@ -33,22 +33,25 @@ class ApiController extends Controller
 				if($router['status'] == 1){
 					if($router['ip'] && $router['api_username'] && $router['api_password']){
 						
-						try {
+						
 						    $config = (new Config())
 								//->set('timeout', 1)
 								->set('host', $router['ip'])
 								->set('user', $router['api_username'])
 								->set('pass', $router['api_password']);
 								
-						}
+								print_r($config);
+                            try {
+							// Initiate client with config object
+							$client = new Client($config);
+							
+							}
+
 						catch(Exception $e) {
 						    header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error', true, 500);
 							echo json_encode(array("success" => false, "message" => $e->getMessage()));
 							return;
 						}
-
-							// Initiate client with config object
-							$client = new Client($config);
 
 							// Get list of all available profiles with name Block
 							$query = new Query('/ppp/active/print');
@@ -58,7 +61,7 @@ class ApiController extends Controller
 							if(!empty($secrets)){
 								$active_user_count += count($secrets);
 							}
-
+						
 
 					}
 				}
