@@ -96,4 +96,10 @@ class ApplicationHelper
         $router_list = Yii::$app->db->createCommand( 'SELECT id, name, ip FROM router where status=1' )->queryAll();
 		return $router_list;
     }
+	
+	public static function getRouters()
+    {
+        $router_list = Yii::$app->db->createCommand( 'SELECT ip FROM router where status=1' )->queryColumn();
+		return $router_list;
+    }
 }

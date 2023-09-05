@@ -180,22 +180,22 @@ class ElasticController extends Controller
 		$message_filter = array_merge($mac_filter, $user_filter, $src_filter, $dst_filter, $nat_filter);	
 		
 		$router_filter = [];
-		$router_list = ['103.102.216.1', '172.31.1.3'];
+		$router_list = ApplicationHelper::getRouters();
 		
 		foreach($router_list  as $router_ip){
 			if($router == 'all'){
 				$router_filter[] = [
-						  "match"=> [
-							"HOST"=> '.*'.$router_ip.'.*'
-						  ]
-						];
+					"match"=> [
+						"HOST"=> '.*'.$router_ip.'.*'
+					]
+				];
 			}else{
 				if($router == $router_ip){
 					$router_filter[] = [
 						  "match"=> [
 							"HOST"=> '.*'.$router_ip.'.*'
 						  ]
-						];
+					];
 				}
 			}
 		}
