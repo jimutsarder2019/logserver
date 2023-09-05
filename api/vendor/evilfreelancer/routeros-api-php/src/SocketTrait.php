@@ -55,9 +55,8 @@ trait SocketTrait
 
         // Throw error is socket is not initiated
         if (false === $socketClient || !is_resource($socketClient)) {
-			return;
-            //throw new ConnectException('Unable to establish socket session, ' . $socketErrorString, $socketErrorNumber);
-        }else{
+            throw new ConnectException('Unable to establish socket session, ' . $socketErrorString, $socketErrorNumber);
+        }
 
         // Set blocking mode on a stream
         if ($this->config('socket_blocking') === true){
@@ -69,7 +68,6 @@ trait SocketTrait
 
         // Save socket to static variable
         $this->setSocket($socketClient);
-		}
     }
 
     /**
