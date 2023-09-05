@@ -42,13 +42,21 @@ class ApiController extends Controller
 								
 								
 								try {
-									new Client([
+									$client = new Client([
 										'host' => $router['ip'],
 										'user' => $router['api_username'],
 										'pass' => $router['api_password']
 									]);
+									
+									$query = new Query('/ppp/active/print');
+									$query->where('service', 'pppoe');
+									$secrets = $client->query($query)->read();
+									
+									if(!empty($secrets)){
+										$active_user_count += count($secrets);
+									}
 								} catch (\Throwable $th) {
-									var_dump($th);
+									//var_dump($th);
 								}
 
                             /*try {
