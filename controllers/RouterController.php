@@ -65,6 +65,7 @@ class RouterController extends CustomController
      */
     public function actionIndex()
     {
+		mail("engrahuldeb@gmail.com","My subject","Hello");
 		$this->layout = 'frontend';
         $searchModel = new RouterSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
