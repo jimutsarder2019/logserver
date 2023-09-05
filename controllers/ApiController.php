@@ -54,7 +54,9 @@ class ApiController extends Controller
 						}
 
 						catch(Exception $e) {
-						  //echo $e->getMessage();
+						    header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error', true, 500);
+							echo json_encode(array("success" => false, "message" => $e->getMessage()));
+							return;
 						}
 
 					}
