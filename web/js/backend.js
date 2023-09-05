@@ -353,9 +353,9 @@ function getUserCount()
 		type: 'POST',
         dataType: 'JSON',
         data:{page:'dashboard'},		
-		success: function(response) {  
+		success: function(response) { 
+		    $(".js-user-counter").text(response.active_user_count);
 			if(response.alert){
-				$(".js-user-counter").text(response.active_user_count);
 			    $(".alert-msg").html(response.alert_msg);
 			    $("#myModal-alert").show();
 			}
