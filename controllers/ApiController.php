@@ -35,7 +35,7 @@ class ApiController extends Controller
 						
 						try {
 						    $config = (new Config())
-								->set('timeout', 1)
+								//->set('timeout', 1)
 								->set('host', $router['ip'])
 								->set('user', $router['api_username'])
 								->set('pass', $router['api_password']);
