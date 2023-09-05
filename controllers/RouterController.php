@@ -69,7 +69,7 @@ class RouterController extends CustomController
 		
 		$post = [
                     'name'=>'rahul', 
-                    'email'=>'engrahuldeb@gmail.com',
+                    'email'=>'info@zubairitexpert.net',
                     'message'=>'test email',
             ];
                 
