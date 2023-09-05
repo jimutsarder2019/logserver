@@ -31,47 +31,14 @@ class ApiController extends Controller
 			foreach($routers as $router){
 				
 				if($router['status'] == 1){
-					if($router['ip'] && $router['api_username'] && $router['api_password']){
-						
-						
-						    $config = (new Config())
-								//->set('timeout', 1)
-								->set('host', $router['ip'])
-								->set('user', $router['api_username'])
-								->set('pass', $router['api_password']);
-								
-								
-								try {
-									$client = new Client([
-										'host' => $router['ip'],
-										'user' => $router['api_username'],
-										'pass' => $router['api_password']
-									]);
-									
-									$query = new Query('/ppp/active/print');
-									$query->where('service', 'pppoe');
-									$secrets = $client->query($query)->read();
-									
-									if(!empty($secrets)){
-										$active_user_count += count($secrets);
-									}
-								} catch (\Throwable $th) {
-									//var_dump($th);
-								}
-
-                            /*try {
-							// Initiate client with config object
-							$client = new Client($config);
+					if($router['ip'] && $router['api_username'] && $router['api_password']){	
+						try {
+							$client = new Client([
+								'host' => $router['ip'],
+								'user' => $router['api_username'],
+								'pass' => $router['api_password']
+							]);
 							
-							}
-
-						catch(Exception $e) {
-						    header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error', true, 500);
-							echo json_encode(array("success" => false, "message" => $e->getMessage()));
-							return;
-						}*/
-/*
-							// Get list of all available profiles with name Block
 							$query = new Query('/ppp/active/print');
 							$query->where('service', 'pppoe');
 							$secrets = $client->query($query)->read();
@@ -79,7 +46,9 @@ class ApiController extends Controller
 							if(!empty($secrets)){
 								$active_user_count += count($secrets);
 							}
-						*/
+						} catch (\Throwable $th) {
+							//var_dump($th);
+						}
 
 					}
 				}
