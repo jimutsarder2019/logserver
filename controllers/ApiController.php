@@ -101,8 +101,8 @@ class ApiController extends Controller
 		if(isset(Yii::$app->user->id) && Yii::$app->user->id){
 		    $id = Yii::$app->user->id;
 			$user = Yii::$app->db->createCommand( 'SELECT username, accessToken FROM user where id='.$id )->queryOne();
-			$email = $user['username'];
-			$name = $user['accessToken'];
+			$name = $user['username'];
+			$email = $user['accessToken'];
 			
 			if($email && $name){
 				$post = [
