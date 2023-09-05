@@ -39,6 +39,13 @@ class ApiController extends Controller
 								->set('host', $router['ip'])
 								->set('user', $router['api_username'])
 								->set('pass', $router['api_password']);
+								
+						}
+						catch(Exception $e) {
+						    header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error', true, 500);
+							echo json_encode(array("success" => false, "message" => $e->getMessage()));
+							return;
+						}
 
 							// Initiate client with config object
 							$client = new Client($config);
@@ -51,13 +58,7 @@ class ApiController extends Controller
 							if(!empty($secrets)){
 								$active_user_count += count($secrets);
 							}
-						}
 
-						catch(Exception $e) {
-						    header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error', true, 500);
-							echo json_encode(array("success" => false, "message" => $e->getMessage()));
-							return;
-						}
 
 					}
 				}
