@@ -39,8 +39,9 @@ class ApiController extends Controller
 								->set('host', $router['ip'])
 								->set('user', $router['api_username'])
 								->set('pass', $router['api_password']);
-								
+								print '<pre>';
 								print_r($config);
+								print '</pre>';
                             try {
 							// Initiate client with config object
 							//$client = new Client($config);
