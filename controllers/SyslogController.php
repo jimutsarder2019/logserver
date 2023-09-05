@@ -9,6 +9,7 @@ use yii\web\Controller;
 use yii\filters\VerbFilter;
 use kartik\mpdf\Pdf;
 use app\components\CustomController;
+use app\components\ApplicationHelper;
 
 class SyslogController extends CustomController
 {
@@ -77,19 +78,22 @@ class SyslogController extends CustomController
     public function actionIndex()
     {
 		$this->layout = 'frontend';
+		$routers = ApplicationHelper::getRouterList();
 		$search = Yii::$app->getRequest()->getQueryParam('search');
-        return $this->render('index', array('search'=>$search));
+        return $this->render('index', array('search'=>$search, 'routers'=>$routers));
     }
 	
 	public function actionSearch()
     {
+		$routers = ApplicationHelper::getRouterList();
 		$this->layout = 'frontend';
-        return $this->render('search');
+        return $this->render('search', array('routers'=>$routers));
     }
 	
 	public function actionReport()
     {
+		$routers = ApplicationHelper::getRouterList();
 		$this->layout = 'frontend';
-        return $this->render('report');
+        return $this->render('report', array('routers'=>$routers));
     }
 }

@@ -128,6 +128,7 @@ class ElasticController extends Controller
 		$limit = Yii::$app->request->post('limit', 100);
 		$date_limit = Yii::$app->request->post('limit_date');
 		$search = Yii::$app->request->post('search');
+		$router = Yii::$app->request->post('router');
 		
 		$query = new Query;
 		$query->from('syslog-ng');
@@ -138,6 +139,7 @@ class ElasticController extends Controller
 		$src_filter = [];
 		$dst_filter = [];
 		$nat_filter = [];
+		$router_filter = [];
 		
 		if($mac){
 			$mac_filter[] = [
@@ -177,6 +179,27 @@ class ElasticController extends Controller
 		
 		$message_filter = array_merge($mac_filter, $user_filter, $src_filter, $dst_filter, $nat_filter);	
 		
+		$router_filter = [];
+		$router_list = ['103.102.216.1', '172.31.1.3'];
+		
+		foreach($router_list  as $router_ip){
+			if($router == 'all'){
+				$router_filter[] = [
+						  "match"=> [
+							"HOST"=> '.*'.$router_ip.'.*'
+						  ]
+						];
+			}else{
+				if($router == $router_ip){
+					$router_filter[] = [
+						  "match"=> [
+							"HOST"=> '.*'.$router_ip.'.*'
+						  ]
+						];
+				}
+			}
+		}
+		
 		if($from_date && $to_date && !empty($message_filter)){
 			
 			$date_filter[] = [
@@ -191,30 +214,63 @@ class ElasticController extends Controller
 			
 			$message_filter = array_merge($message_filter, $date_filter);
 			
-			$match  =	 [
-				"bool"=> [
-				  "must"=> $message_filter
-				]
-			];
+			if(count($router_filter) > 1){
+				$match  =	 [
+					"bool"=> [
+					  "should"=> $router_filter,
+					  "must"=> $message_filter
+					]
+				];
+			}else{
+				$match  =	 [
+					"bool"=> [
+					  "must"=> array_merge($router_filter,$message_filter)	
+					]
+				];
+			}
 			$query->query = $match;
 		}
 		else if($from_date && $to_date){
-			$match = [
-						"range"=>[
-							 "@timestamp"=>[
-								"gte"=>"".$from_date."T00:00:00+06:00",
-								"lte"=>"".$to_date."T23:59:59+06:00",
-							 ]
-				    ]
+			$date_filter[] = [
+					"range"=>[
+								"@timestamp"=>[
+												"gte"=>"".$from_date."T00:00:00+06:00",
+												"lte"=>"".$to_date."T23:59:59+06:00",
+								]
+					]
 			];
+			
+			if(count($router_filter) > 1){
+				$match  =	 [
+					"bool"=> [
+					  "should"=> $router_filter,
+					  "must"=> $date_filter
+					]
+				];
+			}else{
+				$match  =	 [
+					"bool"=> [
+					  "must"=> array_merge($router_filter,$date_filter)	
+					]
+				];
+			}
 			$query->query = $match;
 		}else if(!empty($message_filter)){
-
-			  $match  =	 [
-				"bool"=> [
-				  "must"=> $message_filter
-				]
-			  ];
+              if(count($router_filter) > 1){
+				  $match  =	 [
+					"bool"=> [
+					  "must"=> $message_filter,
+					  "should"=> $router_filter
+					]
+				  ];
+			  }else{
+				  $match  =	 [
+					"bool"=> [
+					  "must"=> array_merge($router_filter,$message_filter)					
+					  ]
+				  ];
+			  }
+			 
 			  $query->query = $match;
 		}else if($date_limit){		
 			$match = [
@@ -227,24 +283,37 @@ class ElasticController extends Controller
 			
 			$query->query = $match;
 		}else if($search){
-		
+			  if(count($router_filter) > 1){
+				  $match  =	 [
+					"bool"=> [
+					  "must"=> [
+						  "match_phrase_prefix"=> [
+							"MESSAGE"=> '.*'.$search.'.*'
+						  ]
+					  ],
+					  "should"=> $router_filter
+					]
+				  ];
+			  }else{  
+				$match_prefix[] = [
+						  "match_phrase_prefix"=> [
+							"MESSAGE"=> '.*'.$search.'.*'
+						  ]
+						];
+				$match  =	 [
+					"bool"=> [
+					  "must"=> array_merge($router_filter,$match_prefix)
+					]
+				  ];
+			  }
+			  $query->query = $match;
+		}else{
 			$match  =	 [
 				"bool"=> [
-				  "should"=> [
-					[
-					  "match_phrase_prefix"=> [
-						"MESSAGE"=> '.*'.$search.'.*'
-					  ]
-					],
-					[
-					  "match"=> [
-						"HOST"=> '.*'.$search.'.*'
-					  ]
-					]
-				  ]
+				  "should"=> $router_filter
 				]
-			  ];
-			  $query->query = $match;
+			];
+			$query->query = $match;
 		}
 		
 		$query->orderBy(['@timestamp' => SORT_DESC]);

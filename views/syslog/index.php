@@ -29,6 +29,18 @@
 								<option value="10000">2000+ entries</option>
 							</select>
 						</div>
+						
+						<div class="form-inline search-form search-box">
+							<select class="custom-select form-control js_router" required="">
+							    <?php
+								$option = '<option value="all">----- All Router-----</option>';
+								foreach($routers as $router){
+									$option .= '<option value="'.$router['ip'].'">'.$router['name'].' ('.$router['ip'].')</option>';
+								}
+                                print $option;
+								?>
+							</select>
+						</div>
 
 						<input class="js_searching" value="<?=@$search?>" type="search" placeholder="Search..">
 					</div>

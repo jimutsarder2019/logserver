@@ -30,7 +30,11 @@ $(document).ready(function(){
 	   getUserCount();
 	}
 	
-	$(".js_limit_change").change(function(){
+    $(".js_limit_change").change(function(){
+		generateLogData();
+	});
+	
+	$(".js_router").change(function(){
 		generateLogData();
 	});
 	
@@ -112,7 +116,8 @@ function getPostParams()
 	var src_ip = $('.srcip').val();
 	var dst_ip = $('.dstip').val();
 	var nat_ip = $('.natip').val();
-	return {limit:limit, search:search_value, from_date:date_start, to_date:date_end, user:user, mac:mac, src_ip:src_ip, dst_ip:dst_ip, nat_ip:nat_ip};
+	var router = $('.js_router').val();
+	return {limit:limit, search:search_value, from_date:date_start, to_date:date_end, router:router, user:user, mac:mac, src_ip:src_ip, dst_ip:dst_ip, nat_ip:nat_ip};
 }
 
 function generateLogData(type=false)
