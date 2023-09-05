@@ -44,6 +44,8 @@ input[type=file]::file-selector-button:hover {
 
     <?= $form->field($model, 'password')->passwordInput(['maxlength' => true]) ?>
 	
+    <?= $form->field($model, 'authKey')->textInput(['maxlength' => true]) ?>
+	
 	<?= $form->field($model, 'role')->dropDownList([
 		1 => 'Admin',
 		2 => 'User',
