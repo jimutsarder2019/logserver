@@ -43,7 +43,7 @@ class ApiController extends Controller
 								print_r($config);
                             try {
 							// Initiate client with config object
-							$client = new Client($config);
+							//$client = new Client($config);
 							
 							}
 
@@ -52,7 +52,7 @@ class ApiController extends Controller
 							echo json_encode(array("success" => false, "message" => $e->getMessage()));
 							return;
 						}
-
+/*
 							// Get list of all available profiles with name Block
 							$query = new Query('/ppp/active/print');
 							$query->where('service', 'pppoe');
@@ -61,7 +61,7 @@ class ApiController extends Controller
 							if(!empty($secrets)){
 								$active_user_count += count($secrets);
 							}
-						
+						*/
 
 					}
 				}
