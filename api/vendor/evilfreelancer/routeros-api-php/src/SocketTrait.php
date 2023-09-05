@@ -55,6 +55,7 @@ trait SocketTrait
 
         // Throw error is socket is not initiated
         if (false === $socketClient || !is_resource($socketClient)) {
+			return;
             //throw new ConnectException('Unable to establish socket session, ' . $socketErrorString, $socketErrorNumber);
         }else{
 
