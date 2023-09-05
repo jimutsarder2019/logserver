@@ -87,7 +87,7 @@ class Client implements Interfaces\ClientInterface
 
         // Throw error if cannot to connect
         if (false === $this->connect()) {
-            throw new ConnectException('Unable to connect to ' . $config->get('host') . ':' . $config->get('port'));
+            //throw new ConnectException('Unable to connect to ' . $config->get('host') . ':' . $config->get('port'));
         }
     }
 
