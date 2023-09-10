@@ -40,6 +40,10 @@
 						    <div class="col-md-6"><?=@$license_data['upgradable_till']?></div>
 						</div>
 						<div class="row">
+						    <div class="col-md-6">Maximum number of User:</div>
+						    <div class="col-md-6"><?=@$license_data['maximum_number_of_user_allow']?></div>
+						</div>
+						<div class="row">
 						    <div class="col-md-6">Maximum number of Account:</div>
 						    <div class="col-md-6"><?=@$license_data['maximum_number_of_account']?></div>
 						</div>
