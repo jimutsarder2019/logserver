@@ -38,19 +38,19 @@ use yii\widgets\ActiveForm;
 		    <?= $form->field($model, 'api_password')->textInput(['maxlength' => true]) ?>
 		</div>
 		<div class="col-xl-4 col-md-4">
-		    <?= $form->field($model, 'type')->textInput(['maxlength' => true]) ?>
+		    <?= $form->field($model, 'status')->dropDownList([1=>'Active',0=>'In active']); ?>
 		</div>
 	</div>
 
-    <div class="form-group row">
+    <div class="form-group row" style="display:none">
 		<div class="col-xl-4 col-md-4">
-		    <?= $form->field($model, 'status')->dropDownList([1=>'Active',0=>'In active']); ?>
+		    <?= $form->field($model, 'type')->textInput(['maxlength' => true, 'value'=>'demo']) ?>
 		</div>
 		<div class="col-xl-4 col-md-4">
-		    <?= $form->field($model, 'connection')->textInput(['maxlength' => true]) ?>
+		    <?= $form->field($model, 'connection')->textInput(['maxlength' => true, 'value'=>'demo']) ?>
 		</div>
 		<div class="col-xl-4 col-md-4">
-		    <?= $form->field($model, 'ipv6')->textInput(['maxlength' => true]) ?>
+		    <?= $form->field($model, 'ipv6')->textInput(['maxlength' => true, 'value'=>'demo']) ?>
 		</div>
 	</div>
 
