@@ -110,8 +110,9 @@ class ApiController extends Controller
 							$query->where('service', 'pppoe');
 							$secrets = $client->query($query)->read();
 							
+							print '<pre>'
 							print_r($secrets);
-							
+							print '</pre>'
 							if(!empty($secrets)){
 								$active_user_count += count($secrets);
 							}
@@ -119,7 +120,10 @@ class ApiController extends Controller
 							die;
 						} catch (\Throwable $th) {
 							//var_dump($th);
+													
+							print '<pre>'
 							print_r($th);
+							print '</pre>'
 							die;
 							
 						}
