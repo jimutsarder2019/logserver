@@ -47,6 +47,7 @@ $baseUrl = Url::base();
 						<div class="router-create">
 							<?= $this->render('_form', [
 								'model' => $model,
+								'error'=>@$error
 							]) ?>
 
 						</div>

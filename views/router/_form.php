@@ -9,7 +9,13 @@ use yii\widgets\ActiveForm;
 ?>
 
 <div class="router-form">
-
+    <?php 
+	
+	if(isset($error) && $error == 'yes'){
+		print '<p style="color:red;">Router is not valid. Please create valid router</p>';
+	}
+	
+	?>
     <?php $form = ActiveForm::begin(); ?>
 	
 	<div class="form-group row">

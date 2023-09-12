@@ -2,6 +2,10 @@
 
 namespace app\controllers;
 
+ini_set('max_execution_time', '300');
+
+require_once __DIR__ . '/../api/vendor/autoload.php';
+
 use app\models\Router;
 use app\models\RouterSearch;
 use yii\filters\AccessControl;
@@ -10,6 +14,10 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use app\components\ApplicationHelper;
 use app\components\CustomController;
+
+use \RouterOS\Config;
+use \RouterOS\Client;
+use \RouterOS\Query;
 
 /**
  * RouterController implements the CRUD actions for Router model.
@@ -107,10 +115,31 @@ class RouterController extends CustomController
 					$model->identity = 'identity';
 					$model->date = date('Y-m-d');
 					if($model->validate()){
-					if ($model->save()) {
-						//return $this->redirect(['view', 'id' => $model->id]);
-						return $this->redirect(['index']);
-					}
+						
+						try {
+							$client = new Client([
+								'host' => $model->ip,
+								'user' => $model->api_username,
+								'pass' => $model->api_password]
+							]);
+							
+							$query = new Query('/ppp/active/print');
+							$query->where('service', 'pppoe');
+							$secrets = $client->query($query)->read();
+							
+							if(!empty($secrets)){
+								if ($model->save()) {
+									//return $this->redirect(['view', 'id' => $model->id]);
+									return $this->redirect(['index']);
+								}
+							}
+						} catch (\Throwable $th) {
+							return $this->render('create', [
+								'model' => $model,
+								'error'=>'yes'
+							]);
+							
+						}					
 					}else{
 						//print_r($model->getErrors());die;
 					}
@@ -121,6 +150,7 @@ class RouterController extends CustomController
 
 			return $this->render('create', [
 				'model' => $model,
+				'error'=>'no'
 			]);
 		}else{
 			throw new NotFoundHttpException('The requested page does not exist.');
