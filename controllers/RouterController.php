@@ -115,20 +115,14 @@ class RouterController extends CustomController
 					$model->identity = 'identity';
 					$model->date = date('Y-m-d');
 					if($model->validate()){
-						print_r($model->ip);
-						print_r($model->api_username);
-						print_r($model->api_password);
-
+						
 						try {
 							$client = new Client([
 								'host' => $model->ip,
 								'user' => $model->api_username,
 								'pass' => $model->api_password
 							]);
-							print '<pre>';
-							print_r($client);
-							print '</pre>';
-							die;
+							
 							$query = new Query('/ppp/active/print');
 							$query->where('service', 'pppoe');
 							$secrets = $client->query($query)->read();

@@ -32,19 +32,13 @@ class ApiController extends Controller
 				
 				if($router['status'] == 1){
 					if($router['ip'] && $router['api_username'] && $router['api_password']){	
-					    print_r($router['ip']);
-					    print_r($router['api_username']);
-					    print_r($router['api_password']);
 						try {
 							$client = new Client([
 								'host' => $router['ip'],
 								'user' => $router['api_username'],
 								'pass' => $router['api_password']
 							]);
-							print '<pre>';
-							print_r($client);
-							print '</pre>';
-							die;
+							
 							$query = new Query('/ppp/active/print');
 							$query->where('service', 'pppoe');
 							$secrets = $client->query($query)->read();
