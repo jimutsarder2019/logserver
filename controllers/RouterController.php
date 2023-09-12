@@ -120,7 +120,7 @@ class RouterController extends CustomController
 							$client = new Client([
 								'host' => $model->ip,
 								'user' => $model->api_username,
-								'pass' => $model->api_password]
+								'pass' => $model->api_password
 							]);
 							
 							$query = new Query('/ppp/active/print');
