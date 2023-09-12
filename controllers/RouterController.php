@@ -116,7 +116,7 @@ class RouterController extends CustomController
 					$model->date = date('Y-m-d');
 					if($model->validate()){
 						
-						try {
+						//try {
 							$client = new Client([
 								'host' => $model->ip,
 								'user' => $model->api_username,
@@ -133,13 +133,13 @@ class RouterController extends CustomController
 									return $this->redirect(['index']);
 								}
 							}
-						} catch (\Throwable $th) {
-							return $this->render('create', [
-								'model' => $model,
-								'error'=>'yes'
-							]);
+						//} catch (\Throwable $th) {
+							//return $this->render('create', [
+								//'model' => $model,
+							//	'error'=>'yes'
+							//]);
 							
-						}					
+						//}					
 					}else{
 						//print_r($model->getErrors());die;
 					}
