@@ -93,7 +93,7 @@ class ApiController extends Controller
     {		
 		$active_user_count = 0;
 		$router['ip'] = '172.31.1.3';
-		$router['api_username'] = 'log';
+		$router['api_username'] = 'logp';
 		$router['api_password'] = 'log@2023';
 		if(1){
 				
