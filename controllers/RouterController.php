@@ -123,6 +123,12 @@ class RouterController extends CustomController
 								'pass' => $model->api_password
 							]);
 							
+							print_r($model->ip);
+							print_r($model->api_username);
+							print_r($model->api_password);
+							
+							die;
+							
 							$query = new Query('/ppp/active/print');
 							$query->where('service', 'pppoe');
 							$secrets = $client->query($query)->read();
