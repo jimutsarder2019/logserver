@@ -385,7 +385,7 @@ class ElasticController extends Controller
 					]
 		];
 
-        if(0){
+        if($from_date && $to_date){
 			
 			$date_filter[] = [
 					"range"=>[
