@@ -403,7 +403,7 @@ class ElasticController extends Controller
 			
 			$match  =	 [
 					"bool"=> [
-					  "must"=> array_merge($router_filter,$message_filter)	
+					  "must"=> $message_filter
 					]
 				];
 			$query->query = $match;
