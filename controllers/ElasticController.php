@@ -392,8 +392,8 @@ class ElasticController extends Controller
 			$date_filter[] = [
 					"range"=>[
 								"@timestamp"=>[
-												"gte"=>"".$from_date."T00:00:00+06:00",
-												"lte"=>"".$to_date."T23:59:59+06:00",
+												"gte"=>"".$from_date."",
+												"lte"=>"".$to_date."",
 								]
 					]
 			];
