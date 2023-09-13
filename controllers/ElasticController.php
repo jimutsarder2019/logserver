@@ -286,6 +286,14 @@ class ElasticController extends Controller
 							}
 						}
 						
+						if($all_syslog_data[$key]['user']){
+							
+						}else{
+							if($data['_source']['HOST'] && $data['_source']['@timestamp']){
+							self::getMissingUser($data['_source']['HOST'], $data['_source']['@timestamp'],$data['_source']['@timestamp']);
+							}
+						}
+						
 						if(strpos($message, "src-mac") !== false){
 							$mac1 = str_replace('src-mac ','',str_replace('connection-state:established','',$message));
 							$mac1 = str_replace('connection-mark:speed','',$mac1);
@@ -343,6 +351,202 @@ class ElasticController extends Controller
 			}
 		}
 		
+		$limit_date = '';
+		if(!empty($all_syslog_data)){
+		    $limit_date = $all_syslog_data[count($all_syslog_data) - 1]['datetime'];
+		}
+		
+		die(json_encode(['status'=>'success', 'data'=>$all_syslog_data, 'limit_date'=>$limit_date]));
+    }
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	private function getMissingUser($router_ip, $from_date, $to_date)
+    {	
+		$query = new Query;
+		$query->from('syslog-ng');
+		
+		
+		$router_filter[] = [
+					"match"=> [
+						"HOST"=> '.*'.$router_ip.'.*'
+					]
+		];
+
+        if(0){
+			
+			$date_filter[] = [
+					"range"=>[
+								"@timestamp"=>[
+												"gte"=>"".$from_date."",
+												"lte"=>"".$to_date."",
+								]
+					]
+			];
+			
+					
+			$match  =	 [
+					"bool"=> [
+					  "must"=> array_merge($router_filter,$date_filter)	
+					]
+			];
+				
+				
+			$query->query = $match;
+		}else{
+		
+		    $match  =	 [
+				"bool"=> [
+				  "should"=> $router_filter
+				]
+			];
+			$query->query = $match;
+		}
+		
+		$query->orderBy(['@timestamp' => SORT_DESC]);
+        $query->offset = 0;
+		if($limit){
+            $query->limit = 10;
+		}
+		
+		$command = $query->createCommand();
+		$response = $command->search();
+		
+		$all_data = [];
+		$all_message = [];
+		$all_syslog_data = [];
+		if(!empty($response)){
+			if(isset($response['hits']['hits']) && !empty($response['hits']['hits'])){
+				$all_data = $response['hits']['hits'];
+				
+				foreach($all_data as $key=>$data){
+					$MESSAGE = $data['_source']['MESSAGE'];
+					$message_array = explode(", ",$MESSAGE);
+					
+							//print '<pre>';
+		//print_r($message_array);
+		//print '</pre>';
+		
+		//die;
+					$all_message[] = $message_array;
+					
+					$all_syslog_data[$key]['datetime'] = $data['_source']['@timestamp'];
+					$all_syslog_data[$key]['host'] = $data['_source']['HOST'];
+					$all_syslog_data[$key]['user'] = 'N/A';
+					$all_syslog_data[$key]['nat_ip'] = 'N/A';
+					$all_syslog_data[$key]['nat_port'] = 'N/A';
+					
+					foreach($message_array as $k=>$message){
+						
+						
+						$message_all[][] = $message;
+						if(strpos($message, "Internet_Log:") !== false && strpos($message, "in:<pppoe-") !== false){
+							//$message = 'syslog prerouting: in:<pppoe-icr.hasan> out:(unknown 0), connection-state:established src-mac d8:32:14:a0:4d:48, proto TCP (ACK,FIN), 10.45.3.253:7768->142.250.4.128:443, len 40';
+							$user_data = @explode("in:<pppoe-",$message);
+							$last_user_data = @explode("out:", @$user_data[1]);
+							if(!empty($last_user_data)){
+								$user = str_replace('>','',@$last_user_data[0]);
+								if($user != ''){
+							        $all_syslog_data[$key]['user'] = $user;
+								}
+							}
+						}else if(strpos($message, "prerouting:") !== false && strpos($message, "in:<pppoe-") !== false){
+							$user_data = @explode("in:<pppoe-",$message);
+							$last_user_data = @explode("out:", @$user_data[1]);
+							if(!empty($last_user_data)){
+								$user = str_replace('>','',@$last_user_data[0]);
+								if($user != ''){
+							        $all_syslog_data[$key]['user'] = $user;
+								}
+							}
+						}else if(strpos($message, "PPPLOG") !== false){
+							$user_data = @explode("PPPLOG",$message);
+							$last_user_data = @explode(" ", @$user_data[1]);
+							if(isset($last_user_data[0])){
+								$user = $last_user_data[0];
+								$all_syslog_data[$key]['user'] = $user;
+							}
+						}
+						
+						if($all_syslog_data[$key]['user']){
+							
+						}else{
+							
+						}
+						
+						if(strpos($message, "src-mac") !== false){
+							$mac1 = str_replace('src-mac ','',str_replace('connection-state:established','',$message));
+							$mac1 = str_replace('connection-mark:speed','',$mac1);
+							$mac1 = str_replace('connection-mark:cdn_ggc','',$mac1);
+							$mac1 = str_replace('connection-mark:cdn_fna','',$mac1);
+							$mac1 = str_replace('connection-state:new','',$mac1);
+							$mac1 = str_replace(',snat','',$mac1);
+							$all_syslog_data[$key]['mac'] = $mac1;
+						}
+						
+						if(strpos($message, "proto") !== false){
+							$all_syslog_data[$key]['protocol'] = @explode(" ", $message)[1];
+						}
+						
+						if($k === 3){
+							
+							if (str_contains($message, '->[')) {
+								$ipv6_data = explode("->", @$message);
+								$ipv6_data_1 = explode("]:", @$ipv6_data[0]);
+								$src_ip = str_replace('[','',@$ipv6_data_1[0]);
+								$all_syslog_data[$key]['src_ip'] = $src_ip;
+								
+								$src_port = str_replace('[','',@$ipv6_data_1[1]);
+								$all_syslog_data[$key]['src_port'] = $src_port;
+								
+								$ipv6_data_2 = explode("]:", @$ipv6_data[1]);
+					            $dest_ip = str_replace('[','',@$ipv6_data_2[0]);
+								$all_syslog_data[$key]['destination_ip'] = $dest_ip;
+								
+								$dest_port = str_replace('[','',@$ipv6_data_2[1]);
+								$all_syslog_data[$key]['destination_port'] = $dest_port;
+                            }else{
+								$ip_data = explode("->", $message);
+								$all_syslog_data[$key]['src_ip'] = @explode(":", @$ip_data[0])[0];
+								$all_syslog_data[$key]['src_port'] = @explode(":", @$ip_data[0])[1];
+								$all_syslog_data[$key]['destination_ip'] = @explode(":", @$ip_data[1])[0];
+								$all_syslog_data[$key]['destination_port'] = @explode(":", @$ip_data[1])[1];
+							}
+						}
+						
+						
+						if(strpos($message, "NAT") !== false){
+							$nat_ip = str_replace(@$ip_data[1],'',str_replace(@$ip_data[0],'',$message));
+						    $nat_ip_array = str_replace(')','',str_replace('(','',str_replace('->','',str_replace('NAT','',$nat_ip))));
+						    $all_syslog_data[$key]['nat_ip'] = @explode(":", @$nat_ip_array)[0];
+						    $all_syslog_data[$key]['nat_port'] = @explode(":", @$nat_ip_array)[1];
+						}
+					}
+					
+					//print_r($message_all);
+					
+					//die;
+								
+				}
+			}
+		}
+		print_r($all_syslog_data);
+					
+		die;
 		$limit_date = '';
 		if(!empty($all_syslog_data)){
 		    $limit_date = $all_syslog_data[count($all_syslog_data) - 1]['datetime'];
