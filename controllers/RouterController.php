@@ -128,7 +128,7 @@ class RouterController extends CustomController
 							$secrets = $client->query($query)->read();
 							
 							print '<pre>';
-							print_r($secrets);
+							print_r($client);
 							print '</pre>';
 							die;
 							if(1){
