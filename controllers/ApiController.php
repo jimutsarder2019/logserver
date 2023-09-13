@@ -89,52 +89,6 @@ class ApiController extends Controller
     }
 	
 	
-	public function actionDemo()
-    {		
-		$active_user_count = 0;
-		$router['ip'] = '172.31.1.3';
-		$router['api_username'] = 'logp';
-		$router['api_password'] = 'log@2023';
-		if(1){
-				
-				if(1){
-					if($router['ip'] && $router['api_username'] && $router['api_password']){	
-						try {
-							$client = new Client([
-								'host' => $router['ip'],
-								'user' => $router['api_username'],
-								'pass' => $router['api_password']
-							]);
-							
-							$query = new Query('/ppp/active/print');
-							$query->where('service', 'pppoe');
-							$secrets = $client->query($query)->read();
-							
-							print '<pre>';
-							print_r($secrets);
-							print '</pre>';
-							if(!empty($secrets)){
-								$active_user_count += count($secrets);
-							}
-							
-							die;
-						} catch (\Throwable $th) {
-							//var_dump($th);
-													
-							print '<pre>';
-							print_r($th);
-							print '</pre>';
-							die;
-							
-						}
-
-					}
-				}
-		}
-		
-    }
-	
-	
 	private function sendMail($body)
 	{
 		if(isset(Yii::$app->user->id) && Yii::$app->user->id){
