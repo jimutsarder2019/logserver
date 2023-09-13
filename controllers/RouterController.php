@@ -127,11 +127,7 @@ class RouterController extends CustomController
 							$query->where('service', 'pppoe');
 							$secrets = $client->query($query)->read();
 							
-							print '<pre>';
-							print_r($client);
-							print '</pre>';
-							die;
-							if(1){
+							if($client){
 								if ($model->save()) {
 									//return $this->redirect(['view', 'id' => $model->id]);
 									return $this->redirect(['index']);
@@ -145,7 +141,7 @@ class RouterController extends CustomController
 							
 						}					
 					}else{
-						print_r($model->getErrors());die;
+						//print_r($model->getErrors());die;
 					}
 				}
 			} else {
