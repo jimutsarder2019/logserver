@@ -277,6 +277,13 @@ class ElasticController extends Controller
 							        $all_syslog_data[$key]['user'] = $user;
 								}
 							}
+						}else if(strpos($message, "PPPLOG") !== false){
+							$user_data = @explode("PPPLOG",$message);
+							$last_user_data = @explode(" ", @$user_data[1]);
+							if(isset($last_user_data[0])){
+								$user = $last_user_data[0];
+								$all_syslog_data[$key]['user'] = $user;
+							}
 						}
 						
 						if(strpos($message, "src-mac") !== false){
