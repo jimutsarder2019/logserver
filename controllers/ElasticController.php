@@ -285,6 +285,7 @@ class ElasticController extends Controller
 							$mac1 = str_replace('connection-mark:cdn_ggc','',$mac1);
 							$mac1 = str_replace('connection-mark:cdn_fna','',$mac1);
 							$mac1 = str_replace('connection-state:new','',$mac1);
+							$mac1 = str_replace(',snat','',$mac1);
 							$all_syslog_data[$key]['mac'] = $mac1;
 						}
 						
