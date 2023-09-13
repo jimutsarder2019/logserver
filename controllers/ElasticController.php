@@ -286,9 +286,7 @@ class ElasticController extends Controller
 							}
 						}
 						
-						if($all_syslog_data[$key]['user']){
-							
-						}else{
+						if($all_syslog_data[$key]['user'] == 'N/A'){
 							if($data['_source']['HOST'] && $data['_source']['@timestamp']){
 							self::getMissingUser($data['_source']['HOST'], $data['_source']['@timestamp'],$data['_source']['@timestamp']);
 							}
