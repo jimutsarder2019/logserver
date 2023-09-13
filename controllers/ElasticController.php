@@ -337,7 +337,9 @@ class ElasticController extends Controller
 						
 						if(isset($all_syslog_data[$key]['src_ip']) && $all_syslog_data[$key]['src_ip'] && $all_syslog_data[$key]['user'] == 'N/A'){
 							if($data['_source']['HOST'] && $data['_source']['@timestamp']){
-							self::getMissingUser($all_syslog_data[$key]['src_ip'], $data['_source']['@timestamp'],$data['_source']['@timestamp']);
+							$missing_user = self::getMissingUser($all_syslog_data[$key]['src_ip'], $data['_source']['@timestamp'],$data['_source']['@timestamp']);
+							
+							$all_syslog_data[$key]['user'] = $missing_user.'-Missing';
 							}
 						}
 					}
@@ -436,7 +438,7 @@ class ElasticController extends Controller
 						
 						$all_syslog_data[$key]['datetime'] = $data['_source']['@timestamp'];
 						$all_syslog_data[$key]['host'] = $data['_source']['HOST'];
-						$all_syslog_data[$key]['user'] = 'N/A';
+						$all_syslog_data[$key]['user'] = '';
 						$all_syslog_data[$key]['nat_ip'] = 'N/A';
 						$all_syslog_data[$key]['nat_port'] = 'N/A';
 						
@@ -473,10 +475,9 @@ class ElasticController extends Controller
 							}
 							
 							if($all_syslog_data[$key]['user']){
-								
-							}else{
-								
+								return $all_syslog_data[$key]['user'];
 							}
+							
 							
 							if(strpos($message, "src-mac") !== false){
 								$mac1 = str_replace('src-mac ','',str_replace('connection-state:established','',$message));
@@ -534,15 +535,6 @@ class ElasticController extends Controller
 					}
 				}
 			}
-			print_r($all_syslog_data);
-						
-			die;
-			$limit_date = '';
-			if(!empty($all_syslog_data)){
-				$limit_date = $all_syslog_data[count($all_syslog_data) - 1]['datetime'];
-			}
-			
-			die(json_encode(['status'=>'success', 'data'=>$all_syslog_data, 'limit_date'=>$limit_date]));
 		}
     }
 }
