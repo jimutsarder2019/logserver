@@ -335,7 +335,7 @@ class ElasticController extends Controller
 						    $all_syslog_data[$key]['nat_port'] = @explode(":", @$nat_ip_array)[1];
 						}
 						
-						if($all_syslog_data[$key]['user'] == 'N/A' && $all_syslog_data[$key]['src_ip']){
+						if(isset($all_syslog_data[$key]['src_ip']) && $all_syslog_data[$key]['src_ip'] && $all_syslog_data[$key]['user'] == 'N/A'){
 							if($data['_source']['HOST'] && $data['_source']['@timestamp']){
 							self::getMissingUser($all_syslog_data[$key]['src_ip'], $data['_source']['@timestamp'],$data['_source']['@timestamp']);
 							}
