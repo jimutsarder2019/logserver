@@ -384,7 +384,7 @@ class ElasticController extends Controller
 			
 			$query->orderBy(['@timestamp' => SORT_DESC]);
 			$query->offset = 0;
-			$query->limit = 1;
+			$query->limit = 1000;
 			
 			$command = $query->createCommand();
 			$response = $command->search();
@@ -392,8 +392,8 @@ class ElasticController extends Controller
 			$all_data = [];
 			$all_syslog_data = [];
 			
-			//print_r($response);
-			//die;
+			print_r($response);
+			die;
 			if(!empty($response)){
 				if(isset($response['hits']['hits'][0]) && !empty($response['hits']['hits'][0])){
 					$all_data = $response['hits']['hits'][0];
