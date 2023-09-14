@@ -346,7 +346,7 @@ class ElasticController extends Controller
 							$missing_user = self::getMissingUser($all_syslog_data[$key]['src_ip'], $data['_source']['@timestamp'],$data['_source']['@timestamp']);
 							
 								if($missing_user){
-									$all_syslog_data[$key]['user'] = $missing_user.'-Missing';
+									$all_syslog_data[$key]['user'] = $missing_user;
 								}
 							}
 						}
@@ -388,7 +388,7 @@ class ElasticController extends Controller
 	
 	
 	
-	private function getMissingUser($src_ip, $from_date, $to_date)
+	private function getMissingUser($src_ip)
     {	
 	    $src_ip = '192.168.51.251';
 		$query = new Query;
@@ -402,20 +402,7 @@ class ElasticController extends Controller
 		];
 		
 		
-		if($from_date && $to_date && !empty($src_filter)){
-			
-			$date_filter[] = [
-					"range"=>[
-								"@timestamp"=>[
-												"gte"=>"".$from_date."",
-												"lte"=>"".$to_date."",
-								]
-					]
-			];
-			
-			
-			$message_filter = array_merge($src_filter, $date_filter);
-			
+		if(!empty($src_filter)){	
 			$match  =	 [
 					"bool"=> [
 					  "must"=> $src_filter
@@ -426,7 +413,7 @@ class ElasticController extends Controller
 			
 			$query->orderBy(['@timestamp' => SORT_DESC]);
 			$query->offset = 0;
-			$query->limit = 10000;
+			$query->limit = 1;
 			
 			$command = $query->createCommand();
 			$response = $command->search();
@@ -438,15 +425,14 @@ class ElasticController extends Controller
 					$all_data = $response['hits']['hits'];
 					
 					if(!empty($all_data)){
-						$index = count($all_data) - 1;
-						$missing_user_data = $all_data[$index]['_source']['MESSAGE'];
+						$missing_user_data = $all_data[0]['_source']['MESSAGE'];
 						
 						if(strpos($missing_user_data, "PPPLOG") !== false){
 							$message_array = explode(" ",$missing_user_data);
 							if(isset($message_array[1])){
 								$user = $message_array[1];
 								
-								return $user.'-missing';
+								return $user.'-';
 							}
 						}
 					}
