@@ -240,16 +240,16 @@ class ElasticController extends Controller
 				foreach($all_data as $key=>$data){
 					$MESSAGE = $data['_source']['MESSAGE'];
 					
-					print $MESSAGE;
+					//print $MESSAGE;
 					
-					print '</br>';
+					//print '</br>';
 					$message_array = explode(", ",$MESSAGE);
 					
-							print '<pre>';
-		print_r($message_array);
-		print '</pre>';
+							//print '<pre>';
+		//print_r($message_array);
+		//print '</pre>';
 		
-		die;
+		//die;
 					$all_message[] = $message_array;
 					
 					$all_syslog_data[$key]['datetime'] = $data['_source']['@timestamp'];
@@ -355,6 +355,10 @@ class ElasticController extends Controller
 					//die;
 								
 				}
+				
+				print_r($all_message);
+					
+					die;
 			}
 		}
 		
