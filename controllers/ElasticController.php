@@ -426,7 +426,7 @@ class ElasticController extends Controller
 			
 			$query->orderBy(['@timestamp' => SORT_DESC]);
 			$query->offset = 0;
-			//$query->limit = 10;
+			$query->limit = 10000;
 			
 			$command = $query->createCommand();
 			$response = $command->search();
