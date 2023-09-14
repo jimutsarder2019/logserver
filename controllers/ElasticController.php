@@ -357,6 +357,10 @@ class ElasticController extends Controller
 	
 	private function getMissingUser($src_ip)
     {	
+	
+	    print $src_ip;
+		
+		die;
 	    //$src_ip = '192.168.51.251'; //for test: you can active
 		$query = new Query;
 		$query->from('syslog-ng');
