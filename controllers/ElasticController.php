@@ -235,6 +235,12 @@ class ElasticController extends Controller
 			$all_data = [];
 			$all_message = [];
 			$all_syslog_data = [];
+			
+			if(isset($_REQUEST['debug'])){
+			print_r($response);
+			
+			die;
+			}
 			if(!empty($response)){
 				if(isset($response['hits']['hits']) && !empty($response['hits']['hits'])){
 					$all_data = $response['hits']['hits'];
