@@ -34,6 +34,7 @@ $this->params['breadcrumbs'][] = 'Update';
 						<div class="router-create">
 							<?= $this->render('_form', [
 								'model' => $model,
+								'error'=>@$error
 							]) ?>
 
 						</div>

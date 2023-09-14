@@ -69,7 +69,6 @@ $baseUrl = Url::base();
 										//'id',
 										'name',
 										'identity',
-										'type',
 										'ip',
 										'api_port',
 										'api_username',
@@ -80,9 +79,13 @@ $baseUrl = Url::base();
 												return str_repeat("*", strlen($model->api_password)); 
 											}
 										],
-										'status',
-										'ipv6',
-										'connection',
+										[
+											'label' => 'Status',
+											'headerOptions' => ['style' => 'color:#ff4c3b'],
+											'content' => function ($model) {
+												return $model->status == 1?'Active':'In active';
+											}
+										],
 										//'date',
 										[
 										    'class' => 'yii\grid\ActionColumn',

@@ -171,8 +171,31 @@ class RouterController extends CustomController
 
 			$model = $this->findModel($id);
 
-			if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-				return $this->redirect(['index']);
+			if ($this->request->isPost && $model->load($this->request->post())) {
+				try {
+					$client = new Client([
+						'host' => $model->ip,
+						'user' => $model->api_username,
+						'pass' => $model->api_password
+					]);
+					
+					$query = new Query('/ppp/active/print');
+					$query->where('service', 'pppoe');
+					$secrets = $client->query($query)->read();
+					
+					if($client){
+						if ($model->save()) {
+							//return $this->redirect(['view', 'id' => $model->id]);
+							return $this->redirect(['index']);
+						}
+					}
+				} catch (\Throwable $th) {
+					return $this->render('update', [
+						'model' => $model,
+						'error'=>'yes'
+					]);
+					
+				}
 			}
 
 			return $this->render('update', [
