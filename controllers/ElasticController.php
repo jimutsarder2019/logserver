@@ -358,7 +358,7 @@ class ElasticController extends Controller
 	private function getMissingUser($src_ip)
     {	
 	
-	    print $src_ip;
+	    //print $src_ip;
 		
 
 	    //$src_ip = '192.168.51.251'; //for test: you can active
@@ -392,11 +392,11 @@ class ElasticController extends Controller
 			$all_data = [];
 			$all_syslog_data = [];
 			
-			print_r($response);
-			die;
+			//print_r($response);
+			//die;
 			if(!empty($response)){
-				if(isset($response['hits']['hits']) && !empty($response['hits']['hits'])){
-					$all_data = $response['hits']['hits'];
+				if(isset($response['hits']['hits'][0]) && !empty($response['hits']['hits'][0])){
+					$all_data = $response['hits']['hits'][0];
 					
 					if(!empty($all_data)){
 						$missing_user_data = $all_data[0]['_source']['MESSAGE'];
