@@ -368,7 +368,7 @@ class ElasticController extends Controller
 		$src_ip = 'PPPLOG';
 		$src_filter[] = [
 		  "match"=> [
-			"MESSAGE"=> '.'.$src_ip.'.*'
+			"MESSAGE"=> '.*'.$src_ip.'.*'
 		  ]
 		];
 		
