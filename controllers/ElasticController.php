@@ -359,24 +359,29 @@ class ElasticController extends Controller
     {	
 	
 	    //print $src_ip;
-		
+
 
 	    //$src_ip = '192.168.51.251'; //for test: you can active
 		$query = new Query;
 		$query->from('syslog-ng');
 		
-		$src_ip = 'PPPLOG';
+		$logcheck_filter[] = [
+		  "match"=> [
+			"PROGRAM"=> 'PPPLOG'
+		  ]
+		];
+		
 		$src_filter[] = [
 		  "match"=> [
 			"MESSAGE"=> '.*'.$src_ip.'.*'
 		  ]
 		];
 		
-		
-		if(!empty($src_filter)){	
+		$filter = array_merge($logcheck_filter,$src_filter)	
+		if(!empty($filter)){	
 			$match  =	 [
 					"bool"=> [
-					  "must"=> $src_filter
+					  "must"=> $filter
 					]
 				];
 			$query->query = $match;
