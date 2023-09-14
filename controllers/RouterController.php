@@ -117,8 +117,8 @@ class RouterController extends CustomController
 					if($model->validate()){
 						
 						try {
-							/*$client = new Client([
-								'host' => $model->ip,
+							$client = new Client([
+								'host' => $model->ip.':'.$model->api_port,
 								'user' => $model->api_username,
 								'pass' => $model->api_password
 							]);
@@ -126,8 +126,8 @@ class RouterController extends CustomController
 							$query = new Query('/ppp/active/print');
 							$query->where('service', 'pppoe');
 							$secrets = $client->query($query)->read();
-							*/
-							if(1){
+							
+							if($client){
 								if ($model->save()) {
 									//return $this->redirect(['view', 'id' => $model->id]);
 									return $this->redirect(['index']);
