@@ -173,13 +173,11 @@ class ElasticController extends Controller
 				  }else{
 					  $match  =	 [
 						"bool"=> [
-						  "must"=> array_merge($message_filter)					
+						  "must"=> array_merge($router_filter,$message_filter)					
 						  ]
 					  ];
 				  }
-				  //print_r($match);
-				  
-				  //die;
+				 
 				  $query->query = $match;
 			}else if($date_limit){		
 				$match = [
@@ -238,11 +236,6 @@ class ElasticController extends Controller
 			$all_message = [];
 			$all_syslog_data = [];
 			
-			//if(isset($_REQUEST['r'])){
-			print_r($response);
-			
-			die;
-			//}
 			if(!empty($response)){
 				if(isset($response['hits']['hits']) && !empty($response['hits']['hits'])){
 					$all_data = $response['hits']['hits'];
