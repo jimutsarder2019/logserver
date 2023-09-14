@@ -250,7 +250,7 @@ class ElasticController extends Controller
 		//print '</pre>';
 		
 		//die;
-					$all_message[] = $message_array;
+					$all_message[] = $MESSAGE;
 					
 					$all_syslog_data[$key]['datetime'] = $data['_source']['@timestamp'];
 					$all_syslog_data[$key]['host'] = $data['_source']['HOST'];
