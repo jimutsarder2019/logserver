@@ -333,10 +333,11 @@ class ElasticController extends Controller
 						}
 						
 						if(isset($all_syslog_data[$key]['src_ip']) && $all_syslog_data[$key]['src_ip'] && $all_syslog_data[$key]['user'] == 'N/A'){
-							$missing_user = self::getMissingUser($all_syslog_data[$key]['src_ip']);
+							$missing_user_data = self::getMissingUser($all_syslog_data[$key]['src_ip']);
 						
-							if($missing_user){
-								$all_syslog_data[$key]['user'] = $missing_user;
+							if(isset($missing_user_data['user']) && $missing_user_data['user']){
+								$all_syslog_data[$key]['user'] = $missing_user_data['user'];
+								$all_syslog_data[$key]['mac'] = $missing_user_data['mac'];
 							}
 						}
 					}			
@@ -356,7 +357,7 @@ class ElasticController extends Controller
 	
 	private function getMissingUser($src_ip)
     {	
-	    //$src_ip = '192.168.51.251'; //for test: you can active
+	    $src_ip = '192.168.51.251'; //for test: you can active
 		$query = new Query;
 		$query->from('syslog-ng');
 		
@@ -395,10 +396,11 @@ class ElasticController extends Controller
 						
 						if(strpos($missing_user_data, "PPPLOG") !== false){
 							$message_array = explode(" ",$missing_user_data);
-							if(isset($message_array[1])){
-								$user = $message_array[1];
+							if(isset($message_array[1],  $message_array[2])){
+								$user_name = $message_array[1];
+								$mac_ip = $message_array[2];
 								
-								return $user.'-';
+								return ['user'=>'-'.$user_name.'-', 'mac'=>'-'.$mac_ip.'-'];
 							}
 						}
 					}
