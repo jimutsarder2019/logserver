@@ -365,10 +365,10 @@ class ElasticController extends Controller
 		$query = new Query;
 		$query->from('syslog-ng');
 		
-		$src_ip2 = 'PPLOG';
+		$src_ip = 'PPPLOG';
 		$src_filter[] = [
 		  "match"=> [
-			"MESSAGE"=> '.*'.$src_ip2.'.*'
+			"MESSAGE"=> '.'.$src_ip.'.*'
 		  ]
 		];
 		
