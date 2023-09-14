@@ -440,17 +440,16 @@ class ElasticController extends Controller
 					if(!empty($all_data)){
 						$index = count($all_data) - 1;
 						$missing_user_data = $all_data[$index]['_source']['MESSAGE'];
-						$message_array = explode(", ",$missing_user_data);
 						
-						print '<pre>';
-						print_r($message_array);
-						
-						print '</pre>';
-						
-						die;
+						if(strpos($missing_user_data, "PPPLOG") !== false){
+							$message_array = explode(" ",$missing_user_data);
+							if(isset($message_array[1])){
+								$user = $message_array[1];
+								
+								return $user.'-missing';
+							}
+						}
 					}
-						
-
 				}
 			}
 		}
