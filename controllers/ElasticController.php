@@ -377,7 +377,7 @@ class ElasticController extends Controller
 		  ]
 		];
 		
-		$filter = array_merge($logcheck_filter,$src_filter)	
+		$filter = array_merge($logcheck_filter,$src_filter);
 		if(!empty($filter)){	
 			$match  =	 [
 					"bool"=> [
