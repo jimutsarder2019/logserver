@@ -237,6 +237,12 @@ class ElasticController extends Controller
 			if(isset($response['hits']['hits']) && !empty($response['hits']['hits'])){
 				$all_data = $response['hits']['hits'];
 				
+				print '<pre>';
+				print_r($all_data);
+				print '<pre>';
+				
+				die;
+				
 				foreach($all_data as $key=>$data){
 					$MESSAGE = $data['_source']['MESSAGE'];
 					
