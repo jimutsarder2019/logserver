@@ -242,16 +242,8 @@ class ElasticController extends Controller
 				foreach($all_data as $key=>$data){
 					$MESSAGE = $data['_source']['MESSAGE'];
 					
-					//print $MESSAGE;
-					
-					//print '</br>';
 					$message_array = explode(", ",$MESSAGE);
 					
-							//print '<pre>';
-		//print_r($message_array);
-		//print '</pre>';
-		
-		//die;
 					$all_message[] = $MESSAGE;
 					
 					$all_syslog_data[$key]['datetime'] = $data['_source']['@timestamp'];
@@ -265,7 +257,6 @@ class ElasticController extends Controller
 						
 						$message_all[][] = $message;
 						if(strpos($message, "Internet_Log:") !== false && strpos($message, "in:<pppoe-") !== false){
-							//$message = 'syslog prerouting: in:<pppoe-icr.hasan> out:(unknown 0), connection-state:established src-mac d8:32:14:a0:4d:48, proto TCP (ACK,FIN), 10.45.3.253:7768->142.250.4.128:443, len 40';
 							$user_data = @explode("in:<pppoe-",$message);
 							$last_user_data = @explode("out:", @$user_data[1]);
 							if(!empty($last_user_data)){
@@ -342,25 +333,14 @@ class ElasticController extends Controller
 						}
 						
 						if(isset($all_syslog_data[$key]['src_ip']) && $all_syslog_data[$key]['src_ip'] && $all_syslog_data[$key]['user'] == 'N/A'){
-							if($data['_source']['HOST'] && $data['_source']['@timestamp']){
-							$missing_user = self::getMissingUser($all_syslog_data[$key]['src_ip'], $data['_source']['@timestamp'],$data['_source']['@timestamp']);
-							
-								if($missing_user){
-									$all_syslog_data[$key]['user'] = $missing_user;
-								}
+							$missing_user = self::getMissingUser($all_syslog_data[$key]['src_ip']);
+						
+							if($missing_user){
+								$all_syslog_data[$key]['user'] = $missing_user;
 							}
 						}
-					}
-					
-					//print_r($message_all);
-					
-					//die;
-								
+					}			
 				}
-				
-				//print_r($all_message);
-					
-					//die;
 			}
 		}
 		
