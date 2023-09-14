@@ -352,25 +352,11 @@ class ElasticController extends Controller
 		die(json_encode(['status'=>'success', 'data'=>$all_syslog_data, 'limit_date'=>$limit_date]));
     }
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 	
 	private function getMissingUser($src_ip)
     {	
-	    $src_ip = '192.168.51.251';
+	    //$src_ip = '192.168.51.251'; //for test: you can active
 		$query = new Query;
 		$query->from('syslog-ng');
 		
