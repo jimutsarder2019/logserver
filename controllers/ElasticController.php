@@ -389,7 +389,7 @@ class ElasticController extends Controller
 			
 			$query->orderBy(['@timestamp' => SORT_DESC]);
 			$query->offset = 0;
-			$query->limit = 10000;
+			$query->limit = 1;
 			
 			$command = $query->createCommand();
 			$response = $command->search();
@@ -397,24 +397,24 @@ class ElasticController extends Controller
 			$all_data = [];
 			$all_syslog_data = [];
 			
-			print_r($response);
-			die;
+			//print_r($response);
+			//die;
 			if(!empty($response)){
-				if(isset($response['hits']['hits'][0]) && !empty($response['hits']['hits'][0])){
-					$all_data = $response['hits']['hits'][0];
+				if(isset($response['hits']['hits']) && !empty($response['hits']['hits'])){
+					$all_data = $response['hits']['hits'];
 					
 					if(!empty($all_data)){
 						$missing_user_data = $all_data[0]['_source']['MESSAGE'];
 						
-						if(strpos($missing_user_data, "PPPLOG") !== false){
+						//if(strpos($missing_user_data, "PPPLOG") !== false){
 							$message_array = explode(" ",$missing_user_data);
-							if(isset($message_array[1],  $message_array[2])){
-								$user_name = $message_array[1];
-								$mac_ip = $message_array[2];
+							if(isset($message_array[0],  $message_array[1])){
+								$user_name = $message_array[0];
+								$mac_ip = $message_array[1];
 								
 								return ['user'=>'-'.$user_name.'-', 'mac'=>'-'.$mac_ip.'-'];
 							}
-						}
+						//}
 					}
 				}
 			}
