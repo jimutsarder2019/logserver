@@ -437,62 +437,20 @@ class ElasticController extends Controller
 				if(isset($response['hits']['hits']) && !empty($response['hits']['hits'])){
 					$all_data = $response['hits']['hits'];
 					
-					print '<pre>';
-					print_r($all_data);
-					print '</pre>';
-					die;
-					
-					
-					
-					foreach($all_data as $key=>$data){
-						$MESSAGE = $data['_source']['MESSAGE'];
-						$message_array = explode(", ",$MESSAGE);
+					if(!empty($all_data)){
+						$index = count($all_data) - 1;
+						$missing_user_data = $all_data[$index]['_source']['MESSAGE'];
+						$message_array = explode(", ",$missing_user_data);
 						
-						$all_syslog_data[$key]['user'] = '';
+						print '<pre>';
+						print_r($message_array);
 						
-						foreach($message_array as $k=>$message){
-							
-							
-							$message_all[][] = $message;
-							if(strpos($message, "Internet_Log:") !== false && strpos($message, "in:<pppoe-") !== false){
-								//$message = 'syslog prerouting: in:<pppoe-icr.hasan> out:(unknown 0), connection-state:established src-mac d8:32:14:a0:4d:48, proto TCP (ACK,FIN), 10.45.3.253:7768->142.250.4.128:443, len 40';
-								$user_data = @explode("in:<pppoe-",$message);
-								$last_user_data = @explode("out:", @$user_data[1]);
-								if(!empty($last_user_data)){
-									$user = str_replace('>','',@$last_user_data[0]);
-									if($user != ''){
-										$all_syslog_data[$key]['user'] = $user;
-									}
-								}
-							}else if(strpos($message, "prerouting:") !== false && strpos($message, "in:<pppoe-") !== false){
-								$user_data = @explode("in:<pppoe-",$message);
-								$last_user_data = @explode("out:", @$user_data[1]);
-								if(!empty($last_user_data)){
-									$user = str_replace('>','',@$last_user_data[0]);
-									if($user != ''){
-										$all_syslog_data[$key]['user'] = $user;
-									}
-								}
-							}else if(strpos($message, "PPPLOG") !== false){
-								$user_data = @explode("PPPLOG",$message);
-								$last_user_data = @explode(" ", @$user_data[1]);
-								if(isset($last_user_data[0])){
-									$user = $last_user_data[0];
-									$all_syslog_data[$key]['user'] = $user;
-								}
-							}
-							
-							if($all_syslog_data[$key]['user']){
-								return $all_syslog_data[$key]['user'];
-							}
-							
-						}
+						print '</pre>';
 						
-						//print_r($message_all);
-						
-						//die;
-									
+						die;
 					}
+						
+
 				}
 			}
 		}
