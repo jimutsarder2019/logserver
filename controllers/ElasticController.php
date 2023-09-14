@@ -239,6 +239,10 @@ class ElasticController extends Controller
 				
 				foreach($all_data as $key=>$data){
 					$MESSAGE = $data['_source']['MESSAGE'];
+					
+					print $MESSAGE;
+					
+					print '</br>';
 					$message_array = explode(", ",$MESSAGE);
 					
 							print '<pre>';
