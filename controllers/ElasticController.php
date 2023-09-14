@@ -356,9 +356,9 @@ class ElasticController extends Controller
 								
 				}
 				
-				//print_r($all_message);
+				print_r($all_message);
 					
-					//die;
+					die;
 			}
 		}
 		
