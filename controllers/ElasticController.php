@@ -362,9 +362,9 @@ class ElasticController extends Controller
 								
 				}
 				
-				print_r($all_message);
+				//print_r($all_message);
 					
-					die;
+					//die;
 			}
 		}
 		
@@ -394,6 +394,7 @@ class ElasticController extends Controller
 	
 	private function getMissingUser($src_ip, $from_date, $to_date)
     {	
+	    $src_ip = '192.168.51.251';
 		$query = new Query;
 		$query->from('syslog-ng');
 		
@@ -429,7 +430,7 @@ class ElasticController extends Controller
 			
 			$query->orderBy(['@timestamp' => SORT_DESC]);
 			$query->offset = 0;
-			$query->limit = 10;
+			//$query->limit = 10;
 			
 			$command = $query->createCommand();
 			$response = $command->search();
@@ -439,6 +440,13 @@ class ElasticController extends Controller
 			if(!empty($response)){
 				if(isset($response['hits']['hits']) && !empty($response['hits']['hits'])){
 					$all_data = $response['hits']['hits'];
+					
+					print '<pre>';
+					print_r($all_data);
+					print '</pre>';
+					die;
+					
+					
 					
 					foreach($all_data as $key=>$data){
 						$MESSAGE = $data['_source']['MESSAGE'];
