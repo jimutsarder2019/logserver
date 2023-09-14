@@ -177,7 +177,9 @@ class ElasticController extends Controller
 						  ]
 					  ];
 				  }
-				 
+				  print_r($match);
+				  
+				  die;
 				  $query->query = $match;
 			}else if($date_limit){		
 				$match = [
