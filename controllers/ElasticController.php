@@ -360,7 +360,7 @@ class ElasticController extends Controller
 	
 	    print $src_ip;
 		
-		die;
+
 	    //$src_ip = '192.168.51.251'; //for test: you can active
 		$query = new Query;
 		$query->from('syslog-ng');
@@ -391,6 +391,9 @@ class ElasticController extends Controller
 			
 			$all_data = [];
 			$all_syslog_data = [];
+			
+			print_r($response);
+			die;
 			if(!empty($response)){
 				if(isset($response['hits']['hits']) && !empty($response['hits']['hits'])){
 					$all_data = $response['hits']['hits'];
