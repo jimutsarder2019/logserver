@@ -241,11 +241,11 @@ class ElasticController extends Controller
 					$MESSAGE = $data['_source']['MESSAGE'];
 					$message_array = explode(", ",$MESSAGE);
 					
-							//print '<pre>';
-		//print_r($message_array);
-		//print '</pre>';
+							print '<pre>';
+		print_r($message_array);
+		print '</pre>';
 		
-		//die;
+		die;
 					$all_message[] = $message_array;
 					
 					$all_syslog_data[$key]['datetime'] = $data['_source']['@timestamp'];
