@@ -173,7 +173,7 @@ class ElasticController extends Controller
 				  }else{
 					  $match  =	 [
 						"bool"=> [
-						  "must"=> array_merge($router_filter,$message_filter)					
+						  "must"=> array_merge($message_filter)					
 						  ]
 					  ];
 				  }
