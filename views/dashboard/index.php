@@ -255,13 +255,15 @@ $baseUrl = Url::base();
 									<?php
 									$router_tr = '';
 									foreach($router_data as $router){
+										
+										$status = ($router['status'] == 1)?'Active':'In active';
 										$router_tr .= '<tr>
 													<td>'.$router['name'].'</td>
 													<td>'.$router['identity'].'</td>
 													<td>'.$router['ip'].'</td>
 													<td>'.$router['api_port'].'</td>
 													<td>'.$router['api_username'].'</td>
-													<td>'.($router['status'] == 1)?'Active':'In active'.'</td>
+													<td>'.$status.'</td>
 												</tr>';
 									}
 									print $router_tr;
