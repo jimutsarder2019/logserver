@@ -335,8 +335,8 @@ class ElasticController extends Controller
 								$all_syslog_data[$key]['nat_port'] = @explode(":", @$nat_ip_array)[1];
 							}
 							
-							if(isset($all_syslog_data[$key]['src_ip']) && $all_syslog_data[$key]['src_ip'] && $all_syslog_data[$key]['user'] == 'N/A'){
-								$missing_user_data = self::getMissingUser($all_syslog_data[$key]['src_ip']);
+							if(isset($all_syslog_data[$key]['src_ip'], $data['_source']['@timestamp']) && $all_syslog_data[$key]['src_ip'] && $all_syslog_data[$key]['user'] == 'N/A'){
+								$missing_user_data = self::getMissingUser($all_syslog_data[$key]['src_ip'], $data['_source']['@timestamp']);
 							
 								if(isset($missing_user_data['user']) && $missing_user_data['user']){
 									$all_syslog_data[$key]['user'] = $missing_user_data['user'];
@@ -361,8 +361,10 @@ class ElasticController extends Controller
 	
 
 	
-	private function getMissingUser($src_ip)
+	private function getMissingUser($src_ip, $date_time)
     {	
+	    $date_array = explode("T", $date_time);
+		$log_date_time = @$date_array[0];
 		$query = new Query;
 		$query->from('syslog-ng');
 		
@@ -377,8 +379,18 @@ class ElasticController extends Controller
 			"MESSAGE"=> '.*'.$src_ip.'.*'
 		  ]
 		];
+			
+		$date_filter[] = [
+				"range"=>[
+							"@timestamp"=>[
+											"gte"=>"".$log_date_time."T00:00:00+06:00",
+											"lte"=>"".$log_date_time."T23:59:59+06:00",
+							]
+				]
+		];
 		
-		$filter = array_merge($logcheck_filter,$src_filter);
+		$filter = array_merge($logcheck_filter,$src_filter,$date_filter);
+				
 		if(!empty($filter)){	
 			$match  =	 [
 					"bool"=> [
@@ -409,7 +421,7 @@ class ElasticController extends Controller
 							$user_name = $message_array[0];
 							$mac_ip = $message_array[1];
 							
-							return ['user'=>$user_name, 'mac'=>$mac_ip];
+							return ['user'=>$user_name.'-', 'mac'=>$mac_ip];
 						}
 					}
 				}
