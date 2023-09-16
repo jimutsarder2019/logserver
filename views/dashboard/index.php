@@ -245,8 +245,8 @@ $baseUrl = Url::base();
 										<th scope="col">Name</th>
 										<th scope="col">Identity</th>
 										<th scope="col">IP</th>
-										<th scope="col">Type</th>
-										<th scope="col">Details</th>
+										<th scope="col">Port</th>
+										<th scope="col">Username</th>
 										<th scope="col">Status</th>
 									</tr>
 								</thead>
@@ -259,9 +259,9 @@ $baseUrl = Url::base();
 													<td>'.$router['name'].'</td>
 													<td>'.$router['identity'].'</td>
 													<td>'.$router['ip'].'</td>
-													<td>'.$router['type'].'</td>
-													<td>'.$router['ipv6'].'</td>
-													<td>'.$router['status'].'</td>
+													<td>'.$router['api_port'].'</td>
+													<td>'.$router['api_username'].'</td>
+													<td>'.($router['status'] == 1)?'Active':'In active'.'</td>
 												</tr>';
 									}
 									print $router_tr;

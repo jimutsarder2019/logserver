@@ -397,6 +397,13 @@ class ElasticController extends Controller
 					  "must"=> $filter
 					]
 				];
+				
+				
+				print '<pre>';
+				print_r($match);
+				print '</pre>';
+				
+				die;
 			$query->query = $match;
 			
 			
