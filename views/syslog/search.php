@@ -38,6 +38,16 @@
 							<option value="3">1000 entries</option>
 							<option value="4">2000 entries</option>
 						</select>
+						<div class="form-inline search-form search-box">
+								<select class="custom-select form-control js_limit_change" required="">
+									<option value="10">10 entries</option>
+									<option value="100">100 entries</option>
+									<option value="200">200 entries</option>
+									<option value="500">500 entries</option>
+									<option value="1000">1000 entries</option>
+									<option value="2000">2000 entries</option>
+								</select>
+							</div>
 						
 						<div class="form-inline search-form search-box" style="display:none;">
 							<select class="custom-select form-control js_router" required="">
