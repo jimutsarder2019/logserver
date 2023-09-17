@@ -153,6 +153,10 @@ class DashboardController extends CustomController
 		$diskFree = 0;
 		$days = 0;*/
 		
+		$data = file_get_contents('../web/license.json');
+		
+		$license_data = json_decode($data, 1);
+		
         return $this->render('index', ['router_data'=>$routers, 
 		'user_data'=>$users,
 		'users_count'=>0, 
@@ -161,7 +165,8 @@ class DashboardController extends CustomController
 		'ram'=>round($ramUtilization, 2),
 		'disk_use'=>round($rootUtilization, 2),
 		'disk_free'=>round($diskFree, 2),
-		'uptime'=>$days
+		'uptime'=>$days,
+		'max_user_count_limit'=>@$license_data['maximum_number_of_user_allow'];
 		]);
     }
 }
