@@ -179,12 +179,12 @@ $baseUrl = Url::base();
 						<div class="media static-top-widget align-items-center">
 							<div class="icons-widgets">
 								<div class="align-self-center text-center" style="background-color:#0000FF">
-									<i class="fa fa-inbox"></i>
+									<i data-feather="users"></i>
 								</div>
 							</div>
 							<div class="media-body media-doller">
-								<span class="m-0">Max number of User</span>
-								<h3 class="mb-0"><span class="counter"><?=@$max_user_count_limit?></span>%
+								<span class="m-0">Max User</span>
+								<h3 class="mb-0"><span class="counter"><?=@$max_user_count_limit?></span>
 								</h3>
 							</div>
 						</div>
