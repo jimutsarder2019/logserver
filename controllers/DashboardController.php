@@ -166,7 +166,7 @@ class DashboardController extends CustomController
 		'disk_use'=>round($rootUtilization, 2),
 		'disk_free'=>round($diskFree, 2),
 		'uptime'=>$days,
-		'max_user_count_limit'=>@$license_data['maximum_number_of_user_allow'];
+		'max_user_count_limit'=>@$license_data['maximum_number_of_user_allow']
 		]);
     }
 }
