@@ -183,8 +183,8 @@ $baseUrl = Url::base();
 								</div>
 							</div>
 							<div class="media-body media-doller">
-								<span class="m-0">RAM</span>
-								<h3 class="mb-0"><span class="counter"><?=@$ram?></span>%
+								<span class="m-0">Max number of User</span>
+								<h3 class="mb-0"><span class="counter"><?=@$max_user_count_limit?></span>%
 								</h3>
 							</div>
 						</div>
