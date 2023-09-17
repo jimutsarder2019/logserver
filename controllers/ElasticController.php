@@ -30,13 +30,14 @@ class ElasticController extends Controller
 		$dst_ip = Yii::$app->request->post('dst_ip');
 		$nat_ip = Yii::$app->request->post('nat_ip');
 		$mikrotik = Yii::$app->request->post('mikrotik');
-		$limit = Yii::$app->request->post('limit', 100);
+		$limit = Yii::$app->request->post('limit', 10);
 		$date_limit = Yii::$app->request->post('limit_date');
 		$search = Yii::$app->request->post('search');
 		$router = Yii::$app->request->post('router');
+		$offset = Yii::$app->request->post('offset', 0);
 		
 		$query = new Query;
-		$query->from('syslog-ng');
+		$query->from('cloud-log-nat');
 		
 		$message_filter = [];
 		$mac_filter = [];
@@ -224,7 +225,7 @@ class ElasticController extends Controller
 			}
 			
 			$query->orderBy(['@timestamp' => SORT_DESC]);
-			$query->offset = 0;
+			$query->offset = $offset;
 			if($limit){
 				$query->limit = $limit;
 			}
@@ -235,6 +236,11 @@ class ElasticController extends Controller
 			$all_data = [];
 			$all_message = [];
 			$all_syslog_data = [];
+			
+			//print '<pre>';
+			//print_r($response);
+			//print '</pre>';
+			//die;
 			
 			if(!empty($response)){
 				if(isset($response['hits']['hits']) && !empty($response['hits']['hits'])){
@@ -341,6 +347,7 @@ class ElasticController extends Controller
 								if(isset($missing_user_data['user']) && $missing_user_data['user']){
 									$all_syslog_data[$key]['user'] = $missing_user_data['user'];
 									$all_syslog_data[$key]['mac'] = $missing_user_data['mac'];
+									$all_syslog_data[$key]['host'] = $missing_user_data['router_ip'];
 								}
 							}
 						}			
@@ -362,17 +369,12 @@ class ElasticController extends Controller
 
 	
 	private function getMissingUser($src_ip, $date_time)
-    {	
+    {
 	    $date_array = explode("T", $date_time);
 		$log_date_time = @$date_array[0];
+		//$log_date_time = '2023-09-17';
 		$query = new Query;
-		$query->from('syslog-ng');
-		
-		$logcheck_filter[] = [
-		  "match"=> [
-			"PROGRAM"=> 'PPPLOG'
-		  ]
-		];
+		$query->from('cloud-log-ppp');
 		
 		$src_filter[] = [
 		  "match"=> [
@@ -389,7 +391,7 @@ class ElasticController extends Controller
 				]
 		];
 		
-		$filter = array_merge($logcheck_filter,$src_filter,$date_filter);
+		$filter = array_merge($src_filter, $date_filter);
 				
 		if(!empty($filter)){	
 			$match  =	 [
@@ -407,6 +409,9 @@ class ElasticController extends Controller
 			
 			$command = $query->createCommand();
 			$response = $command->search();
+			//$response = [];
+			
+			//print_r($response);die;
 			
 			$all_data = [];
 			$all_syslog_data = [];
@@ -417,12 +422,13 @@ class ElasticController extends Controller
 					
 					if(!empty($all_data)){
 						$missing_user_data = $all_data[0]['_source']['MESSAGE'];
+						$src_ip = $all_data[0]['_source']['HOST'];
 						$message_array = explode(" ",$missing_user_data);
 						if(isset($message_array[0],  $message_array[1])){
 							$user_name = $message_array[0];
 							$mac_ip = $message_array[1];
 							
-							return ['user'=>$user_name, 'mac'=>$mac_ip];
+							return ['user'=>$user_name.'--', 'mac'=>$mac_ip, 'router_ip'=>$src_ip];
 						}
 					}
 				}

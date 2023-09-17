@@ -55,9 +55,6 @@ $this->params['breadcrumbs'][] = $this->title;
 									'api_username',
 									'api_password',
 									'status',
-									'ipv6',
-									'connection',
-									'date',
 								],
 							]) ?>
 						</div>

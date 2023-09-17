@@ -15,6 +15,8 @@ let reportHeaders = [
         { name: "Port" }
     ];
 
+let limit = 10;
+let offset = 1;
 
 //document.addEventListener('contextmenu', event => event.preventDefault());
 
@@ -31,6 +33,9 @@ $(document).ready(function(){
 	}
 	
     $(".js_limit_change").change(function(){
+		limit = $(this).val();
+		offset = 1;
+		$(".js_page_no").val(offset);
 		generateLogData();
 	});
 	
@@ -101,12 +106,28 @@ $(document).ready(function(){
 		$("#myModal-alert").hide();
 	});
 	
+	$(".js_pagination").click(function(){
+		let action = $(this).data('action');
+		
+		if(action == 'next'){
+		   offset = parseInt(offset)+ parseInt(1);
+		}else{
+		   offset = parseInt(offset) - parseInt(1);
+		}
+		$(".js_page_no").val(offset);
+		generateLogData();
+	});
+	
+	$(".js_page_no").change(function(){
+		offset = $(this).val();
+		limitCount= 10;
+		generateLogData();
+	});
 });
 
 
 function getPostParams()
 {
-	var limit = $(".js_limit_change").val();
 	var search_value = $('.js_searching').val();
 	var date_start = $('.js_date_start').val();
 	var date_end = $('.js_date_end').val();
@@ -117,7 +138,7 @@ function getPostParams()
 	var dst_ip = $('.dstip').val();
 	var nat_ip = $('.natip').val();
 	var router = $('.js_router').val();
-	return {limit:limit, search:search_value, from_date:date_start, to_date:date_end, router:router, user:user, mac:mac, src_ip:src_ip, dst_ip:dst_ip, nat_ip:nat_ip};
+	return {offset:offset, limit:limit, search:search_value, from_date:date_start, to_date:date_end, router:router, user:user, mac:mac, src_ip:src_ip, dst_ip:dst_ip, nat_ip:nat_ip};
 }
 
 function generateLogData(type=false)

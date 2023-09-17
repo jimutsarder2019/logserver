@@ -42,10 +42,13 @@ use yii\widgets\ActiveForm;
 		</div>
 	</div>
 
-    <div class="form-group row" style="display:none">
+    <div class="form-group row">
 		<div class="col-xl-4 col-md-4">
-		    <?= $form->field($model, 'type')->textInput(['maxlength' => true, 'value'=>'demo']) ?>
+		    <?= $form->field($model, 'type')->dropDownList([''=>'--Select--', 'nat'=>'NAT','pppp'=>'PPPP']) ?>
 		</div>
+	</div>
+	
+	<div class="form-group row" style="display:none">
 		<div class="col-xl-4 col-md-4">
 		    <?= $form->field($model, 'connection')->textInput(['maxlength' => true, 'value'=>'demo']) ?>
 		</div>

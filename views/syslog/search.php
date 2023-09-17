@@ -37,10 +37,9 @@
 							<option value="2">500 entries</option>
 							<option value="3">1000 entries</option>
 							<option value="4">2000 entries</option>
-							<option value="5">2000+ entries</option>
 						</select>
 						
-						<div class="form-inline search-form search-box">
+						<div class="form-inline search-form search-box" style="display:none;">
 							<select class="custom-select form-control js_router" required="">
 							    <?php
 								$option = '<option value="all">----- All Router-----</option>';

@@ -99,7 +99,7 @@ class ApplicationHelper
 	
 	public static function getRouters()
     {
-        $router_list = Yii::$app->db->createCommand( 'SELECT ip FROM router where status=1' )->queryColumn();
+        $router_list = Yii::$app->db->createCommand( 'SELECT ip FROM router where status=1 and type="nat"' )->queryColumn();
 		return $router_list;
     }
 }

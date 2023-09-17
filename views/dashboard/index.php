@@ -247,6 +247,7 @@ $baseUrl = Url::base();
 										<th scope="col">IP</th>
 										<th scope="col">Port</th>
 										<th scope="col">Username</th>
+										<th scope="col">Type</th>
 										<th scope="col">Status</th>
 									</tr>
 								</thead>
@@ -263,6 +264,7 @@ $baseUrl = Url::base();
 													<td>'.$router['ip'].'</td>
 													<td>'.$router['api_port'].'</td>
 													<td>'.$router['api_username'].'</td>
+													<td>'.$router['type'].'</td>
 													<td>'.$status.'</td>
 												</tr>';
 									}

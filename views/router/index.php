@@ -72,6 +72,7 @@ $baseUrl = Url::base();
 										'ip',
 										'api_port',
 										'api_username',
+										'type',
 										[
 											'label' => 'Password',
 											'headerOptions' => ['style' => 'color:#ff4c3b'],
