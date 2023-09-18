@@ -57,28 +57,28 @@ class ElasticController extends Controller
 		}
 		if($user){
 			$user_filter[] = [
-					  "match"=> [
-						"MESSAGE"=> '.*'.$user.'.*'
+					  "match_phrase_prefix"=> [
+						"MESSAGE"=> '.* '.$user.'. *'
 					  ]
 					];
 		}
 		if($src_ip){
 			$src_filter[] = [
-					  "match"=> [
+					  "match_phrase_prefix"=> [
 						"MESSAGE"=> '.*'.$src_ip.'.*'
 					  ]
 					];
 		}
 		if($dst_ip){
 			$dst_filter[] = [
-					  "match"=> [
+					  "match_phrase_prefix"=> [
 						"MESSAGE"=> '.*'.$dst_ip.'.*'
 					  ]
 					];
 		}
 		if($nat_ip){
 			$nat_filter[] = [
-					  "match"=> [
+					  "match_phrase_prefix"=> [
 						"MESSAGE"=> '.*'.$nat_ip.'.*'
 					  ]
 					];
@@ -237,6 +237,13 @@ class ElasticController extends Controller
 			$all_data = [];
 			$all_message = [];
 			$all_syslog_data = [];
+			
+			//print_r($match);
+			
+			//print '<pre>';
+			//print_r($response);
+			//print '</pre>';
+			//die;
 
 			if(!empty($response)){
 				if(isset($response['hits']['hits']) && !empty($response['hits']['hits'])){
@@ -246,19 +253,42 @@ class ElasticController extends Controller
 					
 				}else{
 					if(1){
+						
 						$query = new Query;
 						$query->from('cloud-log-ppp');
-						$match  =	 [
-							"bool"=> [
-							  "must"=> $message_filter			
+						
+						if($search){
+							$_filter[] = [
+							  "match_phrase_prefix"=> [
+								"MESSAGE"=> '.* '.$search.'. *'
 							  ]
-						];
+							];
+							
+							$match  =	 [
+								"bool"=> [
+								  "must"=> $_filter			
+								  ]
+							];
+						}else{
+							$match  =	 [
+								"bool"=> [
+								  "must"=> $message_filter			
+								  ]
+							];
+						}
 						$query->query = $match;
 						$query->orderBy(['@timestamp' => SORT_DESC]);
 						$query->offset = 0;
 						$query->limit = 1;
 						$command = $query->createCommand();
 						$response = $command->search();
+						
+						
+						//print '<pre>';
+						//print_r($response);
+						//print '</pre>';
+						
+						//die;
 						
 						if(!empty($response)){
 							if(isset($response['hits']['hits']) && !empty($response['hits']['hits'])){
@@ -291,7 +321,7 @@ class ElasticController extends Controller
 										$query->from('cloud-log-nat');
 										
 										$src_filter[] = [
-										  "match"=> [
+										  "match_phrase_prefix"=> [
 											"MESSAGE"=> '.*'.$src_ip.'.*'
 										  ]
 										];
@@ -359,7 +389,7 @@ class ElasticController extends Controller
 		$query->from('cloud-log-ppp');
 		
 		$src_filter[] = [
-		  "match"=> [
+		  "match_phrase_prefix"=> [
 			"MESSAGE"=> '.*'.$src_ip.'.*'
 		  ]
 		];
@@ -411,16 +441,11 @@ class ElasticController extends Controller
 						$missing_user_data = $all_data[0]['_source']['MESSAGE'];
 						$src_ip = $all_data[0]['_source']['HOST'];
 						$message_array = explode(" ",$missing_user_data);
-						if(isset($message_array[0],  $message_array[1])){
-							$user_name = $message_array[0];
-							$mac_ip = $message_array[1];
+						if(isset($message_array[1],  $message_array[2])){
+							$user_name = $message_array[1];
+							$mac_ip = $message_array[2];
 							
-							if($user_name == 'PPPLOG'){
-							   $user_name = $message_array[1];
-							   $mac_ip = $message_array[2];
-							}
-							
-							return ['user'=>$user_name.'--', 'mac'=>$mac_ip, 'router_ip'=>$src_ip];
+							return ['user'=>$user_name, 'mac'=>$mac_ip, 'router_ip'=>$src_ip];
 						}
 					}
 				}
