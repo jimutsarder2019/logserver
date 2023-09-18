@@ -138,22 +138,37 @@ $baseUrl = Url::base();
 					</div>
 				</div>
 			</div>
+			
 			<div class="col-xxl-3 col-md-3 xl-25">
 				<div class="card o-hidden widget-cards">
-					<div class="danger-box card-body">
+					<div class="primary-box card-body">
 						<div class="media static-top-widget align-items-center">
 							<div class="icons-widgets">
-								<div class="align-self-center text-center"><i
-										class="fa fa-clock-o"></i></div>
+								<div class="align-self-center text-center" style="background-color:#FFFF00"><i class="fa fa-archive"></i></div>
 							</div>
-							<div class="media-body media-doller"><span class="m-0">Support Expired</span>
-								<p class="mb-0">2023-12-31</p>
+							<div class="media-body media-doller"><span class="m-0">Disk Usage</span>
+								<h3 class="mb-0"><span class="counter"><?=@$disk_use?></span>%</h3>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 			
+			<div class="col-xxl-3 col-md-3 xl-25">
+				<div class="card o-hidden widget-cards">
+					<div class="danger-box card-body">
+						<div class="media static-top-widget align-items-center">
+							<div class="icons-widgets">
+								<div class="align-self-center text-center" style="background-color:#A020F0"><i data-feather="message-square"
+										class="font-danger"></i></div>
+							</div>
+							<div class="media-body media-doller"><span class="m-0">Disk Free</span>
+								<h3 class="mb-0"><span class="counter"><?=@$disk_free?></span>%</h3>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 			<div class="col-xxl-3 col-md-3 xl-25">
 				<div class="card o-hidden widget-cards">
 					<div class="warning-box card-body">
@@ -173,6 +188,7 @@ $baseUrl = Url::base();
 					</div>
 				</div>
 			</div>
+			
 			<div class="col-xxl-3 col-md-3 xl-25">
 				<div class="card o-hidden widget-cards">
 					<div class="secondary-box card-body">
@@ -191,35 +207,27 @@ $baseUrl = Url::base();
 					</div>
 				</div>
 			</div>
-			<div class="col-xxl-3 col-md-3 xl-25">
-				<div class="card o-hidden widget-cards">
-					<div class="primary-box card-body">
-						<div class="media static-top-widget align-items-center">
-							<div class="icons-widgets">
-								<div class="align-self-center text-center" style="background-color:#FFFF00"><i class="fa fa-archive"></i></div>
-							</div>
-							<div class="media-body media-doller"><span class="m-0">Disk Usage</span>
-								<h3 class="mb-0"><span class="counter"><?=@$disk_use?></span>%</h3>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
+			
 			<div class="col-xxl-3 col-md-3 xl-25">
 				<div class="card o-hidden widget-cards">
 					<div class="danger-box card-body">
 						<div class="media static-top-widget align-items-center">
 							<div class="icons-widgets">
-								<div class="align-self-center text-center" style="background-color:#A020F0"><i data-feather="message-square"
-										class="font-danger"></i></div>
+								<div class="align-self-center text-center"><i
+										class="fa fa-clock-o"></i></div>
 							</div>
-							<div class="media-body media-doller"><span class="m-0">Disk Free</span>
-								<h3 class="mb-0"><span class="counter"><?=@$disk_free?></span>%</h3>
+							<div class="media-body media-doller"><span class="m-0">Support Expired</span>
+								<p class="mb-0"><?=@$license_expire?></p>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
+			
+			
+			
+			
+			
 			
 			
 			<div class="col-md-12">

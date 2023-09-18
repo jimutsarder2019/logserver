@@ -90,6 +90,85 @@ class DashboardController extends CustomController
 		
 		
 		
+		
+		// Execute the "df -BG" command to get disk usage information
+
+		exec("df -BG /log_disk", $output);
+
+		 
+
+		// Parse the output to get the usage information
+		
+		$used_percentage_formatted = 0;
+		$remaining_percentage_formatted = 0;
+
+		if (count($output) > 1) {
+
+			$data = explode(" ", preg_replace('/\s+/', ' ', $output[1]));
+
+			$total = $data[1];
+
+			$used = $data[2];
+
+			$remaining = $data[3];
+
+		 
+
+			// Remove the 'G' character and convert to numeric values
+
+			$used = rtrim($used, 'G');
+
+			$total = rtrim($total, 'G');
+
+		 
+
+			// Calculate the percentage
+
+			$used_percentage = ($used / $total) * 100;
+
+			$remaining_percentage = 100 - $used_percentage;
+
+		 
+
+			// Format the percentages
+
+			$used_percentage_formatted = number_format($used_percentage, 2);
+
+			$remaining_percentage_formatted = number_format($remaining_percentage, 2);
+
+		}
+
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		// Geeting free CPU info
 		$cpuUsage = shell_exec("top -bn 2 -d 0.01 | grep '^%Cpu' | tail -n 1");
 		preg_match_all('/[0-9.]+/', $cpuUsage, $cpuUsageArray);
@@ -141,10 +220,11 @@ class DashboardController extends CustomController
 		'router_count'=>count($routers),
 		'cpu'=>$cpuUtilization,
 		'ram'=>round($ramUtilization, 2),
-		'disk_use'=>round($rootUtilization, 2),
-		'disk_free'=>round($diskFree, 2),
+		'disk_use'=>round($used_percentage_formatted, 2),
+		'disk_free'=>round($remaining_percentage_formatted, 2),
 		'uptime'=>$days,
-		'max_user_count_limit'=>@$license_data['maximum_number_of_user_allow']
+		'max_user_count_limit'=>@$license_data['maximum_number_of_user_allow'],
+		'license_expire'=>@$license_data['license_expire']
 		]);
     }
 }

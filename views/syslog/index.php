@@ -48,7 +48,7 @@
 					<div class="card-header search-form">
 						<div class="form-inline search-form search-box">
 							<select class="custom-select form-control js_limit_change" required="">
-								<option value="10">10 entries</option>
+								<option value="50">50 entries</option>
 								<option value="100">100 entries</option>
 								<option value="200">200 entries</option>
 								<option value="500">500 entries</option>
@@ -95,11 +95,11 @@
 							</table>
 						</div>
 						</br>
-						<div class="center">
+						<div class="center" style="display:none">
 						  <div class="pagination">
 						  <a href="javascript:void(0)" data-action="prev" class="js_pagination">&laquo;</a>
 						  <select class="js_page_no">
-						  <?php for($c = 1; $c <= 1000; $c++){ ?>
+						  <?php for($c = 1; $c <= 200; $c++){ ?>
 						     <option value="<?=$c?>"><?=$c?></option>
 						  <?php } ?>
 						  </select>
