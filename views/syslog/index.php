@@ -95,7 +95,7 @@
 							</table>
 						</div>
 						</br>
-						<div class="center">
+						<div class="center" style="display:none">
 						  <div class="pagination">
 						  <a href="javascript:void(0)" data-action="prev" class="js_pagination">&laquo;</a>
 						  <select class="js_page_no">
