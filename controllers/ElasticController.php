@@ -346,17 +346,18 @@ class ElasticController extends Controller
 										$query->query = $match;
 										$query->orderBy(['@timestamp' => SORT_DESC]);
 										$query->offset = 0;
-										$query->limit = 1;
+										///$query->limit = 1;
 										$command = $query->createCommand();
 										$response = $command->search();
-										
+										//print '<pre>';
+										//print_r($response);
+										//print '</pre>';
+										//die;
 										if(!empty($response)){
 											if(isset($response['hits']['hits']) && !empty($response['hits']['hits'])){
 												$all_data = $response['hits']['hits'];
-												$all_syslog_data = self::dataProcess($all_data, false);
-												$all_syslog_data[0]['user'] = $user_name;									
-											    $all_syslog_data[0]['mac'] = $mac_ip;
-										        $all_syslog_data[0]['host'] = $main_src_ip;
+												$all_syslog_data = self::dataProcess($all_data, false, $user_name, $mac_ip, $main_src_ip);
+												
 											}
 										}
 									}
@@ -445,7 +446,7 @@ class ElasticController extends Controller
 							$user_name = $message_array[1];
 							$mac_ip = $message_array[2];
 							
-							return ['user'=>$user_name, 'mac'=>$mac_ip, 'router_ip'=>$src_ip];
+							return ['user'=>$user_name.'---', 'mac'=>$mac_ip, 'router_ip'=>$src_ip];
 						}
 					}
 				}
@@ -456,8 +457,9 @@ class ElasticController extends Controller
 
 
 
-	private function dataProcess($all_data, $missing_find=true)
+	private function dataProcess($all_data, $missing_find=true, $user_name = false, $mac_ip = false,  $main_src_ip = false)
 	{
+
 		foreach($all_data as $key=>$data){
 							$MESSAGE = $data['_source']['MESSAGE'];
 							
@@ -558,6 +560,12 @@ class ElasticController extends Controller
 										$all_syslog_data[$key]['user'] = $missing_user_data['user'];
 										$all_syslog_data[$key]['mac'] = $missing_user_data['mac'];
 										$all_syslog_data[$key]['host'] = $missing_user_data['router_ip'];
+									}
+								}else{
+									if($user_name && $mac_ip && $main_src_ip){
+										$all_syslog_data[$key]['user'] = $user_name;									
+										$all_syslog_data[$key]['mac'] = $mac_ip;
+										$all_syslog_data[$key]['host'] = $main_src_ip;
 									}
 								}
 							}			
