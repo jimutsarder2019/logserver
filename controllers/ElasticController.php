@@ -446,7 +446,7 @@ class ElasticController extends Controller
 							$user_name = $message_array[1];
 							$mac_ip = $message_array[2];
 							
-							return ['user'=>$user_name.'---', 'mac'=>$mac_ip, 'router_ip'=>$src_ip];
+							return ['user'=>$user_name, 'mac'=>$mac_ip, 'router_ip'=>$src_ip];
 						}
 					}
 				}
