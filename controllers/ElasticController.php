@@ -31,7 +31,7 @@ class ElasticController extends Controller
 		$dst_ip = Yii::$app->request->post('dst_ip');
 		$nat_ip = Yii::$app->request->post('nat_ip');
 		$mikrotik = Yii::$app->request->post('mikrotik');
-		$limit = Yii::$app->request->post('limit', 10);
+		$limit = Yii::$app->request->post('limit', 50);
 		$date_limit = Yii::$app->request->post('limit_date');
 		$search = Yii::$app->request->post('search');
 		$router = Yii::$app->request->post('router');

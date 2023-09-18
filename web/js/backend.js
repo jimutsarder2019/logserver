@@ -15,7 +15,7 @@ let reportHeaders = [
         { name: "Port" }
     ];
 
-let limit = 10;
+let limit = 50;
 let offset = 1;
 
 //document.addEventListener('contextmenu', event => event.preventDefault());

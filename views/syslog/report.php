@@ -20,7 +20,7 @@
 							<input class="natip" type="search" placeholder="NAT IP..">
 							<div class="form-inline search-form search-box">
 								<select class="custom-select form-control js_limit_change" required="">
-									<option value="10">10 entries</option>
+									<option value="50">50 entries</option>
 									<option value="100">100 entries</option>
 									<option value="200">200 entries</option>
 									<option value="500">500 entries</option>
