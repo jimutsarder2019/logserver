@@ -143,8 +143,8 @@ class ElasticController extends Controller
 				$date_filter[] = [
 						"range"=>[
 									"@timestamp"=>[
-													"gte"=>"".$from_date."T00:00:00+06:00",
-													"lte"=>"".$to_date."T23:59:59+06:00",
+													"gte"=>"".$from_date."T00:00:00+00:00",
+													"lte"=>"".$to_date."T23:59:59+00:00",
 									]
 						]
 				];
@@ -249,7 +249,7 @@ class ElasticController extends Controller
 				if(isset($response['hits']['hits']) && !empty($response['hits']['hits'])){
 					$all_data = $response['hits']['hits'];
 					
-					$all_syslog_data = self::dataProcess($all_data);
+					$all_syslog_data = self::dataProcess($all_data, true, $from_date, $to_date);
 					
 				}else{
 					if(1){
@@ -325,15 +325,17 @@ class ElasticController extends Controller
 											"MESSAGE"=> '.*'.$src_ip.'.*'
 										  ]
 										];
-											
-										$date_filter[] = [
-												"range"=>[
-															"@timestamp"=>[
-																			"gte"=>"".$log_date_time."T00:00:00+00:00",
-																			"lte"=>"".$log_date_time."T23:59:59+00:00",
-															]
-												]
-										];
+										$date_filter = [];
+                                        if($from_date && $to_date){								
+											$date_filter[] = [
+													"range"=>[
+																"@timestamp"=>[
+																				"gte"=>"".$from_date."T00:00:00+00:00",
+																				"lte"=>"".$to_date."T23:59:59+00:00",
+																]
+													]
+											];
+										}
 										
 										$filter = array_merge($src_filter, $date_filter);
 										$match  =	 [
@@ -356,7 +358,7 @@ class ElasticController extends Controller
 										if(!empty($response)){
 											if(isset($response['hits']['hits']) && !empty($response['hits']['hits'])){
 												$all_data = $response['hits']['hits'];
-												$all_syslog_data = self::dataProcess($all_data, false, $user_name, $mac_ip, $main_src_ip);
+												$all_syslog_data = self::dataProcess($all_data, false, $from_date, $to_date, $user_name, $mac_ip, $main_src_ip);
 												
 											}
 										}
@@ -381,10 +383,8 @@ class ElasticController extends Controller
 	
 
 	
-	private function getMissingUser($src_ip, $date_time)
+	private function getMissingUser($src_ip, $date_start = false, $date_end = false)
     {
-	    $date_array = explode("T", $date_time);
-		$log_date_time = @$date_array[0];
 		//$log_date_time = '2023-09-17';
 		$query = new Query;
 		$query->from('cloud-log-ppp');
@@ -394,15 +394,17 @@ class ElasticController extends Controller
 			"MESSAGE"=> '.*'.$src_ip.'.*'
 		  ]
 		];
-			
-		$date_filter[] = [
-				"range"=>[
-							"@timestamp"=>[
-											"gte"=>"".$log_date_time."T00:00:00+06:00",
-											"lte"=>"".$log_date_time."T23:59:59+06:00",
-							]
-				]
-		];
+		$date_filter = [];
+		if($date_start && $date_end){
+			$date_filter[] = [
+					"range"=>[
+								"@timestamp"=>[
+												"gte"=>"".$date_start."T00:00:00+00:00",
+												"lte"=>"".$date_end."T23:59:59+00:00",
+								]
+					]
+			];
+		}
 		
 		$filter = array_merge($src_filter, $date_filter);
 				
@@ -424,8 +426,8 @@ class ElasticController extends Controller
 			$response = $command->search();
 			//$response = [];
 			
-			
-			//print '<pre>';
+			//print_r($match);
+		//print '<pre>';
 					//print_r($response);
 			//print '</pre>';
 			//die;
@@ -457,7 +459,7 @@ class ElasticController extends Controller
 
 
 
-	private function dataProcess($all_data, $missing_find=true, $user_name = false, $mac_ip = false,  $main_src_ip = false)
+	private function dataProcess($all_data, $missing_find=true, $date_start = false, $date_end = false, $user_name = false, $mac_ip = false,  $main_src_ip = false)
 	{
 
 		foreach($all_data as $key=>$data){
@@ -554,7 +556,7 @@ class ElasticController extends Controller
 								}
 								
 								if(isset($all_syslog_data[$key]['src_ip'], $data['_source']['@timestamp']) && $missing_find && $all_syslog_data[$key]['src_ip'] && $all_syslog_data[$key]['user'] == 'N/A'){
-									$missing_user_data = self::getMissingUser($all_syslog_data[$key]['src_ip'], $data['_source']['@timestamp']);
+									$missing_user_data = self::getMissingUser($all_syslog_data[$key]['src_ip'], $date_start, $date_end);
 								
 									if(isset($missing_user_data['user']) && $missing_user_data['user']){
 										$all_syslog_data[$key]['user'] = $missing_user_data['user'];
