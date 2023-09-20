@@ -32,7 +32,7 @@
 			<div class="row">
 				<div class="col-lg-6">
 					<div class="page-header-left">
-						<h3>Activity Log</h3>
+						<h3>Activity Log <span style="font-size:18px;text-transform: capitalize;">(24 Hours)</span></h3>
 					</div>
 				</div>
 			</div>
@@ -54,6 +54,7 @@
 								<option value="500">500 entries</option>
 								<option value="1000">1000 entries</option>
 								<option value="2000">2000 entries</option>
+								<option value="5000">2000+ entries</option>
 							</select>
 						</div>
 						
@@ -95,11 +96,12 @@
 							</table>
 						</div>
 						</br>
+						<input value="log" type="hidden" class="js_page_name"> 
 						<div class="center" style="display:none">
 						  <div class="pagination">
 						  <a href="javascript:void(0)" data-action="prev" class="js_pagination">&laquo;</a>
 						  <select class="js_page_no">
-						  <?php for($c = 1; $c <= 200; $c++){ ?>
+						  <?php for($c = 0; $c <= 200; $c++){ ?>
 						     <option value="<?=$c?>"><?=$c?></option>
 						  <?php } ?>
 						  </select>

@@ -210,7 +210,7 @@ class DashboardController extends CustomController
 		$diskFree = 0;
 		$days = 0;*/
 		
-		$data = file_get_contents('../web/license.json');
+		$data = file_get_contents('../web/demo-test.json');
 		
 		$license_data = json_decode($data, 1);
 		

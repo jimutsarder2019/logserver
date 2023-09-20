@@ -297,12 +297,10 @@ $baseUrl = Url::base();
 							<table class="table table-bordernone mb-0" style="table-layout:fixed">
 								<thead>
 									<tr>
-										<th scope="col">SL</th>
 										<th scope="col">Name</th>
 										<th scope="col">Username</th>
 										<th scope="col">Registration Date</th>
 										<th scope="col">Status</th>
-										<th scope="col">Action</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -311,12 +309,10 @@ $baseUrl = Url::base();
 									$user_tr = '';
 									foreach($user_data as $k=>$user){
 										$user_tr .= '<tr>
-													<td>'.($k+1).'</td>
 													<td>'.$user['name'].'</td>
 													<td>'.$user['username'].'</td>
 													<td>'.$user['date'].'</td>
 													<td>'.($user['status']?'Active':'Inactive').'</td>
-													<td>Action</td>
 												</tr>';
 									}
 									print $user_tr;

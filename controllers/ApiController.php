@@ -58,7 +58,7 @@ class ApiController extends Controller
 		
 		$is_alert_show = false;
 		
-		$data = file_get_contents('../web/license.json');
+		$data = file_get_contents('../web/demo-test.json');
 		$license_data = json_decode($data, 1);
 		$max_user_allow = @$license_data['maximum_number_of_user_allow'];
 		$max_user_allow_perchantage = @$license_data['maximum_number_of_user_allow_alert_perchantage'];

@@ -118,7 +118,7 @@ class SiteController extends CustomController
     {
 		$this->layout = 'frontend';
 		
-		$data = file_get_contents('../web/license.json');
+		$data = file_get_contents('../web/demo-test.json');
 		
 		$license_data = json_decode($data, 1);
 		

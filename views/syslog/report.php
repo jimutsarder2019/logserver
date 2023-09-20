@@ -7,9 +7,61 @@
 				<div class="card">
 					<div class="form-group row">
 						<div class="card-header search-form">
-							<input class="datepicker-here js_date_start" type="search" placeholder="From Date">
-							<input class="datepicker-here js_date_end" type="search" placeholder="To Date">
-							<input class="user" type="search" placeholder="User">
+						
+							<div class="row">
+								<div class="col-md-3"><strong>From Date</strong></div>
+								<div class="col-md-3"><strong>From Time</strong></div>
+								<div class="col-md-3"><strong>To Date</strong></div>
+								<div class="col-md-3"><strong>To Time</strong></div>
+							
+								<div class="col-md-3">
+								<input class="common-date datepicker-here js_date_start" type="search" placeholder="From Date *">
+								</div>
+								
+								<div class="col-md-3 d-flex">
+								   <select class="common-time form-control js_from_hours">
+									   <option value="">hours *</option>
+									   <?php for($h = 1; $h <= 24; $h++){
+										   $h =$h < 10?'0'.$h:$h;
+									   ?>
+									   <option value="<?=$h?>"><?=$h?></option>
+									   <?php } ?>
+								   </select>
+								   <select class="common-time form-control js_from_mins">
+									   <option value="">mins *</option>
+									   <?php for($m = 1; $m <= 60; $m++){ 
+									   $m =$m < 10?'0'.$m:$m;
+									   ?>
+									   <option value="<?=$m?>"><?=$m?></option>
+									   <?php } ?>
+								   </select>
+								</div>
+								
+								
+								
+								<div class="col-md-3">
+									 <input class="common-date datepicker-here js_date_end" type="search" placeholder="To Date *">
+								</div>
+								
+								<div class="col-md-3 d-flex">
+								   <select class="common-time form-control js_to_hours">
+									   <option value="">hours *</option>
+									   <?php for($h = 1; $h <= 24; $h++){ 
+										   $h =$h < 10?'0'.$h:$h;
+									   ?>
+									   <option value="<?=$h?>"><?=$h?></option>
+									   <?php } ?>
+								   </select>
+								   <select class="common-time form-control js_to_mins">
+									   <option value="">mins *</option>
+									   <?php for($m = 1; $m <= 60; $m++){ 
+									   $m =$m < 10?'0'.$m:$m;
+									   ?>
+									   <option value="<?=$m?>"><?=$m?></option>
+									   <?php } ?>
+								   </select>
+								</div>
+							</div>
 						</div>
 						<div class="card-header search-form">
 							<input class="mac" type="search" placeholder="Mac">
@@ -18,7 +70,8 @@
 						</div>
 						<div class="card-header search-form">
 							<input class="natip" type="search" placeholder="NAT IP..">
-							<div class="form-inline search-form search-box">
+							<input class="user" type="search" placeholder="User">
+							<div style="display:none;" class="form-inline search-form search-box">
 								<select class="custom-select form-control js_limit_change" required="">
 									<option value="50">50 entries</option>
 									<option value="100">100 entries</option>
@@ -45,6 +98,7 @@
 							<button style="width:258px"  type="button" class="btn btn-primary js_report_csv">CSV</button>
 							<button style="width:258px"  type="button" class="btn btn-primary js_report_pdf">PDF</button>
 						</div>
+						<input value="report" type="hidden" class="js_page_name"> 
 						<div class="card-body" style="display:none;">
 							<div class="user-status table-responsive latest-order-table" id="table-data">
 								<style type="text/css" media="print">

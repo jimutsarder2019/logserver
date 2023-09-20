@@ -16,7 +16,7 @@ let reportHeaders = [
     ];
 
 let limit = 50;
-let offset = 1;
+let offset = 0;
 
 //document.addEventListener('contextmenu', event => event.preventDefault());
 
@@ -34,7 +34,7 @@ $(document).ready(function(){
 	
     $(".js_limit_change").change(function(){
 		limit = $(this).val();
-		offset = 1;
+		offset = 0;
 		$(".js_page_no").val(offset);
 		generateLogData();
 	});
@@ -44,7 +44,7 @@ $(document).ready(function(){
 	});
 	
 	$('.js_search_btn').click(function(){
-		generateLogData();
+	    commonSearch('search');
 	});
 	
 	$(".js_searching").keyup(function(){
@@ -55,16 +55,16 @@ $(document).ready(function(){
 	});
 	
     $('.js_report_csv').click(function(){
-		generateLogData('csv');
+		commonSearch('csv');
 	});
 	
     $('.js_report_excel').click(function(){
-		generateLogData('excel');
+		commonSearch('excel');
 	});
 	
 	
 	$('.js_report_pdf').click(function(){
-		generateLogData('pdf');
+		commonSearch('pdf');
 	});
 	
 	
@@ -126,11 +126,45 @@ $(document).ready(function(){
 });
 
 
+function commonSearch(type)
+{
+	var date_start = $('.js_date_start').val();
+	var date_end = $('.js_date_end').val();
+	
+	var from_hours = $('.js_from_hours').val();
+	var from_mins = $('.js_from_mins').val();
+	
+	var to_hours = $('.js_to_hours').val();
+	var to_mins = $('.js_to_mins').val();
+	
+	var user = $('.user').val();
+	var mac = $('.mac').val();
+	var src_ip = $('.srcip').val();
+	var dst_ip = $('.dstip').val();
+	var nat_ip = $('.natip').val();
+	
+	if(date_start && date_end && from_hours && from_mins && to_hours && to_mins && (user || mac || src_ip || dst_ip || nat_ip)){
+		if(type === 'search'){
+			generateLogData();
+		}else{
+			generateLogData(type);
+		}
+	}else{
+		alert('Please select From Date, From Time(hours-mins), To Date, To Time(hours-mins) and any one of Mac, Src IP, Dst IP, NAT IP, User');
+	}
+}
+
 function getPostParams()
 {
 	var search_value = $('.js_searching').val();
 	var date_start = $('.js_date_start').val();
 	var date_end = $('.js_date_end').val();
+	
+	var from_hours = $('.js_from_hours').val();
+	var from_mins = $('.js_from_mins').val();
+	
+    var to_hours = $('.js_to_hours').val();
+	var to_mins = $('.js_to_mins').val();
 	
 	var user = $('.user').val();
 	var mac = $('.mac').val();
@@ -138,7 +172,8 @@ function getPostParams()
 	var dst_ip = $('.dstip').val();
 	var nat_ip = $('.natip').val();
 	var router = $('.js_router').val();
-	return {offset:offset, limit:limit, search:search_value, from_date:date_start, to_date:date_end, router:router, user:user, mac:mac, src_ip:src_ip, dst_ip:dst_ip, nat_ip:nat_ip};
+	var page_name = $('.js_page_name').val();
+	return {page_name:page_name, offset:offset, limit:limit, search:search_value, from_date:date_start, to_date:date_end, from_hours:from_hours, from_mins:from_mins, to_hours:to_hours, to_mins:to_mins, router:router, user:user, mac:mac, src_ip:src_ip, dst_ip:dst_ip, nat_ip:nat_ip};
 }
 
 function generateLogData(type=false)
