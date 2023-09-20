@@ -183,15 +183,6 @@ class ElasticController extends Controller
 			$all_message = [];
 			$all_syslog_data = [];
 			
-			print '<pre>';
-			print_r($match);
-			print '</pre>';
-			
-			print '<pre>';
-			print_r($all_data);
-			print '</pre>';
-			
-			die;
 
 			if(!empty($all_data)){
 				$all_syslog_data = self::dataProcess($all_data, true, $from_date, $to_date);
