@@ -316,7 +316,7 @@ class ElasticController extends Controller
 		foreach($all_data as $key=>$data){
 			$message_array = explode(", ",$data['_source']['MESSAGE']);
 	
-			//$all_syslog_data[$key]['datetime'] = @$data['_source']['@timestamp'];
+			$all_syslog_data[$key]['datetime_real'] = @$data['_source']['@timestamp'];
 			$datetime2 = new \DateTime(@$data['_source']['@timestamp']);
 			$la_time = new \DateTimeZone('Asia/Dhaka');
             //$datetime2->setTimezone($la_time);
