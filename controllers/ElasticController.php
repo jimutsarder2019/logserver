@@ -98,16 +98,18 @@ class ElasticController extends Controller
 				$date_filter[] = [
 					"range"=>[
 						"@timestamp"=>[
-										"gte"=>"".$from_date."T".$from_hours.":".$from_mins.":00+00:00",
-										"lte"=>"".$to_date."T".$to_hours.":".$to_mins.":59+00:00",
+						                "time_zone"=> "+06:00", 
+										"gte"=>"".$from_date."T".$from_hours.":".$from_mins.":00",
+										"lte"=>"".$to_date."T".$to_hours.":".$to_mins.":59",
 						]
 					]
 				];
 				$date_filter_ppp[] = [
 						"range"=>[
 									"@timestamp"=>[
-													"gte"=>"".$from_date."T00:00:00+00:00",
-													"lte"=>"".$to_date."T23:59:59+00:00",
+									    "time_zone"=> "+06:00", 
+										"gte"=>"".$from_date."T00:00:00",
+										"lte"=>"".$to_date."T23:59:59",
 									]
 						]
 				];
@@ -158,6 +160,7 @@ class ElasticController extends Controller
 					$date_filter[] = [
 							"range"=>[
 								"@timestamp"=>[
+								       "time_zone"=> "+06:00",
 									   "gte" => "now-24h",
 									   "lt" =>  "now"
 								]
@@ -186,6 +189,16 @@ class ElasticController extends Controller
 
 			if(!empty($all_data)){
 				$all_syslog_data = self::dataProcess($all_data, true, $from_date, $to_date);
+						
+						/*print '<pre>';
+						print_r($match);
+						print '</pre>'; 
+						
+						print '<pre>';
+						print_r($all_data);
+						print '</pre>'; die;*/
+						
+						
 			}else{
 				if($search){
 					$_filter[] = [
@@ -241,8 +254,11 @@ class ElasticController extends Controller
 							$date_filter_nat[] = [
 								"range"=>[
 									"@timestamp"=>[
-													"gte"=>"".$from_date."T".$from_hours.":".$from_mins.":00+00:00",
-													"lte"=>"".$to_date."T".$to_hours.":".$to_mins.":59+00:00",
+													"time_zone"=> "+06:00", 
+													"gte"=>"".$from_date."T".$from_hours.":".$from_mins.":00",
+													"lte"=>"".$to_date."T".$to_hours.":".$to_mins.":59",
+													//"gte"=>"".$from_date."T".$from_hours.":".$from_mins.":00+00:00",
+													//"lte"=>"".$to_date."T".$to_hours.":".$to_mins.":59+00:00",
 									]
 								]
 							];
@@ -254,6 +270,7 @@ class ElasticController extends Controller
 								]
 						];
 						$all_data = self::getQueryData($match, 'cloud-log-nat', $limit, 0);
+						
 						if(!empty($all_data)){
 							$all_syslog_data = self::dataProcess($all_data, false, $from_date, $to_date, $user_name, $mac_ip, $main_src_ip);
 						}
@@ -281,8 +298,9 @@ class ElasticController extends Controller
 			$date_filter[] = [
 					"range"=>[
 								"@timestamp"=>[
-												"gte"=>"".$date_start."T00:00:00+00:00",
-												"lte"=>"".$date_end."T23:59:59+00:00",
+								                "time_zone"=> "+06:00", 
+												"gte"=>"".$date_start."T00:00:00",
+												"lte"=>"".$date_end."T23:59:59",
 								]
 					]
 			];

@@ -21,7 +21,7 @@
 								<div class="col-md-3 d-flex">
 								   <select class="common-time form-control js_from_hours">
 									   <option value="">hours *</option>
-									   <?php for($h = 1; $h <= 24; $h++){
+									   <?php for($h = 0; $h <= 23; $h++){
 										   $h =$h < 10?'0'.$h:$h;
 									   ?>
 									   <option value="<?=$h?>"><?=$h?></option>
@@ -29,7 +29,7 @@
 								   </select>
 								   <select class="common-time form-control js_from_mins">
 									   <option value="">mins *</option>
-									   <?php for($m = 1; $m <= 60; $m++){ 
+									   <?php for($m = 0; $m <= 60; $m++){ 
 									   $m =$m < 10?'0'.$m:$m;
 									   ?>
 									   <option value="<?=$m?>"><?=$m?></option>
