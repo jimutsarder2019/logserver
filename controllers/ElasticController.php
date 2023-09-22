@@ -188,17 +188,7 @@ class ElasticController extends Controller
 			
 
 			if(!empty($all_data)){
-				$all_syslog_data = self::dataProcess($all_data, true, $from_date, $to_date);
-						
-						/*print '<pre>';
-						print_r($match);
-						print '</pre>'; 
-						
-						print '<pre>';
-						print_r($all_data);
-						print '</pre>'; die;*/
-						
-						
+				$all_syslog_data = self::dataProcess($all_data, true, $from_date, $to_date);	
 			}else{
 				if($search){
 					$_filter[] = [
@@ -257,8 +247,6 @@ class ElasticController extends Controller
 													"time_zone"=> "+06:00", 
 													"gte"=>"".$from_date."T".$from_hours.":".$from_mins.":00",
 													"lte"=>"".$to_date."T".$to_hours.":".$to_mins.":59",
-													//"gte"=>"".$from_date."T".$from_hours.":".$from_mins.":00+00:00",
-													//"lte"=>"".$to_date."T".$to_hours.":".$to_mins.":59+00:00",
 									]
 								]
 							];
@@ -336,8 +324,6 @@ class ElasticController extends Controller
 	
 			$all_syslog_data[$key]['datetime_real'] = @$data['_source']['@timestamp'];
 			$datetime2 = new \DateTime(@$data['_source']['@timestamp']);
-			$la_time = new \DateTimeZone('Asia/Dhaka');
-            //$datetime2->setTimezone($la_time);
 			$all_syslog_data[$key]['datetime'] = $datetime2->format('d-m-Y H:i a');
 			$all_syslog_data[$key]['host'] = @$data['_source']['HOST'];
 			$all_syslog_data[$key]['user'] = 'N/A';
@@ -464,14 +450,6 @@ class ElasticController extends Controller
 	private function filter_match_phrase_prefix($search_string){
 		return [
 		  "match_phrase_prefix"=> [
-			"MESSAGE"=> '.*'.$search_string.'.*'
-		  ]
-		];
-	}
-	
-	private function filter_match_phrase_prefix2($search_string){
-		return [
-		  "match"=> [
 			"MESSAGE"=> '.*'.$search_string.'.*'
 		  ]
 		];

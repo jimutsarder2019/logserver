@@ -143,11 +143,17 @@ function commonSearch(type)
 	var dst_ip = $('.dstip').val();
 	var nat_ip = $('.natip').val();
 	
-	if(date_start && date_end && from_hours && from_mins && to_hours && to_mins && (user || mac || src_ip || dst_ip || nat_ip)){
-		if(type === 'search'){
-			generateLogData();
+	if(date_start && date_end && from_hours && from_mins && to_hours && to_mins && 
+	(user || mac || src_ip || dst_ip || nat_ip)){
+		
+		if((date_start <= date_end) && (parseInt(from_hours) <= parseInt(to_hours)) && (parseInt(from_mins) <= parseInt(to_mins))){
+			if(type === 'search'){
+				generateLogData();
+			}else{
+				generateLogData(type);
+			}
 		}else{
-			generateLogData(type);
+			alert('From date, time should be equal or less than To date, time');
 		}
 	}else{
 		alert('Please select From Date, From Time(hours-mins), To Date, To Time(hours-mins) and any one of Mac, Src IP, Dst IP, NAT IP, User');
