@@ -137,37 +137,6 @@ class DashboardController extends CustomController
 			$remaining_percentage_formatted = number_format($remaining_percentage, 2);
 
 		}
-
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
 		
 		// Geeting free CPU info
 		$cpuUsage = shell_exec("top -bn 2 -d 0.01 | grep '^%Cpu' | tail -n 1");
