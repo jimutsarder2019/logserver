@@ -6,6 +6,13 @@
 .common-time{
 	width:50%;
 }
+
+.search-form select {
+    border: 1px solid #eff0f1;
+    border-radius: 5px;
+    background-color: #f8f8f9;
+}
+
 </style>
 <div class="page-body">
 	<!-- Container-fluid starts-->

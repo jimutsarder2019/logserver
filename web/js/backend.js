@@ -18,7 +18,7 @@ let reportHeaders = [
 let limit = 50;
 let offset = 0;
 
-//document.addEventListener('contextmenu', event => event.preventDefault());
+document.addEventListener('contextmenu', event => event.preventDefault());
 
 $(document).ready(function(){
 	

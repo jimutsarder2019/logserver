@@ -179,9 +179,7 @@ class DashboardController extends CustomController
 		$diskFree = 0;
 		$days = 0;*/
 		
-		$data = file_get_contents('../web/demo-test.json');
-		
-		$license_data = json_decode($data, 1);
+		$license_data = CustomController::getLicenseData();
 		
         return $this->render('index', ['router_data'=>$routers, 
 		'user_data'=>$users,
