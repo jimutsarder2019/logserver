@@ -131,6 +131,43 @@ class ElasticController extends Controller
 						]
 					];
 				}
+			}else if($from_date && $to_date && $from_hours && $from_mins && $to_hours && $to_mins){
+				
+				$date_filter[] = [
+					"range"=>[
+						"@timestamp"=>[
+						                "time_zone"=> "+06:00", 
+										"gte"=>"".$from_date."T".$from_hours.":".$from_mins.":00",
+										"lte"=>"".$to_date."T".$to_hours.":".$to_mins.":59",
+						]
+					]
+				];
+				$date_filter_ppp[] = [
+						"range"=>[
+									"@timestamp"=>[
+									    "time_zone"=> "+06:00", 
+										"gte"=>"".$from_date."T00:00:00",
+										"lte"=>"".$to_date."T23:59:59",
+									]
+						]
+				];
+				
+				$message_filter_ppp = $date_filter_ppp;
+				
+				if(count($router_filter) > 1){
+					$match  =	 [
+						"bool"=> [
+						  "should"=> $router_filter,
+						  "must"=> $date_filter
+						]
+					];
+				}else{
+					$match  =	 [
+						"bool"=> [
+						  "must"=> array_merge($router_filter,$date_filter)	
+						]
+					];
+				}
 			}else if($date_limit){		
 				$match = [
 							"range"=>[

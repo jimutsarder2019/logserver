@@ -132,34 +132,39 @@ function commonSearch(type)
 	var long_date_end = $('.js_date_end').val();
 	
 	
-	var dateStartMyArray1 = long_date_start.split("T");
-	var dateStartMyArray2 = dateStartMyArray1[1].split(":");
+	if(long_date_start && long_date_end){
 	
-	var date_start = dateStartMyArray1[0];
-	var from_hours = dateStartMyArray2[0];
-	var from_mins = dateStartMyArray2[1];
-	
-	
-	var dateEndMyArray1 = long_date_end.split("T");
-	var dateEndMyArray2 = dateEndMyArray1[1].split(":");
-	
-	var date_end = dateEndMyArray1[0];
-	var to_hours = dateEndMyArray2[0];
-	var to_mins = dateEndMyArray2[1];
-	
-	if(date_start && date_end && from_hours && from_mins && to_hours && to_mins){
+		var dateStartMyArray1 = long_date_start.split("T");
+		var dateStartMyArray2 = dateStartMyArray1[1].split(":");
 		
-		if((date_start <= date_end) && (parseInt(from_hours) <= parseInt(to_hours)) && (parseInt(from_mins) <= parseInt(to_mins))){
-			if(type === 'search'){
-				generateLogData();
+		var date_start = dateStartMyArray1[0];
+		var from_hours = dateStartMyArray2[0];
+		var from_mins = dateStartMyArray2[1];
+		
+		
+		var dateEndMyArray1 = long_date_end.split("T");
+		var dateEndMyArray2 = dateEndMyArray1[1].split(":");
+		
+		var date_end = dateEndMyArray1[0];
+		var to_hours = dateEndMyArray2[0];
+		var to_mins = dateEndMyArray2[1];
+		
+		if(long_date_start && long_date_end && date_start && date_end && from_hours && from_mins && to_hours && to_mins){
+			
+			if((date_start <= date_end) && (parseInt(from_hours) <= parseInt(to_hours)) && (parseInt(from_mins) <= parseInt(to_mins))){
+				if(type === 'search'){
+					generateLogData();
+				}else{
+					generateLogData(type);
+				}
 			}else{
-				generateLogData(type);
+				alert('From Date-Time should be equal or less than To Date-Time');
 			}
 		}else{
-			alert('From date, time should be equal or less than To date, time');
+			alert('Please select From Date-Time and To Date-Time');
 		}
 	}else{
-		alert('Please select From Date, From Time(hours-mins), To Date, To Time(hours-mins)');
+		alert('Please select From Date-Time and To Date-Time');
 	}
 }
 
@@ -170,21 +175,28 @@ function getPostParams()
 	var long_date_start = $('.js_date_start').val();
 	var long_date_end = $('.js_date_end').val();
 	
+	var date_start = '';
+	var from_hours = '';
+	var from_mins = '';
 	
-	var dateStartMyArray1 = long_date_start.split("T");
-	var dateStartMyArray2 = dateStartMyArray1[1].split(":");
-	
-	var date_start = dateStartMyArray1[0];
-	var from_hours = dateStartMyArray2[0];
-	var from_mins = dateStartMyArray2[1];
-	
-	
-	var dateEndMyArray1 = long_date_end.split("T");
-	var dateEndMyArray2 = dateEndMyArray1[1].split(":");
-	
-	var date_end = dateEndMyArray1[0];
-	var to_hours = dateEndMyArray2[0];
-	var to_mins = dateEndMyArray2[1];
+	var date_end = '';
+	var to_hours = '';
+	var to_mins = '';
+	if(long_date_start && long_date_end){
+		var dateStartMyArray1 = long_date_start.split("T");
+		var dateStartMyArray2 = dateStartMyArray1[1].split(":");
+		
+		date_start = dateStartMyArray1[0];
+		from_hours = dateStartMyArray2[0];
+		from_mins = dateStartMyArray2[1];
+		
+		var dateEndMyArray1 = long_date_end.split("T");
+		var dateEndMyArray2 = dateEndMyArray1[1].split(":");
+		
+		date_end = dateEndMyArray1[0];
+		to_hours = dateEndMyArray2[0];
+		to_mins = dateEndMyArray2[1];
+	}
 	
 	var user = $('.user').val();
 	var mac = $('.mac').val();

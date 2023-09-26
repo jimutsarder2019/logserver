@@ -34,7 +34,9 @@
 		<div class="row">
 			<div class="col-md-12">
 				<div class="card">
-					
+					<div class="card-header search-form">
+						<div></div>
+					</div>
 					<div class="card-header search-form">
 						<input class="js_date_start" type="datetime-local" placeholder="From Date Time">
 						<input class="js_date_end" type="datetime-local" placeholder="To Date Time">
