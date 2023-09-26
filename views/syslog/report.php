@@ -15,68 +15,19 @@
 				<h2>Download Log</h2>
 				<div class="card">
 					<div class="form-group row">
-						<div class="card-header search-form">
 						
-							<div class="row">
-								<div class="col-md-3"><strong>From Date</strong></div>
-								<div class="col-md-3"><strong>From Time</strong></div>
-								<div class="col-md-3"><strong>To Date</strong></div>
-								<div class="col-md-3"><strong>To Time</strong></div>
-							
-								<div class="col-md-3">
-								<input class="common-date datepicker-here js_date_start" type="search" placeholder="From Date *">
-								</div>
-								
-								<div class="col-md-3 d-flex">
-								   <select class="common-time form-control js_from_hours">
-									   <option value="">hours *</option>
-									   <?php for($h = 0; $h <= 23; $h++){
-										   $h =$h < 10?'0'.$h:$h;
-									   ?>
-									   <option value="<?=$h?>"><?=$h?></option>
-									   <?php } ?>
-								   </select>
-								   <select class="common-time form-control js_from_mins">
-									   <option value="">mins *</option>
-									   <?php for($m = 0; $m <= 60; $m++){ 
-									   $m =$m < 10?'0'.$m:$m;
-									   ?>
-									   <option value="<?=$m?>"><?=$m?></option>
-									   <?php } ?>
-								   </select>
-								</div>
-								
-								
-								
-								<div class="col-md-3">
-									 <input class="common-date datepicker-here js_date_end" type="search" placeholder="To Date *">
-								</div>
-								
-								<div class="col-md-3 d-flex">
-								   <select class="common-time form-control js_to_hours">
-									   <option value="">hours *</option>
-									   <?php for($h = 1; $h <= 24; $h++){ 
-										   $h =$h < 10?'0'.$h:$h;
-									   ?>
-									   <option value="<?=$h?>"><?=$h?></option>
-									   <?php } ?>
-								   </select>
-								   <select class="common-time form-control js_to_mins">
-									   <option value="">mins *</option>
-									   <?php for($m = 1; $m <= 60; $m++){ 
-									   $m =$m < 10?'0'.$m:$m;
-									   ?>
-									   <option value="<?=$m?>"><?=$m?></option>
-									   <?php } ?>
-								   </select>
-								</div>
-							</div>
+						
+						<div class="card-header search-form">
+							<input class="js_date_start" type="datetime-local" placeholder="From Date Time">
+							<input class="js_date_end" type="datetime-local" placeholder="To Date Time">
 						</div>
+						
 						<div class="card-header search-form">
 							<input class="mac" type="search" placeholder="Mac">
 							<input class="srcip" type="search" placeholder="Src IP">
 							<input class="dstip" type="search" placeholder="Dst IP">
 						</div>
+						
 						<div class="card-header search-form">
 							<input class="natip" type="search" placeholder="NAT IP..">
 							<input class="user" type="search" placeholder="User">

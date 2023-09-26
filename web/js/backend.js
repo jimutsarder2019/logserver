@@ -18,7 +18,7 @@ let reportHeaders = [
 let limit = 50;
 let offset = 0;
 
-document.addEventListener('contextmenu', event => event.preventDefault());
+//document.addEventListener('contextmenu', event => event.preventDefault());
 
 $(document).ready(function(){
 	
@@ -128,23 +128,26 @@ $(document).ready(function(){
 
 function commonSearch(type)
 {
-	var date_start = $('.js_date_start').val();
-	var date_end = $('.js_date_end').val();
+	var long_date_start = $('.js_date_start').val();
+	var long_date_end = $('.js_date_end').val();
 	
-	var from_hours = $('.js_from_hours').val();
-	var from_mins = $('.js_from_mins').val();
 	
-	var to_hours = $('.js_to_hours').val();
-	var to_mins = $('.js_to_mins').val();
+	var dateStartMyArray1 = long_date_start.split("T");
+	var dateStartMyArray2 = dateStartMyArray1[1].split(":");
 	
-	var user = $('.user').val();
-	var mac = $('.mac').val();
-	var src_ip = $('.srcip').val();
-	var dst_ip = $('.dstip').val();
-	var nat_ip = $('.natip').val();
+	var date_start = dateStartMyArray1[0];
+	var from_hours = dateStartMyArray2[0];
+	var from_mins = dateStartMyArray2[1];
 	
-	if(date_start && date_end && from_hours && from_mins && to_hours && to_mins && 
-	(user || mac || src_ip || dst_ip || nat_ip)){
+	
+	var dateEndMyArray1 = long_date_end.split("T");
+	var dateEndMyArray2 = dateEndMyArray1[1].split(":");
+	
+	var date_end = dateEndMyArray1[0];
+	var to_hours = dateEndMyArray2[0];
+	var to_mins = dateEndMyArray2[1];
+	
+	if(date_start && date_end && from_hours && from_mins && to_hours && to_mins){
 		
 		if((date_start <= date_end) && (parseInt(from_hours) <= parseInt(to_hours)) && (parseInt(from_mins) <= parseInt(to_mins))){
 			if(type === 'search'){
@@ -156,21 +159,32 @@ function commonSearch(type)
 			alert('From date, time should be equal or less than To date, time');
 		}
 	}else{
-		alert('Please select From Date, From Time(hours-mins), To Date, To Time(hours-mins) and any one of Mac, Src IP, Dst IP, NAT IP, User');
+		alert('Please select From Date, From Time(hours-mins), To Date, To Time(hours-mins)');
 	}
 }
 
 function getPostParams()
 {
 	var search_value = $('.js_searching').val();
-	var date_start = $('.js_date_start').val();
-	var date_end = $('.js_date_end').val();
+
+	var long_date_start = $('.js_date_start').val();
+	var long_date_end = $('.js_date_end').val();
 	
-	var from_hours = $('.js_from_hours').val();
-	var from_mins = $('.js_from_mins').val();
 	
-    var to_hours = $('.js_to_hours').val();
-	var to_mins = $('.js_to_mins').val();
+	var dateStartMyArray1 = long_date_start.split("T");
+	var dateStartMyArray2 = dateStartMyArray1[1].split(":");
+	
+	var date_start = dateStartMyArray1[0];
+	var from_hours = dateStartMyArray2[0];
+	var from_mins = dateStartMyArray2[1];
+	
+	
+	var dateEndMyArray1 = long_date_end.split("T");
+	var dateEndMyArray2 = dateEndMyArray1[1].split(":");
+	
+	var date_end = dateEndMyArray1[0];
+	var to_hours = dateEndMyArray2[0];
+	var to_mins = dateEndMyArray2[1];
 	
 	var user = $('.user').val();
 	var mac = $('.mac').val();
