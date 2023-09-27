@@ -217,6 +217,10 @@ class ElasticController extends Controller
 					];
 				}
 			}
+			
+			if($page_name == 'report' || $page_name == 'search'){
+				$limit = 10000;
+			}
 
 			$all_data = self::getQueryData($match, 'cloud-log-nat', $limit, $offset);
 
