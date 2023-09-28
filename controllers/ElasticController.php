@@ -114,7 +114,7 @@ class ElasticController extends Controller
 						]
 				];
 				
-				$message_filter_ppp = array_merge($message_filter_ppp, $date_filter_ppp);
+				$message_filter_ppp = array_merge($message_filter_ppp, $date_filter);
 				$message_filter = array_merge($message_filter, $date_filter);
 				
 				if(count($router_filter) > 1){
@@ -152,7 +152,7 @@ class ElasticController extends Controller
 						]
 				];
 				
-				$message_filter_ppp = $date_filter_ppp;
+				$message_filter_ppp = $date_filter;
 				
 				if(count($router_filter) > 1){
 					$match  =	 [
@@ -218,18 +218,23 @@ class ElasticController extends Controller
 				}
 			}
 			
-			if($page_name == 'report' || $page_name == 'search'){
+			if($page_name == 'search'){
 				$limit = 10000;
 			}
+			
+			if($page_name == 'report'){
+				$limit = 5000;
+			}
 
-			$all_data = self::getQueryData($match, 'cloud-log-nat', $limit, $offset);
-
+			$all_data = self::getQueryData($match, 'cloud-log-nat', $limit, $offset, $page_name);
+			
 			$all_message = [];
 			$all_syslog_data = [];
 			
-
+            $data_count = 0;
 			if(!empty($all_data)){
-				$all_syslog_data = self::dataProcess($all_data, true, $from_date, $to_date);	
+				$data_count = count($all_data);
+				$all_syslog_data = self::dataProcess($all_data, true, $from_date, $to_date, $from_hours, $from_mins, $to_hours, $to_mins);	
 			}else{
 				if($search){
 					$_filter[] = [
@@ -251,7 +256,7 @@ class ElasticController extends Controller
 					];
 				}
 				
-				$all_data = self::getQueryData($match, 'cloud-log-ppp', 1, 0);
+				$all_data = self::getQueryData($match, 'cloud-log-ppp', 1, 0, $page_name);
 				if(!empty($all_data)){
 					$missing_user_data = $all_data[0]['_source']['MESSAGE'];
 					$main_src_ip = $all_data[0]['_source']['HOST'];
@@ -298,10 +303,11 @@ class ElasticController extends Controller
 								  "must"=> $filter
 								]
 						];
-						$all_data = self::getQueryData($match, 'cloud-log-nat', $limit, 0);
+						$all_data = self::getQueryData($match, 'cloud-log-nat', $limit, 0, $page_name);
 						
 						if(!empty($all_data)){
-							$all_syslog_data = self::dataProcess($all_data, false, $from_date, $to_date, $user_name, $mac_ip, $main_src_ip);
+							$data_count = count($all_data);
+							$all_syslog_data = self::dataProcess($all_data, false, $from_date, $to_date, $from_hours, $from_mins, $to_hours, $to_mins, $user_name, $mac_ip, $main_src_ip);
 						}
 					}
 				}
@@ -311,28 +317,30 @@ class ElasticController extends Controller
 			if(!empty($all_syslog_data)){
 				$limit_date = $all_syslog_data[count($all_syslog_data) - 1]['datetime'];
 			}
-			die(json_encode(['status'=>'success', 'data'=>$all_syslog_data, 'limit_date'=>$limit_date]));
+			die(json_encode(['status'=>'success', 'count'=>$data_count, 'data'=>$all_syslog_data, 'limit_date'=>$limit_date]));
 		}else{
-			die(json_encode(['status'=>'fail', 'data'=>[], 'limit_date'=>'']));
+			die(json_encode(['status'=>'fail', 'count'=>$data_count, 'data'=>[], 'limit_date'=>'']));
 		}
     }
 	
 
 	
-	private function getMissingUser($src_ip, $date_start = false, $date_end = false)
+	private function getMissingUser($src_ip, $date_start = false, $date_end = false, $from_hours = false, $from_mins = false, $to_hours = false, $to_mins = false)
     {
+		$page_name = 'log';
 		$src_filter[] = self::filter_match_phrase_prefix($src_ip);
 		$date_filter = [];
 		if($date_start && $date_end){
 			$date_filter[] = [
 					"range"=>[
-								"@timestamp"=>[
-								                "time_zone"=> "+06:00", 
-												"gte"=>"".$date_start."T00:00:00",
-												"lte"=>"".$date_end."T23:59:59",
+								"@timestamp"=>[												
+												"time_zone"=> "+06:00", 
+												"gte"=>"".$date_start."T".$from_hours.":".$from_mins.":00",
+												"lte"=>"".$date_end."T".$to_hours.":".$to_mins.":59",
 								]
 					]
 			];
+			$page_name = 'search';
 		}
 		
 		$filter = array_merge($src_filter, $date_filter);
@@ -342,7 +350,7 @@ class ElasticController extends Controller
 					]
 		];
 			
-		$all_data = self::getQueryData($match, 'cloud-log-ppp', 1, 0);
+		$all_data = self::getQueryData($match, 'cloud-log-ppp', 1, 0, $page_name);
 		
 		$all_syslog_data = [];
 		if(!empty($all_data)){
@@ -352,12 +360,12 @@ class ElasticController extends Controller
 			if(isset($message_array[1],  $message_array[2])){
 				$user_name = $message_array[1];
 				$mac_ip = $message_array[2];
-				return ['user'=>$user_name, 'mac'=>$mac_ip, 'router_ip'=>$src_ip];
+				return ['user'=>$user_name.'-mm', 'mac'=>$mac_ip, 'router_ip'=>$src_ip];
 			}
 		}
     }
 
-	private function dataProcess($all_data, $missing_find=true, $date_start = false, $date_end = false, $user_name = false, $mac_ip = false,  $main_src_ip = false)
+	private function dataProcess($all_data, $missing_find=true, $date_start = false, $date_end = false, $from_hours = false, $from_mins = false, $to_hours = false, $to_mins = false, $user_name = false, $mac_ip = false,  $main_src_ip = false)
 	{
 		$all_syslog_data = [];
 		foreach($all_data as $key=>$data){
@@ -449,7 +457,7 @@ class ElasticController extends Controller
 				}
 				
 				if(isset($all_syslog_data[$key]['src_ip'], $data['_source']['@timestamp']) && $missing_find && $all_syslog_data[$key]['src_ip'] && $all_syslog_data[$key]['user'] == 'N/A'){
-					$missing_user_data = self::getMissingUser($all_syslog_data[$key]['src_ip'], $date_start, $date_end);
+					$missing_user_data = self::getMissingUser($all_syslog_data[$key]['src_ip'], $date_start, $date_end, $from_hours, $from_mins, $to_hours, $to_mins);
 				
 					if(isset($missing_user_data['user']) && $missing_user_data['user']){
 						$all_syslog_data[$key]['user'] = $missing_user_data['user'];
@@ -469,16 +477,36 @@ class ElasticController extends Controller
 		return $all_syslog_data;
 	}
 	
-	private function getQueryData($match, $index = 'cloud-log-nat', $limit = 50, $offset = 0)
+	private function getQueryData($match, $index = 'cloud-log-nat', $limit = 50, $offset = 0, $page_name = 'log')
 	{
+		/*$query = (new Query)->from($index);
+		$query->query = $match;
+		$query->orderBy(['@timestamp' => SORT_DESC]);
+				//$query->offset = $offset;
+		//$query->limit = $limit;
+		$data = [];
+		foreach ($query->batch('5m') as $row) {
+			
+			
+			$data[] = $row;
+			print '<pre>';
+			print_r($row);
+			print '</pre>';
+		}
+
+		die;*/
 		$query = new Query;
 		$query->from($index);
 		$query->query = $match;
-		$query->orderBy(['@timestamp' => SORT_DESC]);
+		if($page_name == 'log'){
+		    $query->orderBy(['@timestamp' => SORT_DESC]);
+		}else{
+			$query->orderBy(['@timestamp' => SORT_ASC]);
+		}
 		$query->offset = $offset;
 		$query->limit = $limit;
 		$command = $query->createCommand();
-		$response = $command->search();
+        $response = $command->search();
 		$all_data = [];
 		if(!empty($response)){
 			if(isset($response['hits']['hits']) && !empty($response['hits']['hits'])){

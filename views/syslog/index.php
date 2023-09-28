@@ -54,7 +54,7 @@
 								<option value="500">500 entries</option>
 								<option value="1000">1000 entries</option>
 								<option value="2000">2000 entries</option>
-								<option value="5000">2000+ entries</option>
+								<option value="10000">2000+ entries</option>
 							</select>
 						</div>
 						

@@ -211,6 +211,9 @@ function getPostParams()
 function generateLogData(type=false)
 {
 	$('.data-render').html('<tr><td style="color:#FF0000">Loading......</td></tr>');
+	if(type){
+	    $('.js-report-loading').html('<tr><td style="color:#FF0000; font-size:21px;">Loading......</td></tr>');
+	}
 	$.ajax({  
 		url: base_url+'/?r=elastic/get',
 		type: 'POST',
@@ -240,6 +243,9 @@ function generateLogData(type=false)
 					$('.data-render').html(tr);
 				}else{
 					$('.data-render').html('<tr><td style="color:#FF0000">No data found!</td></tr>');
+					if(type){
+					    $('.js-report-loading').html('');
+					}
 				}
 					
 				if(type == 'csv'){
@@ -247,11 +253,18 @@ function generateLogData(type=false)
 				}else if(type == 'excel'){
 					excelReport(response.data);
 				}else if(type == 'pdf'){
-					pdfPrint();
+					pdfPrint(response.data);
+				}
+				
+				if(response.data.length === 10000){
+					alert('Your searching data limitation have already exceed. So, Please add any one filtering option (Mac, Src IP, User, NAT, DST IP).');
 				}
 			}else{
 				alert('No data found!');
                 $('.data-render').html('<tr><td style="color:#FF0000">No data found!</td></tr>');
+				if(type){
+					    $('.js-report-loading').html('');
+					}
 			}				
 		}  
 	});  
@@ -320,7 +333,7 @@ function generateReport(data){
 		csv.push(csvRow.map(str => `"${str}"`).join(","));
 		csvRow = []
 	});
-	
+	$('.js-report-loading').html('');
 	let blob = new Blob([csv.join("\n")],{type:"text/csv"})
 	let download = document.createElement("a")
 	download.download = company_name+"LogReport" + Date();
@@ -333,12 +346,53 @@ function generateReport(data){
 
 
 
-function pdfPrint() {
+function pdfPrint(pdfData) {
+	
+	let tr = '';
+	$.each(pdfData, function( key, value ) {
+		tr += '<tr>'+
+					'<td class="digits">'+value['datetime']+'</td>'+
+					'<td class="digits">'+value['host']+'</td>'+
+					'<td class="digits">'+value['user']+'</td>'+
+					'<td class="digits">'+value['protocol']+'</td>'+
+					'<td class="digits">'+value['mac']+'</td>'+
+					'<td class="digits">'+value['src_ip']+'</td>'+
+					'<td class="digits">'+value['src_port']+'</td>'+
+					'<td class="digits">'+value['destination_ip']+'</td>'+
+					'<td class="digits">'+value['destination_port']+'</td>'+
+					'<td class="digits">'+value['nat_ip']+'</td>'+
+					'<td class="digits">'+value['nat_port']+'</td>'+
+				'</tr>';
+	});
+	
+	var pdfBodyContent = '<style type="text/css" media="print">@page { size: landscape; }</style>'+
+								'<table class="table table-bordernone">'+
+									'<thead>'+
+										'<tr>'+
+											'<th scope="col">DateTime</th>'+
+											'<th scope="col">Router IP</th>'+
+											'<th scope="col">User</th>'+
+											'<th scope="col">Protocol</th>'+
+											'<th scope="col">Mac</th>'+
+											'<th scope="col">Src IP</th>'+
+											'<th scope="col">Port</th>'+
+											'<th scope="col">Dst IP</th>'+
+											'<th scope="col">Port</th>'+
+											'<th scope="col">NAT IP</th>'+
+											'<th scope="col">Port</th>'+
+										'</tr>'+
+									'</thead>'+
+									'<tbody class="data-render2">'+tr+'</tbody>'+
+								'</table>';
+	
+	
+				 //document.getElementById("table-data").innerHTML = pdfBodyContent;
+				
 	var date_start = $('.js_date_start').val();
 	var date_end = $('.js_date_end').val();
 	
-	var divContents = document.getElementById("table-data").innerHTML;
-	var a = window.open('', '', 'height=500, width=500');
+	//var divContents = document.getElementById("table-data").innerHTML;
+	var a = window.open('', '');
 	a.document.write('<html><style>table{border-collapse: collapse;} table, td, th{border:1px solid #000000 !important; padding:2px !important;}</style>');
 	a.document.write('<body ><h1>'+company_name+' Log Report</h1><br>');
 	a.document.write('<p>License Number: '+license_number+'</p>');
@@ -350,9 +404,10 @@ function pdfPrint() {
 		a.document.write('<p>Log Report:</p>');
 	}
 	a.document.write('<br>');
-	a.document.write(divContents);
+	a.document.write(pdfBodyContent);
 	a.document.write('</body></html>');
 	a.document.close();
+	$('.js-report-loading').html('');
 	a.print();
 }
 
@@ -421,7 +476,7 @@ function excelReport(data) {
 		final_data.push(excelRow);
 		excelRow = []
 	});
-						
+	$('.js-report-loading').html('');				
 	  // (C2) CREATE NEW EXCEL "FILE"
 	var workbook = XLSX.utils.book_new(),
 	worksheet = XLSX.utils.aoa_to_sheet(final_data);

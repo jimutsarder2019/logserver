@@ -30,6 +30,7 @@
 						
 						<div class="card-header search-form">
 							<input class="natip" type="search" placeholder="NAT IP..">
+							<div class="js-report-loading"></div>
 							<input class="user" type="search" placeholder="User">
 							<div style="display:none;" class="form-inline search-form search-box">
 								<select class="custom-select form-control js_limit_change" required="">
