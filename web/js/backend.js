@@ -247,24 +247,31 @@ function generateLogData(type=false)
 					    $('.js-report-loading').html('');
 					}
 				}
-					
-				if(type == 'csv'){
-					generateReport(response.data);
-				}else if(type == 'excel'){
-					excelReport(response.data);
-				}else if(type == 'pdf'){
-					pdfPrint(response.data);
-				}
 				
-				if(response.data.length === 10000){
-					alert('Your searching data limitation have already exceed. So, Please add any one filtering option (Mac, Src IP, User, NAT, DST IP).');
+				if((type == 'csv') || (type == 'excel') || (type == 'pdf')){
+					if(response.report_status || (response.data.length > 3000)){
+						$('.js-report-loading').html('');
+						alert('Your report generate data limitation have already exceed. So, Need some time to generate report. You will get it later in download report page.');
+					}else{
+						if(type == 'csv'){
+							generateReport(response.data);
+						}else if(type == 'excel'){
+							excelReport(response.data);
+						}else if(type == 'pdf'){
+							pdfPrint(response.data);
+						}
+					}
+				}else{
+					if(response.data.length === 10000){
+						alert('Your searching data limitation have already exceed. So, Please add any one filtering option (Mac, Src IP, User, NAT, DST IP).');
+					}
 				}
 			}else{
 				alert('No data found!');
                 $('.data-render').html('<tr><td style="color:#FF0000">No data found!</td></tr>');
-				if(type){
-					    $('.js-report-loading').html('');
-					}
+				if((type == 'csv') || (type == 'excel') || (type == 'pdf')){
+					$('.js-report-loading').html('');
+				}
 			}				
 		}  
 	});  

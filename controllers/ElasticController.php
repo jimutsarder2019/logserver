@@ -223,20 +223,13 @@ class ElasticController extends Controller
 			}
 			
 			if($page_name == 'report'){
-				$limit = 5000;
+				$limit = 4000;
 			}
 
 			$all_data = self::getQueryData($match, 'cloud-log-nat', $limit, $offset, $page_name);
 			
 			$all_message = [];
 			$all_syslog_data = [];
-			
-			/*
-			print '<pre>';
-						print_r($all_data);
-						print '</pre>';
-						
-						die;*/
 			
             $data_count = 0;
 			if(!empty($all_data)){
@@ -324,9 +317,16 @@ class ElasticController extends Controller
 			if(!empty($all_syslog_data)){
 				$limit_date = $all_syslog_data[count($all_syslog_data) - 1]['datetime'];
 			}
-			die(json_encode(['status'=>'success', 'count'=>$data_count, 'data'=>$all_syslog_data, 'limit_date'=>$limit_date]));
+			
+			$report_status = false;
+			if($data_count > 3000){
+				$params = ['from_date'=>$from_date."T".$from_hours.":".$from_mins.":00", 'to_date'=>$to_date."T".$to_hours.":".$to_mins.":59", 'report_type'=>'pdf'];
+				ApplicationHelper::storeReportGenerateRecord($params);
+				$report_status = true;
+			}
+			die(json_encode(['status'=>'success', 'report_status'=>$report_status, 'count'=>$data_count, 'data'=>$all_syslog_data, 'limit_date'=>$limit_date]));
 		}else{
-			die(json_encode(['status'=>'fail', 'count'=>$data_count, 'data'=>[], 'limit_date'=>'']));
+			die(json_encode(['status'=>'fail', 'report_status'=>false, 'count'=>$data_count, 'data'=>[], 'limit_date'=>'']));
 		}
     }
 	

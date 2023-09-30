@@ -5,6 +5,7 @@ namespace app\components;
 use Yii;
 use app\models\LoginHistory;
 use app\models\Users;
+use app\models\ReportBackup;
 
 class ApplicationHelper
 {
@@ -102,4 +103,19 @@ class ApplicationHelper
         $router_list = Yii::$app->db->createCommand( 'SELECT ip FROM router where status=1 and type="nat"' )->queryColumn();
 		return $router_list;
     }
+	
+	public static function storeReportGenerateRecord($data)
+	{
+		$model = new ReportBackup();
+		$model->from_date = $data['from_date'];
+		$model->to_date = $data['to_date'];
+		$model->report_type = $data['report_type'];
+		$model->date = date('Y-m-d');
+		
+		if($model->save()){
+			return true;
+		}else{
+			return false;
+		}
+	}
 }
