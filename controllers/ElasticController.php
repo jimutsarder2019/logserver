@@ -231,6 +231,13 @@ class ElasticController extends Controller
 			$all_message = [];
 			$all_syslog_data = [];
 			
+			/*
+			print '<pre>';
+						print_r($all_data);
+						print '</pre>';
+						
+						die;*/
+			
             $data_count = 0;
 			if(!empty($all_data)){
 				$data_count = count($all_data);
@@ -360,7 +367,7 @@ class ElasticController extends Controller
 			if(isset($message_array[1],  $message_array[2])){
 				$user_name = $message_array[1];
 				$mac_ip = $message_array[2];
-				return ['user'=>$user_name.'-mm', 'mac'=>$mac_ip, 'router_ip'=>$src_ip];
+				return ['user'=>$user_name, 'mac'=>$mac_ip, 'router_ip'=>$src_ip];
 			}
 		}
     }
@@ -378,6 +385,7 @@ class ElasticController extends Controller
 			$all_syslog_data[$key]['user'] = 'N/A';
 			$all_syslog_data[$key]['nat_ip'] = 'N/A';
 			$all_syslog_data[$key]['nat_port'] = 'N/A';
+			$all_syslog_data[$key]['mac'] = 'N/A';
 			
 			foreach($message_array as $k=>$message){
 				if(strpos($message, "Internet_Log:") !== false && strpos($message, "in:<pppoe-") !== false){
@@ -420,6 +428,9 @@ class ElasticController extends Controller
 				
 				if(strpos($message, "proto") !== false){
 					$all_syslog_data[$key]['protocol'] = @explode(" ", $message)[1];
+					if($all_syslog_data[$key]['protocol'] == 'proto'){
+						$all_syslog_data[$key]['protocol'] = @explode(" ", $message)[2];
+					}
 				}
 				
 				if($k === 3){
@@ -428,6 +439,8 @@ class ElasticController extends Controller
 						$ipv6_data = explode("->", @$message);
 						$ipv6_data_1 = explode("]:", @$ipv6_data[0]);
 						$src_ip = str_replace('[','',@$ipv6_data_1[0]);
+						$src_ip = str_replace('NAT','',$src_ip);
+						$src_ip = str_replace('(','',$src_ip);
 						$all_syslog_data[$key]['src_ip'] = $src_ip;
 						
 						$src_port = str_replace('[','',@$ipv6_data_1[1]);
@@ -438,13 +451,17 @@ class ElasticController extends Controller
 						$all_syslog_data[$key]['destination_ip'] = $dest_ip;
 						
 						$dest_port = str_replace('[','',@$ipv6_data_2[1]);
+						$dest_port = str_replace(')','',$dest_port);
 						$all_syslog_data[$key]['destination_port'] = $dest_port;
 					}else{
 						$ip_data = explode("->", $message);
 						$all_syslog_data[$key]['src_ip'] = @explode(":", @$ip_data[0])[0];
+						$all_syslog_data[$key]['src_ip'] = str_replace('NAT','',$all_syslog_data[$key]['src_ip']);
+						$all_syslog_data[$key]['src_ip'] = str_replace('(','',$all_syslog_data[$key]['src_ip']);
 						$all_syslog_data[$key]['src_port'] = @explode(":", @$ip_data[0])[1];
 						$all_syslog_data[$key]['destination_ip'] = @explode(":", @$ip_data[1])[0];
 						$all_syslog_data[$key]['destination_port'] = @explode(":", @$ip_data[1])[1];
+						$all_syslog_data[$key]['destination_port'] = str_replace(')','',$all_syslog_data[$key]['destination_port']);
 					}
 				}
 				
