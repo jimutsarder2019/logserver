@@ -17,6 +17,7 @@ let reportHeaders = [
 
 let limit = 50;
 let offset = 0;
+let reportType = '';
 
 //document.addEventListener('contextmenu', event => event.preventDefault());
 
@@ -55,15 +56,18 @@ $(document).ready(function(){
 	});
 	
     $('.js_report_csv').click(function(){
+		reportType = 'csv';
 		commonSearch('csv');
 	});
 	
     $('.js_report_excel').click(function(){
-		commonSearch('excel');
+		reportType = 'xlsx';
+		commonSearch('xlsx');
 	});
 	
 	
 	$('.js_report_pdf').click(function(){
+		reportType = 'pdf';
 		commonSearch('pdf');
 	});
 	
@@ -205,7 +209,7 @@ function getPostParams()
 	var nat_ip = $('.natip').val();
 	var router = $('.js_router').val();
 	var page_name = $('.js_page_name').val();
-	return {page_name:page_name, offset:offset, limit:limit, search:search_value, from_date:date_start, to_date:date_end, from_hours:from_hours, from_mins:from_mins, to_hours:to_hours, to_mins:to_mins, router:router, user:user, mac:mac, src_ip:src_ip, dst_ip:dst_ip, nat_ip:nat_ip};
+	return {page_name:page_name, report_type:reportType, offset:offset, limit:limit, search:search_value, from_date:date_start, to_date:date_end, from_hours:from_hours, from_mins:from_mins, to_hours:to_hours, to_mins:to_mins, router:router, user:user, mac:mac, src_ip:src_ip, dst_ip:dst_ip, nat_ip:nat_ip};
 }
 
 function generateLogData(type=false)
@@ -248,14 +252,14 @@ function generateLogData(type=false)
 					}
 				}
 				
-				if((type == 'csv') || (type == 'excel') || (type == 'pdf')){
+				if((type == 'csv') || (type == 'xlsx') || (type == 'pdf')){
 					if(response.report_status || (response.data.length > 3000)){
 						$('.js-report-loading').html('');
 						alert('Your report generate data limitation have already exceed. So, Need some time to generate report. You will get it later in download report page.');
 					}else{
 						if(type == 'csv'){
 							generateReport(response.data);
-						}else if(type == 'excel'){
+						}else if(type == 'xlsx'){
 							excelReport(response.data);
 						}else if(type == 'pdf'){
 							pdfPrint(response.data);
@@ -269,7 +273,7 @@ function generateLogData(type=false)
 			}else{
 				alert('No data found!');
                 $('.data-render').html('<tr><td style="color:#FF0000">No data found!</td></tr>');
-				if((type == 'csv') || (type == 'excel') || (type == 'pdf')){
+				if((type == 'csv') || (type == 'xlsx') || (type == 'pdf')){
 					$('.js-report-loading').html('');
 				}
 			}				

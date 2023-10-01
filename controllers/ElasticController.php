@@ -42,6 +42,7 @@ class ElasticController extends Controller
 		$router = Yii::$app->request->post('router');
 		$offset = Yii::$app->request->post('offset', 0);
 		$page_name = Yii::$app->request->post('page_name', 'log');
+		$report_type = Yii::$app->request->post('report_type', '');
 
 		$message_filter = [];
 		$mac_filter = [];
@@ -225,6 +226,10 @@ class ElasticController extends Controller
 			if($page_name == 'report'){
 				$limit = 4000;
 			}
+			
+			$report_match1 = json_encode($match);
+			$report_match2 = '';
+			$match_type = 'nat';
 
 			$all_data = self::getQueryData($match, 'cloud-log-nat', $limit, $offset, $page_name);
 			
@@ -255,7 +260,8 @@ class ElasticController extends Controller
 						  ]
 					];
 				}
-				
+				$match_type = 'ppp';
+				$report_match1 = json_encode($match);
 				$all_data = self::getQueryData($match, 'cloud-log-ppp', 1, 0, $page_name);
 				if(!empty($all_data)){
 					$missing_user_data = $all_data[0]['_source']['MESSAGE'];
@@ -303,6 +309,7 @@ class ElasticController extends Controller
 								  "must"=> $filter
 								]
 						];
+						$report_match2 = $match;
 						$all_data = self::getQueryData($match, 'cloud-log-nat', $limit, 0, $page_name);
 						
 						if(!empty($all_data)){
@@ -319,8 +326,8 @@ class ElasticController extends Controller
 			}
 			
 			$report_status = false;
-			if($data_count > 3000){
-				$params = ['from_date'=>$from_date."T".$from_hours.":".$from_mins.":00", 'to_date'=>$to_date."T".$to_hours.":".$to_mins.":59", 'report_type'=>'pdf'];
+			if($data_count > 3000 && ($page_name == 'report')){
+				$params = ['from_date_to_date'=>$from_date.$from_hours.$from_mins.'_'.$to_date.$to_hours.$to_mins, 'from_date'=>$from_date."T".$from_hours.":".$from_mins.":00", 'to_date'=>$to_date."T".$to_hours.":".$to_mins.":59", 'report_type'=>$report_type, 'match1'=>$report_match1, 'match2'=>$report_match2, 'match_type'=>$match_type];
 				ApplicationHelper::storeReportGenerateRecord($params);
 				$report_status = true;
 			}

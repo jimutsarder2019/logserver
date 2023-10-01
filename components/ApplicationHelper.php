@@ -106,10 +106,16 @@ class ApplicationHelper
 	
 	public static function storeReportGenerateRecord($data)
 	{
+		$file_name = $data['match_type'].'_'.$data['from_date_to_date'].'__'.date('Y-m-d').'_LOG'.rand().'.'.$data['report_type'];
+		
 		$model = new ReportBackup();
 		$model->from_date = $data['from_date'];
 		$model->to_date = $data['to_date'];
+		$model->match1 = $data['match1'];
+		$model->match2 = $data['match2'];
+		$model->match_type = $data['match_type'];
 		$model->report_type = $data['report_type'];
+		$model->file_name = $file_name;
 		$model->date = date('Y-m-d');
 		
 		if($model->save()){
