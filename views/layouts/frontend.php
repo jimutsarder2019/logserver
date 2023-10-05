@@ -281,6 +281,13 @@ $isAdmin = ApplicationHelper::isAdmin();
                                 <span>Download Log</span>
                             </a>
                         </li>
+						
+						<li style="display:none;">
+                            <a class="sidebar-header" href="<?=$baseUrl ?>/?r=report-backup/index">
+                                <i data-feather="download"></i>
+                                <span>Request Generated Log</span>
+                            </a>
+                        </li>
 
 
 
