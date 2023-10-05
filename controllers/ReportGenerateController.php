@@ -360,7 +360,7 @@ class ReportGenerateController extends Controller
 		foreach ($query->batch() as $key=>$rows) {
 			 //if($key == 10){
 				 $all_data = array_merge($all_data,$rows);
-				 return $all_data;
+				 //return $all_data;
 			 //}
 		}
 		return $all_data;
