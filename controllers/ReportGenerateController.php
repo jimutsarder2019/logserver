@@ -358,10 +358,10 @@ class ReportGenerateController extends Controller
 		$query->limit = 500;
 		
 		foreach ($query->batch() as $key=>$rows) {
-			 if($key == 10){
+			 //if($key == 10){
 				 $all_data = array_merge($all_data,$rows);
 				 return $all_data;
-			 }
+			 //}
 		}
 		return $all_data;
 	}
