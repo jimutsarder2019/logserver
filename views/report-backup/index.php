@@ -63,7 +63,7 @@ $this->params['breadcrumbs'][] = $this->title;
 										'buttons' => [
 											'download' => function($url, $model){
 												if($model->status == 1){
-													return Html::a('<span class="fa fa-download"></span>', '/logserver/uploads/report/'.$model->report_type.'/'.$model->file_name, [
+													return Html::a('<span class="fa fa-download"></span>', '/uploads/report/'.$model->report_type.'/'.$model->file_name, [
 														'class' => 'download',
 														'target' => '_blank',
 														'data' => [
