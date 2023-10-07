@@ -1,0 +1,41 @@
+
+2023.10.6 14:53:19#Report generate process start...
+2023.10.6 15:05:07#Report generate process start...
+2023.10.6 15:17:19#Report generate process start...
+2023.10.6 15:18:11#Report generate process start...
+2023.10.6 17:16:36 # Report generate process start...
+2023.10.6 17:16:36 # get log data from DB
+2023.10.6 17:16:37 # get log data from DB
+2023.10.6 17:16:37 # xlsx file create done
+2023.10.6 17:16:58 # Report generate process start...
+2023.10.6 17:16:58 # get log data from DB
+2023.10.6 17:16:58 # get log data from DB
+2023.10.6 17:16:59 # xlsx file create done
+2023.10.6 17:20:22 # Report generate process start...
+2023.10.6 17:20:22 # get log data from DB
+2023.10.6 17:20:23 # get log data from DB
+2023.10.6 17:25:43 # Report generate process start...
+2023.10.6 17:25:43 # get log data from DB
+2023.10.6 17:25:44 # get log data from DB
+2023.10.6 17:25:44 # pdf file create done
+2023.10.6 17:25:49 # log data write into pdf file done
+2023.10.6 17:25:49 # All the report generated successfully!
+2023.10.6 17:37:07 # Report generate process start...
+2023.10.6 17:37:07 # No report generate request found!
+2023.10.6 17:38:11 # Report generate process start...
+2023.10.6 17:38:11 # get log data from DB
+2023.10.6 17:38:16 # csv file create done
+2023.10.6 17:49:18 # Report generate process start...
+2023.10.6 17:49:18 # get log data from DB
+2023.10.6 17:49:19 # csv file create done
+2023.10.6 17:49:19 # log data write into csv file done
+2023.10.6 17:49:19 # get log data from DB
+2023.10.6 17:49:20 # xlsx file create done
+2023.10.6 17:49:20 # log data write into xlsx file done
+2023.10.6 17:49:21 # get log data from DB
+2023.10.6 17:49:21 # csv file create done
+2023.10.6 17:49:21 # log data write into csv file done
+2023.10.6 17:49:22 # get log data from DB
+2023.10.6 17:49:22 # pdf file create done
+2023.10.6 17:49:27 # log data write into pdf file done
+2023.10.6 17:49:27 # All the report generated successfully!
