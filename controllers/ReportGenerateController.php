@@ -25,7 +25,7 @@ class ReportGenerateController extends Controller
 	public function actionProcess()
     {
 		$report_backup_list = $this->getReportBackupList();
-		
+		ApplicationHelper::logger('Report generate process start...');
 		if(!empty($report_backup_list)){
 		
 			$company_name = ApplicationHelper::getCompanyName();
@@ -53,15 +53,18 @@ class ReportGenerateController extends Controller
 					$limit = 100;
 					$match = json_decode($report_backup['match1'], 1);
 					$all_data = self::getQueryData($match, 'cloud-log-nat', $limit, $offset);
+					ApplicationHelper::logger('get log data from DB');
 					if(!empty($all_data)){
 						self::dataProcess($all_data, true, $report_type, $report_file_name, $from_date, $to_date, $licenseInfo);	
+					}else{
+						ApplicationHelper::logger('Log data not found!');
 					}
 				}else{
-					
 					$match_pp = json_decode($report_backup['match1'], 1);
 					$match_nat = json_decode($report_backup['match2'], 1);
-					
+					$limit = 100;
 					$all_data = self::getQueryData($match_pp, 'cloud-log-ppp', 1, 0);
+					ApplicationHelper::logger('get log data from DB');
 					if(!empty($all_data)){
 						$missing_user_data = $all_data[0]['_source']['MESSAGE'];
 						$main_src_ip = $all_data[0]['_source']['HOST'];
@@ -74,12 +77,14 @@ class ReportGenerateController extends Controller
 							   $mac_ip = $message_array[2];
 							}
 
-							$all_data = self::getQueryData($match_nat, 'cloud-log-nat', $limit, 0, $page_name);
+							$all_data = self::getQueryData($match_nat, 'cloud-log-nat', $limit, 0);
 							
 							if(!empty($all_data)){
-								self::dataProcess($all_data, false, $report_type, $report_file_name, $from_date, $to_date, $licenseInfo, $from_hours, $from_mins, $to_hours, $to_mins, $user_name, $mac_ip, $main_src_ip);
+								self::dataProcess($all_data, false, $report_type, $report_file_name, $from_date, $to_date, $licenseInfo);
 							}
 						}
+					}else{
+						ApplicationHelper::logger('Log data not found!');
 					}
 				}
 				
@@ -87,8 +92,10 @@ class ReportGenerateController extends Controller
 				$model->status = 1;
 				$model->save();
 			}
+			ApplicationHelper::logger('All the report generated successfully!');
 			die("All the report generated successfully!");
 	    }else{
+			ApplicationHelper::logger('No report generate request found!');
 			die("No report generate request found!");
 		}
     }
@@ -136,8 +143,9 @@ class ReportGenerateController extends Controller
 	private function dataProcess($all_data, $missing_find=true, $report_type,$report_file_name, $date_start, $date_end, $licenseInfo, $user_name = false, $mac_ip = false,  $main_src_ip = false)
 	{
 		$all_syslog_data = [];
-
+        
 		if($report_type == 'pdf'){
+			ApplicationHelper::logger('pdf file create done');
 			$pdf = new Pdf([
                     // set to use core fonts only
                     'mode' => Pdf::MODE_CORE,
@@ -186,6 +194,7 @@ class ReportGenerateController extends Controller
 			$mpdf->WriteHTML($top_area_content.'<table style="border:1px solid #000000; border-collapse: collapse;
 ">'.$table_header.'<tbody class="data-render">');
 		}else{
+			ApplicationHelper::logger($report_type.' file create done');
 		    $fh = @fopen(__DIR__ . '/../web/uploads/report/'.$report_file_name, 'wb');
 			$csvValueArray = [];
 	        $csvValueArray[] = $licenseInfo['company'].' Log Report';
@@ -344,8 +353,10 @@ class ReportGenerateController extends Controller
 		
 		if($report_type == 'pdf'){
 			$mpdf->WriteHTML('</tbody></table></body>');
+			ApplicationHelper::logger('log data write into pdf file done');
 			$mpdf->Output(__DIR__ . '/../web/uploads/report/'.$report_file_name);
 		}else{
+			ApplicationHelper::logger('log data write into '.$report_type.' file done');
 			fclose($fh);
 		}
 	}
@@ -358,10 +369,10 @@ class ReportGenerateController extends Controller
 		$query->limit = 500;
 		
 		foreach ($query->batch() as $key=>$rows) {
-			 //if($key == 10){
+			 if($key == 5){
 				 $all_data = array_merge($all_data,$rows);
-				 //return $all_data;
-			 //}
+				 return $all_data;
+			 }
 		}
 		return $all_data;
 	}

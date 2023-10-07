@@ -118,10 +118,35 @@ class ApplicationHelper
 		$model->file_name = $file_name;
 		$model->date = date('Y-m-d');
 		
+		if($model->validate()){
+		
 		if($model->save()){
 			return true;
 		}else{
 			return false;
 		}
+		}else{
+			ApplicationHelper::_setTrace($data);
+			ApplicationHelper::_setTrace($model->getErrors());
+		}
 	}
+	
+	public static function logger($logmsg)
+    {        
+        $mainDir = '../logs/report/';
+        $mainDirPath = $mainDir.date("Y.n.j").'.log';
+
+        if (!is_dir($mainDir)) { //  Creating directory if not exist
+            mkdir($mainDir,  0777, true);
+        }
+        
+    	try {
+    	    $logmsg = is_array($logmsg)?json_encode($logmsg):$logmsg;
+    		$logmsg = "\n".date("Y.n.j H:i:s")." # ".$logmsg;
+    		file_put_contents($mainDirPath,$logmsg,FILE_APPEND);
+    		//file_put_contents('../../logs/airbooking.'.date("Y.n.j").'.log',$logmsg,FILE_APPEND);
+    	} catch(Exception $e) {
+    		file_put_contents($mainDirPath,$e->getMessage(),FILE_APPEND);
+    	}
+    }
 }

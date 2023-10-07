@@ -309,7 +309,7 @@ class ElasticController extends Controller
 								  "must"=> $filter
 								]
 						];
-						$report_match2 = $match;
+						$report_match2 = json_encode($match,1);
 						$all_data = self::getQueryData($match, 'cloud-log-nat', $limit, 0, $page_name);
 						
 						if(!empty($all_data)){
