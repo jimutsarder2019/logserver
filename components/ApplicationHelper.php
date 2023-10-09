@@ -126,7 +126,7 @@ class ApplicationHelper
 			return false;
 		}
 		}else{
-			ApplicationHelper::_setTrace($data);
+			//ApplicationHelper::_setTrace($data);
 			ApplicationHelper::_setTrace($model->getErrors());
 		}
 	}
