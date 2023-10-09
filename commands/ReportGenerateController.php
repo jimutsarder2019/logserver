@@ -24,12 +24,12 @@ class ReportGenerateController extends Controller
 	
 	public function actionProcess()
     {
-				$model = ReportBackup::findOne(['id' => 18]);
+				/*$model = ReportBackup::findOne(['id' => 18]);
 				$model->report_type = 'test';
 				$model->save();
 				
 				
-				die;
+				die;*/
 		$report_backup_list = $this->getReportBackupList();
 		ApplicationHelper::logger('Report generate process start...');
 		if(!empty($report_backup_list)){
