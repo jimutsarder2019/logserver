@@ -155,14 +155,10 @@ function commonSearch(type)
 		
 		if(long_date_start && long_date_end && date_start && date_end && from_hours && from_mins && to_hours && to_mins){
 			
-			if((date_start <= date_end) && (parseInt(from_hours) <= parseInt(to_hours)) && (parseInt(from_mins) <= parseInt(to_mins))){
-				if(type === 'search'){
-					generateLogData();
-				}else{
-					generateLogData(type);
-				}
+			if(type === 'search'){
+				generateLogData();
 			}else{
-				alert('From Date-Time should be equal or less than To Date-Time');
+				generateLogData(type);
 			}
 		}else{
 			alert('Please select From Date-Time and To Date-Time');
