@@ -239,7 +239,7 @@ class ElasticController extends Controller
             $data_count = 0;
 			if(!empty($all_data)){
 				$data_count = count($all_data);
-				$all_syslog_data = self::dataProcess($all_data, true, $from_date, $to_date, $from_hours, $from_mins, $to_hours, $to_mins);	
+				$all_syslog_data = self::dataProcess($all_data, true, $from_date, $to_date, $from_hours, $from_mins, $to_hours, $to_mins, $router_list);	
 			}else{
 				if($search){
 					$_filter[] = [
@@ -314,7 +314,7 @@ class ElasticController extends Controller
 						
 						if(!empty($all_data)){
 							$data_count = count($all_data);
-							$all_syslog_data = self::dataProcess($all_data, false, $from_date, $to_date, $from_hours, $from_mins, $to_hours, $to_mins, $user_name, $mac_ip, $main_src_ip);
+							$all_syslog_data = self::dataProcess($all_data, false, $from_date, $to_date, $from_hours, $from_mins, $to_hours, $to_mins, $router_list, $user_name, $mac_ip, $main_src_ip);
 						}
 					}
 				}
@@ -379,9 +379,10 @@ class ElasticController extends Controller
 		}
     }
 
-	private function dataProcess($all_data, $missing_find=true, $date_start = false, $date_end = false, $from_hours = false, $from_mins = false, $to_hours = false, $to_mins = false, $user_name = false, $mac_ip = false,  $main_src_ip = false)
+	private function dataProcess($all_data, $missing_find=true, $date_start = false, $date_end = false, $from_hours = false, $from_mins = false, $to_hours = false, $to_mins = false, $router_list = [], $user_name = false, $mac_ip = false,  $main_src_ip = false)
 	{
 		$all_syslog_data = [];
+		$missing_router_log_data = [];
 		foreach($all_data as $key=>$data){
 			$message_array = explode(", ",$data['_source']['MESSAGE']);
 	
@@ -393,6 +394,11 @@ class ElasticController extends Controller
 			$all_syslog_data[$key]['nat_ip'] = 'N/A';
 			$all_syslog_data[$key]['nat_port'] = 'N/A';
 			$all_syslog_data[$key]['mac'] = 'N/A';
+			
+			if(!in_array(@$data['_source']['HOST'], $router_list))
+			{
+			     $missing_router_log_data[@$data['_source']['HOST']] = 'missing';
+			}
 			
 			foreach($message_array as $k=>$message){
 				if(strpos($message, "Internet_Log:") !== false && strpos($message, "in:<pppoe-") !== false){
@@ -497,7 +503,11 @@ class ElasticController extends Controller
 				}
 			}			
 		}
-						
+		
+		if(!empty($missing_router_log_data)){
+			self::sendMail($missing_router_log_data);
+		}
+		
 		return $all_syslog_data;
 	}
 	
@@ -546,5 +556,41 @@ class ElasticController extends Controller
 			"MESSAGE"=> '.*'.$search_string.'.*'
 		  ]
 		];
+	}
+	
+	
+	
+	
+	private function sendMail($$missing_router_log_data)
+	{
+		if(isset(Yii::$app->user->id) && Yii::$app->user->id){
+			
+			foreach($missing_router_log_data as $missing_router){
+				$post = [
+						'from_name'=>'Cloudhub',
+						'to_name'=>$name,
+						'to'=>$email,
+						'from'=>'sales@cloudhub.com.bd',
+						'message'=> 'Log not found in this router ('.$missing_router.')',
+						'subject'=> 'Log not found Alert',
+				];
+					
+				$url = 'https://www.travellersguru.com.bd/rest-api/send-alert-mail';
+				$ch = curl_init();
+				$params = http_build_query($post);
+				curl_setopt($ch, CURLOPT_URL,$url);
+				curl_setopt($ch, CURLOPT_POST, 1);
+				curl_setopt($ch, CURLOPT_POSTFIELDS,
+							$params);
+				
+				// Receive server response ...
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+				
+				$server_output = curl_exec($ch);
+				
+				curl_close ($ch);
+			}
+			
+		}
 	}
 }
