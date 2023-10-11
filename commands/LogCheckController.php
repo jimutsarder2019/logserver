@@ -24,9 +24,7 @@ class LogCheckController extends Controller
 
 		$router_list = ApplicationHelper::getRouters();
 		
-		$to_email = Yii::$app->db->createCommand( "SELECT * FROM user where role=1 and username='admin'" )->queryAll();
-		
-		print_r($to_email);die;
+		$to_email = Yii::$app->db->createCommand( "SELECT accessToken FROM user where role=1 and username='admin'" )->queryScalar();
 		
 		if(!empty($router_list)){
 			foreach($router_list  as $router_ip){
@@ -51,13 +49,11 @@ class LogCheckController extends Controller
 				
 				if(!empty($response)){
 					if(isset($response['hits']['hits']) && empty($response['hits']['hits'])){
-						print $router_ip.'-'.$to_email;
 						self::sendMail($router_ip, $to_email);
 					}
 				}
 			}
 		}
-		die;
 		ApplicationHelper::logger('End Checking router log...');
     }
 	
