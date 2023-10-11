@@ -264,7 +264,7 @@ $isAdmin = ApplicationHelper::isAdmin();
 						<li>
                             <a class="sidebar-header" href="<?=$baseUrl ?>/?r=syslog/index">
                                 <i data-feather="search"></i>
-                                <span>Log</span>
+                                <span>Active Log</span>
                             </a>
                         </li>
 						
