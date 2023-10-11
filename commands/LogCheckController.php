@@ -24,7 +24,9 @@ class LogCheckController extends Controller
 
 		$router_list = ApplicationHelper::getRouters();
 		
-		$to_email = Yii::$app->db->createCommand( "SELECT authKey FROM user where role=1 and username='admin'" )->queryScalar();
+		$to_email = Yii::$app->db->createCommand( "SELECT * FROM user where role=1 and username='admin'" )->queryAll();
+		
+		print_r($to_email);die;
 		
 		if(!empty($router_list)){
 			foreach($router_list  as $router_ip){
