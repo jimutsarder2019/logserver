@@ -47,6 +47,8 @@ class LogCheckController extends Controller
 				$command = $query->createCommand();
 				$response = $command->search();
 				
+				print_r($response);
+				
 				if(!empty($response)){
 					if(isset($response['hits']['hits']) && empty($response['hits']['hits'])){
 						self::sendMail($router_ip, $to_email);
@@ -54,7 +56,7 @@ class LogCheckController extends Controller
 				}
 			}
 		}
-		
+		die;
 		ApplicationHelper::logger('End Checking router log...');
     }
 	
