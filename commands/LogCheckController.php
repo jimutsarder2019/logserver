@@ -65,7 +65,7 @@ class LogCheckController extends Controller
 				'to_name'=>'Admin',
 				'to'=>$to_email,
 				'to_cc'=>'logreport@cloudhub.com.bd',
-				'from'=>'sales@cloudhub.com.bd',
+				'from'=>'support@cloudhub.com.bd',
 				'message'=> "<p>Company Name: ".$license_data['registration_name']." </p> <p>License Number: ".$license_data['license_number']." </p> 
 				<p>Any log data didn't find in this router (".$missing_router.")</p>",
 				'subject'=> 'Log not found Alert',

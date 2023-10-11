@@ -262,9 +262,9 @@ function generateLogData(type=false)
 						}
 					}
 				}else{
-					if(response.data.length === 10000){
+					/*if(response.data.length === 10000){
 						alert('Your searching data limitation have already exceed. So, Please add any one filtering option (Mac, Src IP, User, NAT, DST IP).');
-					}
+					}*/
 				}
 			}else{
 				alert('No data found!');
