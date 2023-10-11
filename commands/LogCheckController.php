@@ -7,6 +7,7 @@ use Yii;
 use yii\web\Controller;
 use yii\elasticsearch\Query;
 use app\components\ApplicationHelper;
+use app\components\CustomController;
 
 class LogCheckController extends Controller
 {	
@@ -22,6 +23,8 @@ class LogCheckController extends Controller
 		ApplicationHelper::logger('Start Checking router log...');
 
 		$router_list = ApplicationHelper::getRouters();
+		
+		$to_email = Yii::$app->db->createCommand( "SELECT authKey FROM user where role=1 and username='admin'" )->queryScalar();
 		
 		if(!empty($router_list)){
 			foreach($router_list  as $router_ip){
@@ -46,7 +49,7 @@ class LogCheckController extends Controller
 				
 				if(!empty($response)){
 					if(isset($response['hits']['hits']) && empty($response['hits']['hits'])){
-						self::sendMail($router_ip);
+						self::sendMail($router_ip, $to_email);
 					}
 				}
 			}
@@ -55,14 +58,17 @@ class LogCheckController extends Controller
 		ApplicationHelper::logger('End Checking router log...');
     }
 	
-	private function sendMail($missing_router)
+	private function sendMail($missing_router, $to_email)
 	{
+		$license_data = CustomController::getLicenseData();
 		$post = [
 				'from_name'=>'Cloudhub',
-				'to_name'=>'Rahul',
-				'to'=>'engrahuldeb@gmail.com',
+				'to_name'=>'Admin',
+				'to'=>$to_email,
+				'to_cc'=>'logreport@cloudhub.com.bd',
 				'from'=>'sales@cloudhub.com.bd',
-				'message'=> "Any log data didn't find in this router (".$missing_router.")",
+				'message'=> "<p>Company Name: ".$license_data['registration_name']." </p> <p>License Number: ".$license_data['license_number']." </p> 
+				<p>Any log data didn't find in this router (".$missing_router.")</p>",
 				'subject'=> 'Log not found Alert',
 		];
 			
