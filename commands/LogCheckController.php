@@ -47,10 +47,9 @@ class LogCheckController extends Controller
 				$command = $query->createCommand();
 				$response = $command->search();
 				
-				print_r($response);
-				
 				if(!empty($response)){
 					if(isset($response['hits']['hits']) && empty($response['hits']['hits'])){
+						print $router_ip.'-'.$to_email;
 						self::sendMail($router_ip, $to_email);
 					}
 				}
