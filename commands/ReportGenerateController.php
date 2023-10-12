@@ -370,6 +370,7 @@ class ReportGenerateController extends Controller
 		$all_data = [];
 		$query = (new Query)->from($index);
 		$query->query = $match;
+		$query->orderBy(['@timestamp' => SORT_ASC]);
 		$query->limit = 500;
 		
 		foreach ($query->batch() as $key=>$rows) {
