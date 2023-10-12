@@ -59,7 +59,7 @@ class ReportGenerateController extends Controller
 					$all_data = self::getQueryData($match, 'cloud-log-nat', $limit, $offset);
 					ApplicationHelper::logger('get log data from DB');
 					if(!empty($all_data)){
-						self::dataProcess($all_data, true, $report_type, $report_file_name, $from_date, $to_date, $licenseInfo);	
+						self::dataProcess($all_data, true, @$report_backup['id'], $report_type, $report_file_name, $from_date, $to_date, $licenseInfo);	
 					}else{
 						ApplicationHelper::logger('Log data not found!');
 					}
@@ -84,17 +84,13 @@ class ReportGenerateController extends Controller
 							$all_data = self::getQueryData($match_nat, 'cloud-log-nat', $limit, 0);
 							
 							if(!empty($all_data)){
-								self::dataProcess($all_data, false, $report_type, $report_file_name, $from_date, $to_date, $licenseInfo);
+								self::dataProcess($all_data, false, @$report_backup['id'], $report_type, $report_file_name, $from_date, $to_date, $licenseInfo);
 							}
 						}
 					}else{
 						ApplicationHelper::logger('Log data not found!');
 					}
 				}
-				
-				$model2 = ReportBackup::findOne(['id' => @$report_backup['id']]);
-				$model2->status = 2;
-				$model2->save();
 			}
 			
 			
@@ -146,7 +142,7 @@ class ReportGenerateController extends Controller
 		}
     }
 
-	private function dataProcess($all_data, $missing_find=true, $report_type,$report_file_name, $date_start, $date_end, $licenseInfo, $user_name = false, $mac_ip = false,  $main_src_ip = false)
+	private function dataProcess($all_data, $missing_find=true, $report_id, $report_type,$report_file_name, $date_start, $date_end, $licenseInfo, $user_name = false, $mac_ip = false,  $main_src_ip = false)
 	{
 		$all_syslog_data = [];
         
@@ -362,6 +358,9 @@ class ReportGenerateController extends Controller
 			ApplicationHelper::logger('log data write into pdf file done');
 			$mpdf->Output(__DIR__ . '/../web/uploads/report/'.$report_file_name);
 		}else{
+			$model2 = ReportBackup::findOne(['id' => $report_id]);
+			$model2->status = 2;
+			$model2->save();
 			ApplicationHelper::logger('log data write into '.$report_type.' file done');
 			fclose($fh);
 		}
