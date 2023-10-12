@@ -53,7 +53,13 @@ $this->params['breadcrumbs'][] = $this->title;
 										'label' => 'Status',
 										'headerOptions' => ['style' => 'color:#ff4c3b'],
 										'content' => function ($model) {
-											return $model->status == 1?'Ready':'Not Ready';
+											if($model->status == 1){
+												return 'Processing';
+											}else if($model->status == 2){
+												return 'Ready';
+											}else{
+												return 'Pending';
+											}
 										}
 									],
 									

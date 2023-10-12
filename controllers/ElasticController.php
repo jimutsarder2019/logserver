@@ -326,12 +326,21 @@ class ElasticController extends Controller
 			}
 			
 			$report_status = false;
+			$process = '';
 			if($data_count > 3000 && ($page_name == 'report')){
-				$params = ['from_date_to_date'=>$from_date.$from_hours.$from_mins.'_'.$to_date.$to_hours.$to_mins, 'from_date'=>$from_date."T".$from_hours.":".$from_mins.":00", 'to_date'=>$to_date."T".$to_hours.":".$to_mins.":59", 'report_type'=>$report_type, 'match1'=>$report_match1, 'match2'=>$report_match2, 'match_type'=>$match_type];
-				ApplicationHelper::storeReportGenerateRecord($params);
-				$report_status = true;
+				
+				$report_generate_process = Yii::$app->db->createCommand( 'SELECT COUNT(*) FROM report_backup where status < 2' )->queryScalar();
+				
+				if($report_generate_process == 0){
+					$params = ['from_date_to_date'=>$from_date.$from_hours.$from_mins.'_'.$to_date.$to_hours.$to_mins, 'from_date'=>$from_date."T".$from_hours.":".$from_mins.":00", 'to_date'=>$to_date."T".$to_hours.":".$to_mins.":59", 'report_type'=>$report_type, 'match1'=>$report_match1, 'match2'=>$report_match2, 'match_type'=>$match_type];
+					ApplicationHelper::storeReportGenerateRecord($params);
+					$process = 'yes';
+					$report_status = true;
+				}else{
+					$process = 'no';
+				}
 			}
-			die(json_encode(['status'=>'success', 'report_status'=>$report_status, 'count'=>$data_count, 'data'=>$all_syslog_data, 'limit_date'=>$limit_date]));
+			die(json_encode(['status'=>'success', 'process'=>$process, 'report_status'=>$report_status, 'count'=>$data_count, 'data'=>$all_syslog_data, 'limit_date'=>$limit_date]));
 		}else{
 			die(json_encode(['status'=>'fail', 'report_status'=>false, 'count'=>$data_count, 'data'=>[], 'limit_date'=>'']));
 		}
@@ -515,6 +524,7 @@ class ElasticController extends Controller
 		$query->limit = $limit;
 		$command = $query->createCommand();
         $response = $command->search();
+
 		$all_data = [];
 		if(!empty($response)){
 			if(isset($response['hits']['hits']) && !empty($response['hits']['hits'])){

@@ -42,6 +42,10 @@ class ReportGenerateController extends Controller
 			
 			foreach($report_backup_list as $report_backup){
 				
+				$model = ReportBackup::findOne(['id' => @$report_backup['id']]);
+				$model->status = 1;
+				$model->save();
+				
 				$from_date = $report_backup['from_date'];
 				$to_date = $report_backup['to_date'];
 				$match_type = $report_backup['match_type'];
@@ -89,7 +93,7 @@ class ReportGenerateController extends Controller
 				}
 				
 				$model = ReportBackup::findOne(['id' => @$report_backup['id']]);
-				$model->status = 1;
+				$model->status = 2;
 				$model->save();
 			}
 			ApplicationHelper::logger('All the report generated successfully!');
@@ -366,15 +370,16 @@ class ReportGenerateController extends Controller
 		$all_data = [];
 		$query = (new Query)->from($index);
 		$query->query = $match;
+		//$query->orderBy(['@timestamp' => SORT_ASC]);
 		$query->limit = 500;
 		
 		foreach ($query->batch() as $key=>$rows) {
-			 //if($key == 5){
+			 if($key == 5){
 				 $all_data = array_merge($all_data,$rows);
-				 //return $all_data;
-			 //}
+				 return $all_data;
+			 }
 		}
-		return $all_data;
+		//return $all_data;
 	}
 	
 	private function filter_match_phrase_prefix($search_string){

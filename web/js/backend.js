@@ -251,7 +251,12 @@ function generateLogData(type=false)
 				if((type == 'csv') || (type == 'xlsx') || (type == 'pdf')){
 					if(response.report_status || (response.data.length > 3000)){
 						$('.js-report-loading').html('');
-						alert('Your report generate data limitation have already exceed. So, Need some time to generate report. You will get it later in download report page.');
+						
+						if(response.process == 'yes'){
+						   alert('Your report generate data limitation have already exceed. So, Need some time to generate report. You will get it later in download report page.');
+						}else{
+							alert('You have already a pending/processing request. So please try again later for further request.');
+						}
 					}else{
 						if(type == 'csv'){
 							generateReport(response.data);
