@@ -42,6 +42,10 @@ class ReportGenerateController extends Controller
 			
 			foreach($report_backup_list as $report_backup){
 				
+				$model = ReportBackup::findOne(['id' => @$report_backup['id']]);
+				$model->status = 1;
+				$model->save();
+				
 				$from_date = $report_backup['from_date'];
 				$to_date = $report_backup['to_date'];
 				$match_type = $report_backup['match_type'];
@@ -89,7 +93,7 @@ class ReportGenerateController extends Controller
 				}
 				
 				$model = ReportBackup::findOne(['id' => @$report_backup['id']]);
-				$model->status = 1;
+				$model->status = 2;
 				$model->save();
 			}
 			ApplicationHelper::logger('All the report generated successfully!');
@@ -371,7 +375,6 @@ class ReportGenerateController extends Controller
 		foreach ($query->batch() as $key=>$rows) {
 		    $all_data = array_merge($all_data,$rows);
 		}
-		//die("AAAAAA");
 		return $all_data;
 	}
 	
