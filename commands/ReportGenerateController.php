@@ -92,10 +92,12 @@ class ReportGenerateController extends Controller
 					}
 				}
 				
-				$model = ReportBackup::findOne(['id' => @$report_backup['id']]);
-				$model->status = 2;
-				$model->save();
+				$model2 = ReportBackup::findOne(['id' => @$report_backup['id']]);
+				$model2->status = 2;
+				$model2->save();
 			}
+			
+			
 			ApplicationHelper::logger('All the report generated successfully!');
 			die("All the report generated successfully!");
 	    }else{
