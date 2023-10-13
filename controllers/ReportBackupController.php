@@ -138,9 +138,17 @@ class ReportBackupController extends CustomController
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
+		$model = $this->findModel($id);
+		
+		if($model->file_name && $model->report_type){
+			$file_name = 'uploads/report/'.$model->report_type.'/'.$model->file_name;
+			if(file_exists($file_name)){
+				unlink($file_name);
+				$this->findModel($id)->delete();
+                return $this->redirect(['index']);
+			}
+		}
+        
     }
 
     /**
