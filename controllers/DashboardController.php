@@ -172,13 +172,6 @@ class DashboardController extends CustomController
 		$days = str_replace(',', '', $matches[1]);
 		$days = intval($days);
 		
-		/*
-		$cpuUtilization = 0;
-		$ramUtilization = 0;
-		$rootUtilization = 0;
-		$diskFree = 0;
-		$days = 0;*/
-		
 		$license_data = CustomController::getLicenseData();
 		
         return $this->render('index', ['router_data'=>$routers, 
