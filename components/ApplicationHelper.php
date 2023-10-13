@@ -5,6 +5,7 @@ namespace app\components;
 use Yii;
 use app\models\LoginHistory;
 use app\models\Users;
+use app\models\ReportBackup;
 
 class ApplicationHelper
 {
@@ -101,5 +102,48 @@ class ApplicationHelper
     {
         $router_list = Yii::$app->db->createCommand( 'SELECT ip FROM router where status=1 and type="nat"' )->queryColumn();
 		return $router_list;
+    }
+	
+	public static function storeReportGenerateRecord($data)
+	{
+		$file_name = $data['match_type'].'_'.$data['from_date_to_date'].'__'.date('Y-m-d').'_LOG'.rand().'.'.$data['report_type'];
+		
+		$model = new ReportBackup();
+		$model->from_date = $data['from_date'];
+		$model->to_date = $data['to_date'];
+		$model->match1 = $data['match1'];
+		$model->match2 = $data['match2'];
+		$model->match_type = $data['match_type'];
+		$model->report_type = $data['report_type'];
+		$model->file_name = $file_name;
+		$model->date = date('Y-m-d');
+		
+		if($model->validate()){
+			if($model->save()){
+				return true;
+			}else{
+				return false;
+			}
+		}else{
+			ApplicationHelper::_setTrace($model->getErrors());
+		}
+	}
+	
+	public static function logger($logmsg)
+    {        
+        $mainDir = '../logs/report/';
+        $mainDirPath = $mainDir.date("Y.n.j").'.log';
+
+        if (!is_dir($mainDir)) { //  Creating directory if not exist
+            mkdir($mainDir,  0777, true);
+        }
+        
+    	try {
+    	    $logmsg = is_array($logmsg)?json_encode($logmsg):$logmsg;
+    		$logmsg = "\n".date("Y.n.j H:i:s")." # ".$logmsg;
+    		file_put_contents($mainDirPath,$logmsg,FILE_APPEND);
+    	} catch(Exception $e) {
+    		file_put_contents($mainDirPath,$e->getMessage(),FILE_APPEND);
+    	}
     }
 }

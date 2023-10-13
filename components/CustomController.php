@@ -23,6 +23,7 @@ class CustomController extends Controller {
    {
        return [
 	        "registration_name"=> "Cloud Hub",
+	        "license_number"=> 20231112,
 			"license_nic"=> "",
 			"license_expire"=> "2023-12-31",
 			"upgradable_till"=> "2023-12-31",

@@ -42,6 +42,7 @@ class ElasticController extends Controller
 		$router = Yii::$app->request->post('router');
 		$offset = Yii::$app->request->post('offset', 0);
 		$page_name = Yii::$app->request->post('page_name', 'log');
+		$report_type = Yii::$app->request->post('report_type', '');
 
 		$message_filter = [];
 		$mac_filter = [];
@@ -223,25 +224,22 @@ class ElasticController extends Controller
 			}
 			
 			if($page_name == 'report'){
-				$limit = 5000;
+				$limit = 4000;
 			}
+			
+			$report_match1 = json_encode($match);
+			$report_match2 = '';
+			$match_type = 'nat';
 
 			$all_data = self::getQueryData($match, 'cloud-log-nat', $limit, $offset, $page_name);
 			
 			$all_message = [];
 			$all_syslog_data = [];
 			
-			/*
-			print '<pre>';
-						print_r($all_data);
-						print '</pre>';
-						
-						die;*/
-			
             $data_count = 0;
 			if(!empty($all_data)){
 				$data_count = count($all_data);
-				$all_syslog_data = self::dataProcess($all_data, true, $from_date, $to_date, $from_hours, $from_mins, $to_hours, $to_mins);	
+				$all_syslog_data = self::dataProcess($all_data, true, $from_date, $to_date, $from_hours, $from_mins, $to_hours, $to_mins, $router_list);	
 			}else{
 				if($search){
 					$_filter[] = [
@@ -262,7 +260,8 @@ class ElasticController extends Controller
 						  ]
 					];
 				}
-				
+				$match_type = 'ppp';
+				$report_match1 = json_encode($match);
 				$all_data = self::getQueryData($match, 'cloud-log-ppp', 1, 0, $page_name);
 				if(!empty($all_data)){
 					$missing_user_data = $all_data[0]['_source']['MESSAGE'];
@@ -310,11 +309,12 @@ class ElasticController extends Controller
 								  "must"=> $filter
 								]
 						];
+						$report_match2 = json_encode($match,1);
 						$all_data = self::getQueryData($match, 'cloud-log-nat', $limit, 0, $page_name);
 						
 						if(!empty($all_data)){
 							$data_count = count($all_data);
-							$all_syslog_data = self::dataProcess($all_data, false, $from_date, $to_date, $from_hours, $from_mins, $to_hours, $to_mins, $user_name, $mac_ip, $main_src_ip);
+							$all_syslog_data = self::dataProcess($all_data, false, $from_date, $to_date, $from_hours, $from_mins, $to_hours, $to_mins, $router_list, $user_name, $mac_ip, $main_src_ip);
 						}
 					}
 				}
@@ -324,9 +324,25 @@ class ElasticController extends Controller
 			if(!empty($all_syslog_data)){
 				$limit_date = $all_syslog_data[count($all_syslog_data) - 1]['datetime'];
 			}
-			die(json_encode(['status'=>'success', 'count'=>$data_count, 'data'=>$all_syslog_data, 'limit_date'=>$limit_date]));
+			
+			$report_status = false;
+			$process = '';
+			if($data_count > 3000 && ($page_name == 'report')){
+				
+				$report_generate_process = Yii::$app->db->createCommand( 'SELECT COUNT(*) FROM report_backup where status < 2' )->queryScalar();
+				
+				if($report_generate_process == 0){
+					$params = ['from_date_to_date'=>$from_date.$from_hours.$from_mins.'_'.$to_date.$to_hours.$to_mins, 'from_date'=>$from_date."T".$from_hours.":".$from_mins.":00", 'to_date'=>$to_date."T".$to_hours.":".$to_mins.":59", 'report_type'=>$report_type, 'match1'=>$report_match1, 'match2'=>$report_match2, 'match_type'=>$match_type];
+					ApplicationHelper::storeReportGenerateRecord($params);
+					$process = 'yes';
+					$report_status = true;
+				}else{
+					$process = 'no';
+				}
+			}
+			die(json_encode(['status'=>'success', 'process'=>$process, 'report_status'=>$report_status, 'count'=>$data_count, 'data'=>$all_syslog_data, 'limit_date'=>$limit_date]));
 		}else{
-			die(json_encode(['status'=>'fail', 'count'=>$data_count, 'data'=>[], 'limit_date'=>'']));
+			die(json_encode(['status'=>'fail', 'report_status'=>false, 'count'=>$data_count, 'data'=>[], 'limit_date'=>'']));
 		}
     }
 	
@@ -372,7 +388,7 @@ class ElasticController extends Controller
 		}
     }
 
-	private function dataProcess($all_data, $missing_find=true, $date_start = false, $date_end = false, $from_hours = false, $from_mins = false, $to_hours = false, $to_mins = false, $user_name = false, $mac_ip = false,  $main_src_ip = false)
+	private function dataProcess($all_data, $missing_find=true, $date_start = false, $date_end = false, $from_hours = false, $from_mins = false, $to_hours = false, $to_mins = false, $router_list = [], $user_name = false, $mac_ip = false,  $main_src_ip = false)
 	{
 		$all_syslog_data = [];
 		foreach($all_data as $key=>$data){
@@ -490,28 +506,12 @@ class ElasticController extends Controller
 				}
 			}			
 		}
-						
+		
 		return $all_syslog_data;
 	}
 	
 	private function getQueryData($match, $index = 'cloud-log-nat', $limit = 50, $offset = 0, $page_name = 'log')
 	{
-		/*$query = (new Query)->from($index);
-		$query->query = $match;
-		$query->orderBy(['@timestamp' => SORT_DESC]);
-				//$query->offset = $offset;
-		//$query->limit = $limit;
-		$data = [];
-		foreach ($query->batch('5m') as $row) {
-			
-			
-			$data[] = $row;
-			print '<pre>';
-			print_r($row);
-			print '</pre>';
-		}
-
-		die;*/
 		$query = new Query;
 		$query->from($index);
 		$query->query = $match;
@@ -524,6 +524,7 @@ class ElasticController extends Controller
 		$query->limit = $limit;
 		$command = $query->createCommand();
         $response = $command->search();
+
 		$all_data = [];
 		if(!empty($response)){
 			if(isset($response['hits']['hits']) && !empty($response['hits']['hits'])){
