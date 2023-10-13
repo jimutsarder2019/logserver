@@ -1,3 +1,12 @@
+<style>
+
+.search-form select {
+    border: 1px solid #eff0f1;
+    border-radius: 5px;
+    background-color: #f8f8f9;
+}
+
+</style>
 <div class="page-body">
 	<!-- Container-fluid starts-->
 	<div class="container-fluid">
@@ -6,19 +15,24 @@
 				<h2>Download Log</h2>
 				<div class="card">
 					<div class="form-group row">
+						
+						
 						<div class="card-header search-form">
-							<input class="datepicker-here js_date_start" type="search" placeholder="From Date">
-							<input class="datepicker-here js_date_end" type="search" placeholder="To Date">
-							<input class="user" type="search" placeholder="User">
+							<input class="js_date_start" type="datetime-local" placeholder="From Date Time">
+							<input class="js_date_end" type="datetime-local" placeholder="To Date Time">
 						</div>
+						
 						<div class="card-header search-form">
 							<input class="mac" type="search" placeholder="Mac">
 							<input class="srcip" type="search" placeholder="Src IP">
 							<input class="dstip" type="search" placeholder="Dst IP">
 						</div>
+						
 						<div class="card-header search-form">
 							<input class="natip" type="search" placeholder="NAT IP..">
-							<div class="form-inline search-form search-box">
+							<div class="js-report-loading"></div>
+							<input class="user" type="search" placeholder="User">
+							<div style="display:none;" class="form-inline search-form search-box">
 								<select class="custom-select form-control js_limit_change" required="">
 									<option value="50">50 entries</option>
 									<option value="100">100 entries</option>
@@ -45,6 +59,7 @@
 							<button style="width:258px"  type="button" class="btn btn-primary js_report_csv">CSV</button>
 							<button style="width:258px"  type="button" class="btn btn-primary js_report_pdf">PDF</button>
 						</div>
+						<input value="report" type="hidden" class="js_page_name"> 
 						<div class="card-body" style="display:none;">
 							<div class="user-status table-responsive latest-order-table" id="table-data">
 								<style type="text/css" media="print">

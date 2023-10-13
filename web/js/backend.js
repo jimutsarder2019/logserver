@@ -16,9 +16,10 @@ let reportHeaders = [
     ];
 
 let limit = 50;
-let offset = 1;
+let offset = 0;
+let reportType = '';
 
-//document.addEventListener('contextmenu', event => event.preventDefault());
+document.addEventListener('contextmenu', event => event.preventDefault());
 
 $(document).ready(function(){
 	
@@ -34,7 +35,7 @@ $(document).ready(function(){
 	
     $(".js_limit_change").change(function(){
 		limit = $(this).val();
-		offset = 1;
+		offset = 0;
 		$(".js_page_no").val(offset);
 		generateLogData();
 	});
@@ -44,7 +45,7 @@ $(document).ready(function(){
 	});
 	
 	$('.js_search_btn').click(function(){
-		generateLogData();
+	    commonSearch('search');
 	});
 	
 	$(".js_searching").keyup(function(){
@@ -55,16 +56,19 @@ $(document).ready(function(){
 	});
 	
     $('.js_report_csv').click(function(){
-		generateLogData('csv');
+		reportType = 'csv';
+		commonSearch('csv');
 	});
 	
     $('.js_report_excel').click(function(){
-		generateLogData('excel');
+		reportType = 'xlsx';
+		commonSearch('xlsx');
 	});
 	
 	
 	$('.js_report_pdf').click(function(){
-		generateLogData('pdf');
+		reportType = 'pdf';
+		commonSearch('pdf');
 	});
 	
 	
@@ -126,11 +130,73 @@ $(document).ready(function(){
 });
 
 
+function commonSearch(type)
+{
+	var long_date_start = $('.js_date_start').val();
+	var long_date_end = $('.js_date_end').val();
+	
+	
+	if(long_date_start && long_date_end){
+	
+		var dateStartMyArray1 = long_date_start.split("T");
+		var dateStartMyArray2 = dateStartMyArray1[1].split(":");
+		
+		var date_start = dateStartMyArray1[0];
+		var from_hours = dateStartMyArray2[0];
+		var from_mins = dateStartMyArray2[1];
+		
+		
+		var dateEndMyArray1 = long_date_end.split("T");
+		var dateEndMyArray2 = dateEndMyArray1[1].split(":");
+		
+		var date_end = dateEndMyArray1[0];
+		var to_hours = dateEndMyArray2[0];
+		var to_mins = dateEndMyArray2[1];
+		
+		if(long_date_start && long_date_end && date_start && date_end && from_hours && from_mins && to_hours && to_mins){
+			
+			if(type === 'search'){
+				generateLogData();
+			}else{
+				generateLogData(type);
+			}
+		}else{
+			alert('Please select From Date-Time and To Date-Time');
+		}
+	}else{
+		alert('Please select From Date-Time and To Date-Time');
+	}
+}
+
 function getPostParams()
 {
 	var search_value = $('.js_searching').val();
-	var date_start = $('.js_date_start').val();
-	var date_end = $('.js_date_end').val();
+
+	var long_date_start = $('.js_date_start').val();
+	var long_date_end = $('.js_date_end').val();
+	
+	var date_start = '';
+	var from_hours = '';
+	var from_mins = '';
+	
+	var date_end = '';
+	var to_hours = '';
+	var to_mins = '';
+	if(long_date_start && long_date_end){
+		var dateStartMyArray1 = long_date_start.split("T");
+		var dateStartMyArray2 = dateStartMyArray1[1].split(":");
+		
+		date_start = dateStartMyArray1[0];
+		from_hours = dateStartMyArray2[0];
+		from_mins = dateStartMyArray2[1];
+		
+		var dateEndMyArray1 = long_date_end.split("T");
+		var dateEndMyArray2 = dateEndMyArray1[1].split(":");
+		
+		date_end = dateEndMyArray1[0];
+		to_hours = dateEndMyArray2[0];
+		to_mins = dateEndMyArray2[1];
+	}
 	
 	var user = $('.user').val();
 	var mac = $('.mac').val();
@@ -138,12 +204,16 @@ function getPostParams()
 	var dst_ip = $('.dstip').val();
 	var nat_ip = $('.natip').val();
 	var router = $('.js_router').val();
-	return {offset:offset, limit:limit, search:search_value, from_date:date_start, to_date:date_end, router:router, user:user, mac:mac, src_ip:src_ip, dst_ip:dst_ip, nat_ip:nat_ip};
+	var page_name = $('.js_page_name').val();
+	return {page_name:page_name, report_type:reportType, offset:offset, limit:limit, search:search_value, from_date:date_start, to_date:date_end, from_hours:from_hours, from_mins:from_mins, to_hours:to_hours, to_mins:to_mins, router:router, user:user, mac:mac, src_ip:src_ip, dst_ip:dst_ip, nat_ip:nat_ip};
 }
 
 function generateLogData(type=false)
 {
 	$('.data-render').html('<tr><td style="color:#FF0000">Loading......</td></tr>');
+	if(type){
+	    $('.js-report-loading').html('<tr><td style="color:#FF0000; font-size:21px;">Loading......</td></tr>');
+	}
 	$.ajax({  
 		url: base_url+'/?r=elastic/get',
 		type: 'POST',
@@ -173,18 +243,40 @@ function generateLogData(type=false)
 					$('.data-render').html(tr);
 				}else{
 					$('.data-render').html('<tr><td style="color:#FF0000">No data found!</td></tr>');
+					if(type){
+					    $('.js-report-loading').html('');
+					}
 				}
-					
-				if(type == 'csv'){
-					generateReport(response.data);
-				}else if(type == 'excel'){
-					excelReport(response.data);
-				}else if(type == 'pdf'){
-					pdfPrint();
+				
+				if((type == 'csv') || (type == 'xlsx') || (type == 'pdf')){
+					if(response.report_status || (response.data.length > 3000)){
+						$('.js-report-loading').html('');
+						
+						if(response.process == 'yes'){
+						   alert('Your report generate data limitation have already exceed. So, Need some time to generate report. You will get it later in download report page.');
+						}else{
+							alert('You have already a pending/processing request. So please try again later for further request.');
+						}
+					}else{
+						if(type == 'csv'){
+							generateReport(response.data);
+						}else if(type == 'xlsx'){
+							excelReport(response.data);
+						}else if(type == 'pdf'){
+							pdfPrint(response.data);
+						}
+					}
+				}else{
+					/*if(response.data.length === 10000){
+						alert('Your searching data limitation have already exceed. So, Please add any one filtering option (Mac, Src IP, User, NAT, DST IP).');
+					}*/
 				}
 			}else{
 				alert('No data found!');
                 $('.data-render').html('<tr><td style="color:#FF0000">No data found!</td></tr>');
+				if((type == 'csv') || (type == 'xlsx') || (type == 'pdf')){
+					$('.js-report-loading').html('');
+				}
 			}				
 		}  
 	});  
@@ -253,7 +345,7 @@ function generateReport(data){
 		csv.push(csvRow.map(str => `"${str}"`).join(","));
 		csvRow = []
 	});
-	
+	$('.js-report-loading').html('');
 	let blob = new Blob([csv.join("\n")],{type:"text/csv"})
 	let download = document.createElement("a")
 	download.download = company_name+"LogReport" + Date();
@@ -266,12 +358,53 @@ function generateReport(data){
 
 
 
-function pdfPrint() {
+function pdfPrint(pdfData) {
+	
+	let tr = '';
+	$.each(pdfData, function( key, value ) {
+		tr += '<tr>'+
+					'<td class="digits">'+value['datetime']+'</td>'+
+					'<td class="digits">'+value['host']+'</td>'+
+					'<td class="digits">'+value['user']+'</td>'+
+					'<td class="digits">'+value['protocol']+'</td>'+
+					'<td class="digits">'+value['mac']+'</td>'+
+					'<td class="digits">'+value['src_ip']+'</td>'+
+					'<td class="digits">'+value['src_port']+'</td>'+
+					'<td class="digits">'+value['destination_ip']+'</td>'+
+					'<td class="digits">'+value['destination_port']+'</td>'+
+					'<td class="digits">'+value['nat_ip']+'</td>'+
+					'<td class="digits">'+value['nat_port']+'</td>'+
+				'</tr>';
+	});
+	
+	var pdfBodyContent = '<style type="text/css" media="print">@page { size: landscape; }</style>'+
+								'<table class="table table-bordernone">'+
+									'<thead>'+
+										'<tr>'+
+											'<th scope="col">DateTime</th>'+
+											'<th scope="col">Router IP</th>'+
+											'<th scope="col">User</th>'+
+											'<th scope="col">Protocol</th>'+
+											'<th scope="col">Mac</th>'+
+											'<th scope="col">Src IP</th>'+
+											'<th scope="col">Port</th>'+
+											'<th scope="col">Dst IP</th>'+
+											'<th scope="col">Port</th>'+
+											'<th scope="col">NAT IP</th>'+
+											'<th scope="col">Port</th>'+
+										'</tr>'+
+									'</thead>'+
+									'<tbody class="data-render2">'+tr+'</tbody>'+
+								'</table>';
+	
+	
+				 //document.getElementById("table-data").innerHTML = pdfBodyContent;
+				
 	var date_start = $('.js_date_start').val();
 	var date_end = $('.js_date_end').val();
 	
-	var divContents = document.getElementById("table-data").innerHTML;
-	var a = window.open('', '', 'height=500, width=500');
+	//var divContents = document.getElementById("table-data").innerHTML;
+	var a = window.open('', '');
 	a.document.write('<html><style>table{border-collapse: collapse;} table, td, th{border:1px solid #000000 !important; padding:2px !important;}</style>');
 	a.document.write('<body ><h1>'+company_name+' Log Report</h1><br>');
 	a.document.write('<p>License Number: '+license_number+'</p>');
@@ -283,9 +416,10 @@ function pdfPrint() {
 		a.document.write('<p>Log Report:</p>');
 	}
 	a.document.write('<br>');
-	a.document.write(divContents);
+	a.document.write(pdfBodyContent);
 	a.document.write('</body></html>');
 	a.document.close();
+	$('.js-report-loading').html('');
 	a.print();
 }
 
@@ -354,7 +488,7 @@ function excelReport(data) {
 		final_data.push(excelRow);
 		excelRow = []
 	});
-						
+	$('.js-report-loading').html('');				
 	  // (C2) CREATE NEW EXCEL "FILE"
 	var workbook = XLSX.utils.book_new(),
 	worksheet = XLSX.utils.aoa_to_sheet(final_data);

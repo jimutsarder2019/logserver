@@ -1,7 +1,37 @@
 <?php
-if(!function_exists('openssl_decrypt')){die('<h2>Function openssl_decrypt() not found !</h2>');}
-if(!defined('_FILE_')){define("_FILE_",getcwd().DIRECTORY_SEPARATOR.basename($_SERVER['PHP_SELF']),false);}
-if(!defined('_DIR_')){define("_DIR_",getcwd(),false);}
-if(file_exists('../key.inc.php')){include_once('../key.inc.php');}else{die('<h2>File key.inc.php not found !</h2>');}
-$e7091="SGhPNlZPREhUOUJDKzB2TnZjWk5weWFBN0VjdGY2V0FCcGhmZ2N0NVVDb0x0c2tPb01tSVVkYXlNQkJua1liSjBnZUVCeUFCUGtpbE14MjNPRDVqc0poOGt2OHBaU0kxQnVyQnhrMFQ3R1VabG1SdXNNYTBIYXU0dGdCemk3TTJpNWlEQVQzdGl4RlM5dENsWERGSGNyRlZuNGNSUW9YSVhOWnhncWFzL005akJaa2o1Nk0zRER6ZzYyaWNYWWhpUnlTMlpHVmdxV05BUGswR2tGa2d6M3BmaEdTdnpWNHRFajJmclVlN1hBRXlzbW95a0pPSEIwL1l2TUp2TmgrY0V1TVd5VkZzVXNWWmJKSVBtS0psa2Y5SSt5VmdkMFhqNlduMjJ2OVZZWElWYll5TFoxaWtIeDJxQjFuaExMRkZsMFZ1TVJ0cHBGdTM2TDQ2eEdiUzFtQVpzeXRKb3piYmRLclRpeHlwQmM2dSsyT1diMWdjQ3diZXNsWVhwS0xmeHdhMCtGNmFDcXdtQzd4TkROR1d0WkNaWE1vbEtvRWlpa2N4VE9pdUhsdmxEVlVZZkptbmQzVkJoMHdiTGNhbCtWUkp0YzRPZVQ0ZWdWL3FIT2M0WFhXb0syWVB2MDJTUTQvTnJWUDl6QlZRR0JtUWxFNE5tVjJGa3lrQUoxeW5vTkxyUmlxVzkyWFhFeTNvNUZKYzB1dVJySkJDL3VBRkpaZUVaWEVnTmxKeVhZWElhemMrWXFIRDVpRll0dU9VWlRIdm1jZWtTbXRoQmlIY3puN1NxU0grazJJK2VpdjZDeVZ3S0FnTXRTT2xNY09reEZYRHlheXh3SFJBbVF6YWhnQmdnZUlVOUEvUm9QM1hJeEREbjFHalR5a0FlNUxRcUVqeUZpNlhlYjUySkdUZmh6a0JTckZXbHlKWWdJK1ZSZE1kQnN3QWNPN3EzT2tTNlBlODlqYkJXZXlBQ0haSDN5WVZrdmZwUlpiZjlkZ3c0QXBxT1BKcGxlVHBVVVV3MVltNGpCQXBHVm0xazZwNzJ1N3ZsdzFPVW0rY2pDWFFjZFU1eGNNWU1XWnBhbkRCY2FoZUxmanlwb2JseUdHLzY1MG5uOVMzUndZd3UwcTcyam1PV1FucVgrc0ZjaXVSVzdFMkxraWZkbWFkWUc5U3plbGF6YkptRlRKb0NTYjM=";eval(e7061($e7091));
+
+namespace app\Components; 
+use Yii; use yii\web\Controller; 
+use yii\web\NotFoundHttpException; 
+
+class CustomController extends Controller {
+
+   public function init(){
+      parent::init();
+	  $license_data = self::getLicenseData(); 
+	  if(!empty($license_data)){
+		 $today_date = date('Y-m-d');
+		 if(isset($license_data['license_expire']) && $license_data['license_expire'] < $today_date){
+			 die('Your license expired! Please contact with admin.'); 
+		 }
+	 }else{ 
+		 die('You are not registered to this system!'); 
+	 }
+   }
+   
+   public static function getLicenseData()
+   {
+       return [
+	        "registration_name"=> "Cloud Hub",
+	        "license_number"=> 20231112,
+			"license_nic"=> "",
+			"license_expire"=> "2023-12-31",
+			"upgradable_till"=> "2023-12-31",
+			"maximum_number_of_account"=> "unlimited",
+			"maximum_number_of_router"=> "unlimited",
+			"maximum_number_of_user_allow"=> 1000,
+			"maximum_number_of_user_allow_alert_perchantage"=> 80
+	   ];
+   }	   
+}
 ?>

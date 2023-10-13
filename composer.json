@@ -18,7 +18,10 @@
         "yiisoft/yii2": "~2.0.45",
         "yiisoft/yii2-bootstrap5": "~2.0.2",
         "yiisoft/yii2-symfonymailer": "~2.0.3",
-        "yiisoft/yii2-elasticsearch": "~7.17.10"
+		"kartik-v/yii2-mpdf": "@dev",
+		"yiisoft/yii2-elasticsearch": "dev-master",
+        "psr/log": "^1",
+		"sharkom/yii2-cron": "*"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",

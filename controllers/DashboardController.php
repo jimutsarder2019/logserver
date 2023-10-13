@@ -93,7 +93,7 @@ class DashboardController extends CustomController
 		
 		// Execute the "df -BG" command to get disk usage information
 
-		exec("df -BG /log_disk", $output);
+		exec("df -BG /", $output);
 
 		 
 
@@ -137,37 +137,6 @@ class DashboardController extends CustomController
 			$remaining_percentage_formatted = number_format($remaining_percentage, 2);
 
 		}
-
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
 		
 		// Geeting free CPU info
 		$cpuUsage = shell_exec("top -bn 2 -d 0.01 | grep '^%Cpu' | tail -n 1");
@@ -203,16 +172,7 @@ class DashboardController extends CustomController
 		$days = str_replace(',', '', $matches[1]);
 		$days = intval($days);
 		
-		/*
-		$cpuUtilization = 0;
-		$ramUtilization = 0;
-		$rootUtilization = 0;
-		$diskFree = 0;
-		$days = 0;*/
-		
-		$data = file_get_contents('../web/license.json');
-		
-		$license_data = json_decode($data, 1);
+		$license_data = CustomController::getLicenseData();
 		
         return $this->render('index', ['router_data'=>$routers, 
 		'user_data'=>$users,

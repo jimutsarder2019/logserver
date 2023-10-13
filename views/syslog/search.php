@@ -1,3 +1,19 @@
+<style>
+.common-date{
+	width:100%;
+}
+
+.common-time{
+	width:50%;
+}
+
+.search-form select {
+    border: 1px solid #eff0f1;
+    border-radius: 5px;
+    background-color: #f8f8f9;
+}
+
+</style>
 <div class="page-body">
 	<!-- Container-fluid starts-->
 	<div class="container-fluid">
@@ -19,10 +35,13 @@
 			<div class="col-md-12">
 				<div class="card">
 					<div class="card-header search-form">
-						<input class="datepicker-here js_date_start" type="search" placeholder="From Date">
-						<input class="datepicker-here js_date_end" type="search" placeholder="To Date">
-						<input class="user" type="search" placeholder="User">
+						<div></div>
 					</div>
+					<div class="card-header search-form">
+						<input class="js_date_start" type="datetime-local" placeholder="From Date Time">
+						<input class="js_date_end" type="datetime-local" placeholder="To Date Time">
+					</div>
+						
 					<div class="card-header search-form">
 						<input class="mac" type="search" placeholder="Mac">
 						<input class="srcip" type="search" placeholder="Src IP">
@@ -30,6 +49,7 @@
 					</div>
 					<div class="card-header search-form">
 						<input class="natip" type="search" placeholder="NAT IP..">
+						<input class="user" type="search" placeholder="User">
 						<select style="width:258px; display:none;" class="custom-select form-control" required="">
 							<option value="">Mikrotik</option>
 							<option value="100">100 entries</option>
@@ -38,7 +58,7 @@
 							<option value="3">1000 entries</option>
 							<option value="4">2000 entries</option>
 						</select>
-						<div class="form-inline search-form search-box">
+						<div style="display:none;" class="form-inline search-form search-box">
 								<select class="custom-select form-control js_limit_change" required="">
 									<option value="50">50 entries</option>
 									<option value="100">100 entries</option>
@@ -62,6 +82,7 @@
 						</div>
 						<button style="width:258px"  type="button" class="btn btn-primary js_search_btn">Search</button>
 					</div>
+					<input value="search" type="hidden" class="js_page_name"> 
 					<div class="card-body">
 						<div class="user-status table-responsive latest-order-table">
 							<table class="table table-bordernone">

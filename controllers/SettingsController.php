@@ -123,19 +123,6 @@ class SettingsController extends CustomController
 			if ($model->save()) {
 			    return $this->redirect(['view', 'id' => $model->id]);
 			}
-			
-			
-			/*
-			$model->login_logo = UploadedFile::getInstance($model, 'login_logo');
-			$model->user_logo = UploadedFile::getInstance($model, 'user_logo');
-			$model->login_logo->saveAs('uploads/login_logo/' . $model->login_logo->baseName . '.' . $model->login_logo->extension);
-			$model->user_logo->saveAs('uploads/user_logo/' . $model->user_logo->baseName . '.' . $model->user_logo->extension);
-
-            $model->login_logo = 'uploads/login_logo/' . $model->login_logo->baseName . '.' . $model->login_logo->extension;
-            $model->user_logo = 'uploads/user_logo/' . $model->user_logo->baseName . '.' . $model->user_logo->extension;
-			if ($model->save()) {
-			   return $this->redirect(['view', 'id' => $model->id]);
-			}*/
 		}
 
         return $this->render('create', [

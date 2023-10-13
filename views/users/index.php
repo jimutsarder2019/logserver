@@ -61,7 +61,7 @@ $baseUrl = Url::base();
 								'columns' => [
 									//['class' => 'yii\grid\SerialColumn'],
 
-									'id',
+									//'id',
 									'name',
 									'username',
 									//'password',

@@ -17,6 +17,17 @@ $config = [
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],
+		'elasticsearch' => [
+            'class' => 'yii\elasticsearch\Connection',
+            'nodes' => [
+                //['http_address' => '127.0.0.1:9200'],
+                //['http_address' => '103.102.216.134:9200'],
+                //['http_address' => '103.102.247.1:9200'],
+                ['http_address' => 'localhost:9200'],
+                // configure more hosts if you have a cluster
+            ],
+            'dslVersion' => 7, // default is 5
+        ],
         'log' => [
             'targets' => [
                 [
@@ -35,6 +46,12 @@ $config = [
         ],
     ],
     */
+	'controllerMap' => [
+		'report' => [
+			'class' => 'yii\console\controllers\ReportGenerateController',
+			
+		],
+	],
 ];
 
 if (YII_ENV_DEV) {
