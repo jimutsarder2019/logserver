@@ -460,11 +460,14 @@ $isAdmin = ApplicationHelper::isAdmin();
             <footer class="footer">
                 <div class="container-fluid">
                     <div class="row">
+					    <div class="col-md-12 footer-copyright text-start">
+                            <p class="mb-0">Support: <i class="fa fa-phone"></i> <a href="tel:+8801617622600">01617622600</a>, <a href="tel:+8809610203060">09610203060</a> <i class="fa fa-envelope"></i> <a href="mailto:support@cloudhub.com.bd">support@cloudhub.com.bd</a></p>
+                        </div>
                         <div class="col-md-6 footer-copyright text-start">
                             <p class="mb-0">Copyright 2023 © <?=$company_name?> All rights reserved.</p>
                         </div>
                         <div class="col-md-6 pull-right text-end">
-                            <p class=" mb-0">Design & Developed by <img width="50" height="30" src="<?=$baseUrl?>/image/powered_by.png"></p>
+                            <p class=" mb-0">Design & Developed by <a target="_blank" href="https://cloudhub.com.bd/"><img width="50" height="30" src="<?=$baseUrl?>/image/powered_by.png"></a></p>
                         </div>
                     </div>
                 </div>
