@@ -144,9 +144,9 @@ class ReportBackupController extends CustomController
 			$file_name = 'uploads/report/'.$model->report_type.'/'.$model->file_name;
 			if(file_exists($file_name)){
 				unlink($file_name);
-				$this->findModel($id)->delete();
-                return $this->redirect(['index']);
 			}
+			$this->findModel($id)->delete();
+            return $this->redirect(['index']);
 		}
         
     }
