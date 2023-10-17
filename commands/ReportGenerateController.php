@@ -91,8 +91,11 @@ class ReportGenerateController extends Controller
 						ApplicationHelper::logger('Log data not found!');
 					}
 				}
+				
+				$model3 = ReportBackup::findOne(['id' => @$report_backup['id']]);
+				$model3->status = 2;
+				$model3->save();
 			}
-			
 			
 			ApplicationHelper::logger('All the report generated successfully!');
 			print "All the report generated successfully!";
@@ -352,6 +355,10 @@ class ReportGenerateController extends Controller
 				self::csvXlsxGenerate($fh, $all_syslog_data, $key);		
 			}	
 		}
+		
+		$model1 = ReportBackup::findOne(['id' => $report_id]);
+		$model1->status = 2;
+		$model1->save();
 		
 		if($report_type == 'pdf'){
 			$mpdf->WriteHTML('</tbody></table></body>');
