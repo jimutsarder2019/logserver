@@ -59,6 +59,8 @@ class ReportGenerateController extends Controller
 					$all_data = self::getQueryData($match, 'cloud-log-nat', $limit, $offset);
 					ApplicationHelper::logger('get log data from DB');
 					if(!empty($all_data)){
+						print count($all_data);
+						die;
 						self::dataProcess($all_data, true, @$report_backup['id'], $report_type, $report_file_name, $from_date, $to_date, $licenseInfo);	
 					}else{
 						ApplicationHelper::logger('Log data not found!');
