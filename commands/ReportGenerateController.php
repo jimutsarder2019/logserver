@@ -1,8 +1,8 @@
 <?php
 namespace app\commands;
 
-ini_set('max_execution_time', '900');
-ini_set('memory_limit', '16384M');
+//ini_set('max_execution_time', '900');
+//ini_set('memory_limit', '16384M');
 
 require_once __DIR__ . '/../api/vendor/autoload.php';
 
@@ -59,9 +59,10 @@ class ReportGenerateController extends Controller
 					$all_data = self::getQueryData($match, 'cloud-log-nat', $limit, $offset);
 					ApplicationHelper::logger('get log data from DB');
 					if(!empty($all_data)){
-						print count($all_data);
-						die;
-						self::dataProcess($all_data, true, @$report_backup['id'], $report_type, $report_file_name, $from_date, $to_date, $licenseInfo);	
+						self::dataProcess($all_data, true, @$report_backup['id'], $report_type, $report_file_name, $from_date, $to_date, $licenseInfo);
+						$model2 = ReportBackup::findOne(['id' => @$report_backup['id']]);
+						$model2->status = 2;
+						$model2->save();
 					}else{
 						ApplicationHelper::logger('Log data not found!');
 					}
