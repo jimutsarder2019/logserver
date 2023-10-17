@@ -95,10 +95,10 @@ class ReportGenerateController extends Controller
 			
 			
 			ApplicationHelper::logger('All the report generated successfully!');
-			die("All the report generated successfully!");
+			print "All the report generated successfully!";
 	    }else{
 			ApplicationHelper::logger('No report generate request found!');
-			die("No report generate request found!");
+			print "No report generate request found!";
 		}
     }
 	
