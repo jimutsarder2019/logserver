@@ -356,6 +356,9 @@ class ReportGenerateController extends Controller
 		if($report_type == 'pdf'){
 			$mpdf->WriteHTML('</tbody></table></body>');
 			ApplicationHelper::logger('log data write into pdf file done');
+			$model2 = ReportBackup::findOne(['id' => $report_id]);
+			$model2->status = 2;
+			$model2->save();
 			$mpdf->Output(__DIR__ . '/../web/uploads/report/'.$report_file_name);
 		}else{
 			$model2 = ReportBackup::findOne(['id' => $report_id]);
