@@ -56,16 +56,7 @@ class ReportGenerateController extends Controller
 					$offset = 0;
 					$limit = 100;
 					$match = json_decode($report_backup['match1'], 1);
-					$all_data = self::getQueryData($match, 'cloud-log-nat', $limit, $offset);
-					ApplicationHelper::logger('get log data from DB');
-					if(!empty($all_data)){
-						self::dataProcess($all_data, true, @$report_backup['id'], $report_type, $report_file_name, $from_date, $to_date, $licenseInfo);
-						$model2 = ReportBackup::findOne(['id' => @$report_backup['id']]);
-						$model2->status = 2;
-						$model2->save();
-					}else{
-						ApplicationHelper::logger('Log data not found!');
-					}
+					$all_data = self::processLogFromDB($match, 'cloud-log-nat', true, @$report_backup['id'], $report_type, $report_file_name, $from_date, $to_date, $licenseInfo);
 				}else{
 					$match_pp = json_decode($report_backup['match1'], 1);
 					$match_nat = json_decode($report_backup['match2'], 1);
@@ -148,94 +139,12 @@ class ReportGenerateController extends Controller
 		}
     }
 
-	private function dataProcess($all_data, $missing_find=true, $report_id, $report_type,$report_file_name, $date_start, $date_end, $licenseInfo, $user_name = false, $mac_ip = false,  $main_src_ip = false)
+	private function dataProcess($all_data, $missing_find=true, $report_id, $report_type,$report_file_name, $date_start, $date_end, $licenseInfo, $FILE = false, $user_name = false, $mac_ip = false,  $main_src_ip = false)
 	{
 		$all_syslog_data = [];
-        
-		if($report_type == 'pdf'){
-			ApplicationHelper::logger('pdf file create done');
-			$pdf = new Pdf([
-                    // set to use core fonts only
-                    'mode' => Pdf::MODE_CORE,
-                    // A4 paper format
-                    'format' => Pdf::FORMAT_A4,
-                    // portrait orientation
-                    'orientation' => Pdf::ORIENT_PORTRAIT,
-                    // stream to browser inline
-                    //'destination' => Pdf::DEST_FILE,
-                    //'filename' =>'sss.pdf',
-                    // your html content input
-                    //'content' => $content,
-
-                    'cssInline' => '.kv-heading-1{font-size:18px}',
-                    // set mPDF properties on the fly
-                    'options' => ['title' => 'LOG'],
-                    // call mPDF methods on the fly
-                    'methods' => [
-                        'SetHeader' => [''],
-                        'SetFooter' => ['{PAGENO}'],
-                    ]
-                ]);
-		    $mpdf = $pdf->api;
-	
-	        $top_area_content = '<body>
-			                        <h1>'.$licenseInfo['company'].' Log Report</h1></br>
-			                        <p>License Number: '.$licenseInfo['license'].'</p>
-			                        <p>Address: '.$licenseInfo['address'].'</p>
-			                        <p>Phone Number: '.$licenseInfo['phone'].'</p>
-			                        <p>Log Report: '.$date_start.' to '.$date_end.'</p>';
-			$table_header = '<thead>
-									<tr>
-										<th style="border:1px solid #000000;" scope="col">DateTime</th>
-										<th style="border:1px solid #000000;" scope="col">Router IP</th>
-										<th style="border:1px solid #000000;"  scope="col">User</th>
-										<th style="border:1px solid #000000;"  scope="col">Protocol</th>
-										<th style="border:1px solid #000000;"  scope="col">MAC</th>
-										<th style="border:1px solid #000000;"  scope="col">Src IP</th>
-										<th style="border:1px solid #000000;"  scope="col">Port</th>
-										<th style="border:1px solid #000000;"  scope="col">Dst IP</th>
-										<th style="border:1px solid #000000;"  scope="col">Port</th>
-										<th style="border:1px solid #000000;"  scope="col">NAT IP</th>
-										<th style="border:1px solid #000000;"  scope="col">Port</th>
-									</tr>
-								</thead>';
-			$mpdf->WriteHTML($top_area_content.'<table style="border:1px solid #000000; border-collapse: collapse;
-">'.$table_header.'<tbody class="data-render">');
-		}else{
-			ApplicationHelper::logger($report_type.' file create done');
-		    $fh = @fopen(__DIR__ . '/../web/uploads/report/'.$report_file_name, 'wb');
-			$csvValueArray = [];
-	        $csvValueArray[] = $licenseInfo['company'].' Log Report';
-			fputcsv($fh, $csvValueArray);
-	        $csvValueArray2[] = 'License Number: '.$licenseInfo['license'];
-	        fputcsv($fh, $csvValueArray2);
-			$csvValueArray3[] = 'Address: '.$licenseInfo['address'];
-	        fputcsv($fh, $csvValueArray3);
-			$csvValueArray4[] = 'Phone Number: '.$licenseInfo['phone'];
-	        fputcsv($fh, $csvValueArray4);
-			$csvValueArray5[] = 'Log Report: '.$date_start.' to '.$date_end;
-	        fputcsv($fh, $csvValueArray5);
-			
-		    $header_data = [
-			               0=>
-			                  [
-							  'datetime'=>'DateTime',
-							  'host'=>'Router IP',
-							  'user'=>'User',
-							  'protocol'=>'Protocol',
-							  'mac'=>'Mac',
-							  'src_ip'=>'Src IP',
-							  'src_port'=>'Port',
-							  'destination_ip'=>'Destination IP',
-							  'destination_port'=>'Port',
-							  'nat_ip'=>'NAT IP',
-							  'nat_port'=>'Port',
-							  ]
-					    ];
-						
-			self::csvXlsxGenerate($fh, $header_data, 0);		
-		}
+		
         $tr = '';
+
 		foreach($all_data as $key=>$data){
 			$message_array = explode(", ",$data['_source']['MESSAGE']);
 	
@@ -353,33 +262,139 @@ class ReportGenerateController extends Controller
 			
 			if($report_type == 'pdf'){
 				$tr = self::pdfGenerate($all_syslog_data, $key);
-                $mpdf->WriteHTML($tr);				
+                $FILE->WriteHTML($tr);				
 			}else{
-				self::csvXlsxGenerate($fh, $all_syslog_data, $key);		
+				self::csvXlsxGenerate($FILE, $all_syslog_data, $key);		
 			}
 			
 			$all_syslog_data = [];
 		}
 		
-		$model1 = ReportBackup::findOne(['id' => $report_id]);
+		
+	}
+	
+	private function processLogFromDB($match, $index = 'cloud-log-nat', $missing_find, $report_backup_id, $report_type, $report_file_name, $date_start, $date_end, $licenseInfo)
+	{
+		$all_data = [];
+		$query = (new Query)->from($index);
+		$query->query = $match;
+		$query->orderBy(['@timestamp' => SORT_ASC]);
+		$query->limit = 500;
+		
+		$FILE = '';
+		
+		if($report_type == 'pdf'){
+			ApplicationHelper::logger('pdf file create done');
+			$pdf = new Pdf([
+                    // set to use core fonts only
+                    'mode' => Pdf::MODE_CORE,
+                    // A4 paper format
+                    'format' => Pdf::FORMAT_A4,
+                    // portrait orientation
+                    'orientation' => Pdf::ORIENT_PORTRAIT,
+                    // stream to browser inline
+                    //'destination' => Pdf::DEST_FILE,
+                    //'filename' =>'sss.pdf',
+                    // your html content input
+                    //'content' => $content,
+
+                    'cssInline' => '.kv-heading-1{font-size:18px}',
+                    // set mPDF properties on the fly
+                    'options' => ['title' => 'LOG'],
+                    // call mPDF methods on the fly
+                    'methods' => [
+                        'SetHeader' => [''],
+                        'SetFooter' => ['{PAGENO}'],
+                    ]
+                ]);
+		    $mpdf = $pdf->api;
+	
+	        $top_area_content = '<body>
+			                        <h1>'.$licenseInfo['company'].' Log Report</h1></br>
+			                        <p>License Number: '.$licenseInfo['license'].'</p>
+			                        <p>Address: '.$licenseInfo['address'].'</p>
+			                        <p>Phone Number: '.$licenseInfo['phone'].'</p>
+			                        <p>Log Report: '.$date_start.' to '.$date_end.'</p>';
+			$table_header = '<thead>
+									<tr>
+										<th style="border:1px solid #000000;" scope="col">DateTime</th>
+										<th style="border:1px solid #000000;" scope="col">Router IP</th>
+										<th style="border:1px solid #000000;"  scope="col">User</th>
+										<th style="border:1px solid #000000;"  scope="col">Protocol</th>
+										<th style="border:1px solid #000000;"  scope="col">MAC</th>
+										<th style="border:1px solid #000000;"  scope="col">Src IP</th>
+										<th style="border:1px solid #000000;"  scope="col">Port</th>
+										<th style="border:1px solid #000000;"  scope="col">Dst IP</th>
+										<th style="border:1px solid #000000;"  scope="col">Port</th>
+										<th style="border:1px solid #000000;"  scope="col">NAT IP</th>
+										<th style="border:1px solid #000000;"  scope="col">Port</th>
+									</tr>
+								</thead>';
+			$mpdf->WriteHTML($top_area_content.'<table style="border:1px solid #000000; border-collapse: collapse;
+">'.$table_header.'<tbody class="data-render">');
+
+            $FILE = $mpdf;
+		}else{
+			ApplicationHelper::logger($report_type.' file create done');
+		    $fh = @fopen(__DIR__ . '/../web/uploads/report/'.$report_file_name, 'wb');
+			$csvValueArray = [];
+	        $csvValueArray[] = $licenseInfo['company'].' Log Report';
+			fputcsv($fh, $csvValueArray);
+	        $csvValueArray2[] = 'License Number: '.$licenseInfo['license'];
+	        fputcsv($fh, $csvValueArray2);
+			$csvValueArray3[] = 'Address: '.$licenseInfo['address'];
+	        fputcsv($fh, $csvValueArray3);
+			$csvValueArray4[] = 'Phone Number: '.$licenseInfo['phone'];
+	        fputcsv($fh, $csvValueArray4);
+			$csvValueArray5[] = 'Log Report: '.$date_start.' to '.$date_end;
+	        fputcsv($fh, $csvValueArray5);
+			
+		    $header_data = [
+			               0=>
+			                  [
+							  'datetime'=>'DateTime',
+							  'host'=>'Router IP',
+							  'user'=>'User',
+							  'protocol'=>'Protocol',
+							  'mac'=>'Mac',
+							  'src_ip'=>'Src IP',
+							  'src_port'=>'Port',
+							  'destination_ip'=>'Destination IP',
+							  'destination_port'=>'Port',
+							  'nat_ip'=>'NAT IP',
+							  'nat_port'=>'Port',
+							  ]
+					    ];
+						
+			self::csvXlsxGenerate($fh, $header_data, 0);
+            $FILE = $fh;			
+		}
+		
+		foreach ($query->batch() as $key=>$rows) {
+			self::dataProcess($rows, $missing_find, $report_backup_id, $report_type, $report_file_name, $date_start, $date_end, $licenseInfo, $FILE);
+		}
+		
+		
+		$model1 = ReportBackup::findOne(['id' => $report_backup_id]);
 		$model1->status = 2;
 		$model1->save();
 		
 		if($report_type == 'pdf'){
 			$mpdf->WriteHTML('</tbody></table></body>');
 			ApplicationHelper::logger('log data write into pdf file done');
-			$model2 = ReportBackup::findOne(['id' => $report_id]);
+			$model2 = ReportBackup::findOne(['id' => $report_backup_id]);
 			$model2->status = 2;
 			$model2->save();
 			$mpdf->Output(__DIR__ . '/../web/uploads/report/'.$report_file_name);
 		}else{
-			$model2 = ReportBackup::findOne(['id' => $report_id]);
+			$model2 = ReportBackup::findOne(['id' => $report_backup_id]);
 			$model2->status = 2;
 			$model2->save();
 			ApplicationHelper::logger('log data write into '.$report_type.' file done');
 			fclose($fh);
 		}
 	}
+	
 	
 	private function getQueryData($match, $index = 'cloud-log-nat', $limit = 50, $offset = 0)
 	{
