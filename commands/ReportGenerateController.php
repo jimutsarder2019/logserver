@@ -356,7 +356,9 @@ class ReportGenerateController extends Controller
                 $mpdf->WriteHTML($tr);				
 			}else{
 				self::csvXlsxGenerate($fh, $all_syslog_data, $key);		
-			}	
+			}
+			
+			$all_syslog_data = [];
 		}
 		
 		$model1 = ReportBackup::findOne(['id' => $report_id]);
