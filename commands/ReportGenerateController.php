@@ -3,7 +3,6 @@ namespace app\commands;
 
 //ini_set('max_execution_time', '900');
 //ini_set('memory_limit', '16384M');
-//test
 
 require_once __DIR__ . '/../api/vendor/autoload.php';
 
@@ -54,16 +53,13 @@ class ReportGenerateController extends Controller
 				$report_file_name = $report_type.'/'.$report_backup['file_name'];
 				
 				if($match_type == 'nat'){
-					$offset = 0;
-					$limit = 100;
 					$match = json_decode($report_backup['match1'], 1);
-					$all_data = self::processLogFromDB($match, 'cloud-log-nat', true, @$report_backup['id'], $report_type, $report_file_name, $from_date, $to_date, $licenseInfo);
+					self::processLogFromDB($match, 'cloud-log-nat', true, @$report_backup['id'], $report_type, $report_file_name, $from_date, $to_date, $licenseInfo);
 				}else{
 					$match_pp = json_decode($report_backup['match1'], 1);
 					$match_nat = json_decode($report_backup['match2'], 1);
-					$limit = 100;
 					$all_data = self::getQueryData($match_pp, 'cloud-log-ppp', 1, 0);
-					ApplicationHelper::logger('get log data from DB');
+					ApplicationHelper::logger('get log data from cloud-log-ppp');
 					if(!empty($all_data)){
 						$missing_user_data = $all_data[0]['_source']['MESSAGE'];
 						$main_src_ip = $all_data[0]['_source']['HOST'];
@@ -75,12 +71,7 @@ class ReportGenerateController extends Controller
 							   $user_name = $message_array[1];
 							   $mac_ip = $message_array[2];
 							}
-
-							$all_data = self::getQueryData($match_nat, 'cloud-log-nat', $limit, 0);
-							
-							if(!empty($all_data)){
-								self::dataProcess($all_data, false, @$report_backup['id'], $report_type, $report_file_name, $from_date, $to_date, $licenseInfo);
-							}
+							self::processLogFromDB($match_nat, 'cloud-log-nat', true, @$report_backup['id'], $report_type, $report_file_name, $from_date, $to_date, $licenseInfo);
 						}
 					}else{
 						ApplicationHelper::logger('Log data not found!');
@@ -374,8 +365,7 @@ class ReportGenerateController extends Controller
 		foreach ($query->batch() as $key=>$rows) {
 			self::dataProcess($rows, $missing_find, $report_backup_id, $report_type, $report_file_name, $date_start, $date_end, $licenseInfo, $FILE);
 		}
-		
-		
+
 		$model1 = ReportBackup::findOne(['id' => $report_backup_id]);
 		$model1->status = 2;
 		$model1->save();
@@ -383,14 +373,8 @@ class ReportGenerateController extends Controller
 		if($report_type == 'pdf'){
 			$mpdf->WriteHTML('</tbody></table></body>');
 			ApplicationHelper::logger('log data write into pdf file done');
-			$model2 = ReportBackup::findOne(['id' => $report_backup_id]);
-			$model2->status = 2;
-			$model2->save();
 			$mpdf->Output(__DIR__ . '/../web/uploads/report/'.$report_file_name);
 		}else{
-			$model2 = ReportBackup::findOne(['id' => $report_backup_id]);
-			$model2->status = 2;
-			$model2->save();
 			ApplicationHelper::logger('log data write into '.$report_type.' file done');
 			fclose($fh);
 		}
