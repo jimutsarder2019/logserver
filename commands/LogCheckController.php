@@ -54,6 +54,7 @@ class LogCheckController extends Controller
 				}
 			}
 		}
+		self::sendMail($router_ip, $to_email);
 		ApplicationHelper::logger('End Checking router log...');
     }
 	
