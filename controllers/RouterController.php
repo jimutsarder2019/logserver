@@ -136,8 +136,6 @@ class RouterController extends CustomController
 								}
 							}
 						} catch (\Throwable $th) {
-							
-							ApplicationHelper::_setTrace($th);
 							return $this->render('create', [
 								'model' => $model,
 								'error'=>'yes'
@@ -194,7 +192,6 @@ class RouterController extends CustomController
 						}
 					}
 				} catch (\Throwable $th) {
-					ApplicationHelper::_setTrace($th);
 					return $this->render('update', [
 						'model' => $model,
 						'error'=>'yes'
