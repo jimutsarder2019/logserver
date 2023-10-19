@@ -34,10 +34,20 @@ class LogCheckController extends Controller
 								"HOST"=> '.*'.$router_ip.'.*'
 							  ]
 						];
-						
+				
+				$date_filter[] = [
+							"range"=>[
+								"@timestamp"=>[
+								       "time_zone"=> "+06:00",
+									   "gte" => "now-1s",
+									   "lt" =>  "now"
+								]
+							]
+				];
 				$match  =	 [
 					"bool"=> [
-					  "must"=> $router_filter
+					  "must"=> $date_filter,
+					  "should"=> $router_filter
 					]
 				];
 				
@@ -66,7 +76,8 @@ class LogCheckController extends Controller
 				'to_name'=>'Admin',
 				'to'=>$to_email,
 				'to_cc'=>'logreport@cloudhub.com.bd',
-				'from'=>'support@cloudhub.com.bd',
+				//'from'=>'support@cloudhub.com.bd',
+				'from'=>'engrahuldeb@gmail.com',
 				'message'=> "<p>Company Name: ".$license_data['registration_name']." </p> <p>License Number: ".$license_data['license_number']." </p> 
 				<p>Any log data didn't find in this router (".$missing_router.")</p>",
 				'subject'=> 'Log not found Alert',
