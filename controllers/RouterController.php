@@ -117,7 +117,7 @@ class RouterController extends CustomController
 					if($model->validate()){
 						
 						try {
-							/*
+							
 							$client = new Client([
 								'host' => $model->ip.':'.$model->api_port,
 								'user' => $model->api_username,
@@ -127,15 +127,17 @@ class RouterController extends CustomController
 							$query = new Query('/ppp/active/print');
 							$query->where('service', 'pppoe');
 							$secrets = $client->query($query)->read();
-							*/
 							
-							if(1){
+							
+							if(!empty($secrets)){
 								if ($model->save()) {
 									//return $this->redirect(['view', 'id' => $model->id]);
 									return $this->redirect(['index']);
 								}
 							}
 						} catch (\Throwable $th) {
+							
+							ApplicationHelper::_setTrace($th);
 							return $this->render('create', [
 								'model' => $model,
 								'error'=>'yes'
@@ -175,7 +177,7 @@ class RouterController extends CustomController
 
 			if ($this->request->isPost && $model->load($this->request->post())) {
 				try {
-					/*$client = new Client([
+					$client = new Client([
 						'host' => $model->ip.':'.$model->api_port,
 						'user' => $model->api_username,
 						'pass' => $model->api_password
@@ -184,14 +186,15 @@ class RouterController extends CustomController
 					$query = new Query('/ppp/active/print');
 					$query->where('service', 'pppoe');
 					$secrets = $client->query($query)->read();
-					*/
-					if(1){
+					
+					if(!empty($secrets)){
 						if ($model->save()) {
 							//return $this->redirect(['view', 'id' => $model->id]);
 							return $this->redirect(['index']);
 						}
 					}
 				} catch (\Throwable $th) {
+					ApplicationHelper::_setTrace($th);
 					return $this->render('update', [
 						'model' => $model,
 						'error'=>'yes'
