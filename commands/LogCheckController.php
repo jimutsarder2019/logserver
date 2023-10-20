@@ -39,7 +39,7 @@ class LogCheckController extends Controller
 							"range"=>[
 								"@timestamp"=>[
 								       "time_zone"=> "+06:00",
-									   "gte" => "now-1s",
+									   "gte" => "now-10s",
 									   "lt" =>  "now"
 								]
 							]
