@@ -331,11 +331,24 @@ $isAdmin = ApplicationHelper::isAdmin();
                         </li>
 					   <?php } ?>
                         
-						
+
 						<?php if($isAdmin){ ?>
-                        <li>
-                            <a class="sidebar-header" href="<?=$baseUrl ?>/?r=settings/update"><i
-                                    data-feather="settings"></i><span>Settings</span></a>
+						<li>
+                            <a class="sidebar-header" href="javascript:void(0)">
+                                <i data-feather="users"></i>
+                                <span>Settings</span>
+                                <i class="fa fa-angle-right pull-right"></i>
+                            </a>
+                            <ul class="sidebar-submenu">
+							    <li>
+									<a class="sidebar-header" href="<?=$baseUrl ?>/?r=settings/update">
+									<i data-feather="user-plus"></i><span>Account</span></a>
+								</li>
+								<li>
+									<a class="sidebar-header" href="<?=$baseUrl ?>/?r=settings/email">
+									<i data-feather="users"></i><span>SMTP</span></a>
+								</li>
+                            </ul>
                         </li>
 						<?php } ?>
 
@@ -343,6 +356,8 @@ $isAdmin = ApplicationHelper::isAdmin();
                             <a class="sidebar-header" href="<?=$baseUrl ?>/?r=site/system"><i
                                     data-feather="archive"></i><span>System Information</span></a>
                         </li>
+						
+						
 						<?php
 								
 							if(!Yii::$app->user->isGuest){

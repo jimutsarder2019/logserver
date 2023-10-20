@@ -154,11 +154,23 @@ function commonSearch(type)
 		var to_mins = dateEndMyArray2[1];
 		
 		if(long_date_start && long_date_end && date_start && date_end && from_hours && from_mins && to_hours && to_mins){
-			
 			if(type === 'search'){
 				generateLogData();
 			}else{
-				generateLogData(type);
+				var day_duration = days_between(long_date_start, long_date_end);
+				if(type == 'pdf'){
+					if(day_duration['diffDays'] == 0 && day_duration['diffHrs']  <= 5){
+						generateLogData(type);
+					}else{
+						alert('You can able to download PDF report for maximum 5 hours');
+					}
+				}else{
+					if(day_duration['diffDays']  <= 1){
+				        generateLogData(type);
+					}else{
+						alert('You can able to download CSV/Excel report for maximum 24 hours');
+					}
+				}
 			}
 		}else{
 			alert('Please select From Date-Time and To Date-Time');
@@ -166,6 +178,39 @@ function commonSearch(type)
 	}else{
 		alert('Please select From Date-Time and To Date-Time');
 	}
+}
+
+
+function days_between1(date1, date2) {
+
+    var date1 = new Date(date1); 
+    var date2 = new Date(date2); 
+      
+    // To calculate the time difference of two dates 
+    var Difference_In_Time = date2.getTime() - date1.getTime(); 
+      
+    // To calculate the no. of days between two dates 
+    var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24); 
+	
+	return Difference_In_Days;
+
+}
+
+
+function days_between(date1, date2)
+{
+	var date1 = new Date(date1); 
+    var date2 = new Date(date2);
+	var diffMs = (date2 - date1); // milliseconds between now & Christmas
+	var diffDays = Math.floor(diffMs / 86400000); // days
+	var diffHrs = Math.floor((diffMs % 86400000) / 3600000); // hours
+	var diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000); // minutes
+	
+	var days_duration = [];
+	days_duration['diffDays'] = diffDays;
+	days_duration['diffHrs'] = diffHrs;
+	
+	return days_duration;
 }
 
 function getPostParams()

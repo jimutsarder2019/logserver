@@ -16,6 +16,10 @@ use Yii;
  * @property string|null $login_logo
  * @property string|null $user_logo
  * @property string|null $favicon
+ * @property string|null $email_username
+ * @property string|null $email_password
+ * @property string|null $email_port
+ * @property string|null $email_smtp_secure
  */
 class Settings extends \yii\db\ActiveRecord
 {
@@ -37,7 +41,7 @@ class Settings extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['company_name', 'company_address', 'login_logo', 'user_logo','favicon'], 'string', 'max' => 100],
+            [['company_name', 'company_address', 'login_logo', 'user_logo','favicon','email_username','email_password',  'email_port', 'email_smtp_secure'], 'string', 'max' => 100],
             [['license_number'], 'string', 'max' => 50],
             [['company_phone'], 'string', 'max' => 20],
 			[['file1','file2','file3'], 'file'],
@@ -58,6 +62,10 @@ class Settings extends \yii\db\ActiveRecord
             'login_logo' => 'Login Logo',
             'user_logo' => 'User Logo',
             'favicon' => 'Company Favicon',
+            'email_username' => 'Email Username',
+            'email_password' => 'Email Password',
+            'email_port' => 'Email Port',
+            'email_smtp_secure' => 'Email SMTP Secure',
         ];
     }
 }

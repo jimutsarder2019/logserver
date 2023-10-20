@@ -19,7 +19,7 @@ $this->params['breadcrumbs'][] = 'Update';
 			<div class="row">
 				<div class="col-lg-6">
 					<div class="page-header-left">
-						<h3>Settings</h3>
+						<h3><?=@$type?> Settings</h3>
 					</div>
 				</div>
 			</div>
@@ -36,6 +36,7 @@ $this->params['breadcrumbs'][] = 'Update';
 						<div class="settings-update">
 							<?= $this->render('_form', [
 								'model' => $model,
+								'type' => $type
 							]) ?>
 
 						</div>

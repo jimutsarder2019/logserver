@@ -38,40 +38,53 @@ input[type=file]::file-selector-button:hover {
 
     <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
 
+    <div class="row">
+	    <?php if(isset($type)){ ?>
+	    <?php if($type == 'account'){ ?>
+		<div class="col-md-12">
+			<?= $form->field($model, 'company_name')->textInput(['maxlength' => true]) ?>
+			
+			<?= $form->field($model, 'license_number')->textInput(['maxlength' => true]) ?>
+			<?= $form->field($model, 'company_phone')->textInput(['maxlength' => true]) ?>
+			<?= $form->field($model, 'company_address')->textInput(['maxlength' => true]) ?>
+			
+			
+			<?= $form->field($model, 'file2')->fileInput()->label('Company Dashboard Logo [Hints: width:60px; Height:50px]'); ?>
+			<?php if($model->user_logo){ ?>
+			<img src="<?=$baseUrl?>/<?=$model->user_logo?>" width="150" height="150">
+			<?php } ?>
 
-    <?= $form->field($model, 'company_name')->textInput(['maxlength' => true]) ?>
-	
-    <?= $form->field($model, 'license_number')->textInput(['maxlength' => true]) ?>
-    <?= $form->field($model, 'company_phone')->textInput(['maxlength' => true]) ?>
-    <?= $form->field($model, 'company_address')->textInput(['maxlength' => true]) ?>
-	
-	
-	<?= $form->field($model, 'file2')->fileInput()->label('Company Dashboard Logo [Hints: width:60px; Height:50px]'); ?>
-	<?php if($model->user_logo){ ?>
-	<img src="<?=$baseUrl?>/<?=$model->user_logo?>" width="150" height="150">
-	<?php } ?>
+			</br>
+			</br>
+			</br>
 
-    </br>
-    </br>
-    </br>
-
-	<?= $form->field($model, 'file1')->fileInput()->label('Company Login Logo [Hints: width:150px; Height:50px]'); ?>
-	<?php if($model->login_logo){ ?>
-	    <img src="<?=$baseUrl?>/<?=$model->login_logo?>" width="150" height="150">
-	<?php } ?>
-	
-	
-	
-	</br>
-	</br>
-	
-	
-	<?= $form->field($model, 'file3')->fileInput()->label('Company Favicon'); ?>
-	<?php if($model->favicon){ ?>
-	    <img src="<?=$baseUrl?>/<?=$model->favicon?>" width="150" height="150">
-	<?php } ?>
-	
+			<?= $form->field($model, 'file1')->fileInput()->label('Company Login Logo [Hints: width:150px; Height:50px]'); ?>
+			<?php if($model->login_logo){ ?>
+				<img src="<?=$baseUrl?>/<?=$model->login_logo?>" width="150" height="150">
+			<?php } ?>
+			
+			
+			
+			</br>
+			</br>
+			
+			
+			<?= $form->field($model, 'file3')->fileInput()->label('Company Favicon'); ?>
+			<?php if($model->favicon){ ?>
+				<img src="<?=$baseUrl?>/<?=$model->favicon?>" width="150" height="150">
+			<?php } ?>
+		</div>
 		
+		<?php }else{ ?>
+		<div class="col-md-12">
+		    <?= $form->field($model, 'email_username')->textInput(['maxlength' => true]) ?>
+			<?= $form->field($model, 'email_password')->textInput(['maxlength' => true]) ?>
+			<?= $form->field($model, 'email_port')->textInput(['maxlength' => true]) ?>
+			<?= $form->field($model, 'email_smtp_secure')->textInput(['maxlength' => true]) ?>
+		</div>
+		<?php } ?>
+		<?php } ?>
+	</div>
 	
 	</br>
 	</br>
