@@ -35,7 +35,7 @@ class ApiController extends CustomController
 					if($router['ip'] && $router['api_username'] && $router['api_password']){	
 						try {
 							$client = new Client([
-								'host' => $router['ip'],
+								'host' => $router['ip'].':'.$router['api_port'],
 								'user' => $router['api_username'],
 								'pass' => $router['api_password']
 							]);

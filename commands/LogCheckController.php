@@ -34,10 +34,20 @@ class LogCheckController extends Controller
 								"HOST"=> '.*'.$router_ip.'.*'
 							  ]
 						];
-						
+				
+				$date_filter[] = [
+							"range"=>[
+								"@timestamp"=>[
+								       "time_zone"=> "+06:00",
+									   "gte" => "now-30s",
+									   "lt" =>  "now"
+								]
+							]
+				];
 				$match  =	 [
 					"bool"=> [
-					  "must"=> $router_filter
+					  "must"=> $date_filter,
+					  "should"=> $router_filter
 					]
 				];
 				
@@ -54,6 +64,7 @@ class LogCheckController extends Controller
 				}
 			}
 		}
+		//self::sendMail($router_ip, $to_email);
 		ApplicationHelper::logger('End Checking router log...');
     }
 	
