@@ -140,41 +140,83 @@ class SettingsController extends CustomController
     public function actionUpdate($id=1)
     {
 		$this->layout = 'frontend';
-		
+			
 		$id = Yii::$app->db->createCommand( 'SELECT id FROM settings where id > 0 limit 1' )->queryScalar();
 
-        $model = $this->findModel($id);
+		$model = $this->findModel($id);
 
-        if ($model->load($this->request->post())) {
+		if ($model->load($this->request->post())) {
 			
 			$model->file1 = UploadedFile::getInstance($model, 'file1');
 			$model->file2 = UploadedFile::getInstance($model, 'file2');
 			$model->file3 = UploadedFile::getInstance($model, 'file3');
 			
 			if($model->file1){
-			    $model->file1->saveAs('uploads/login_logo/' . $model->file1->baseName . '.' . $model->file1->extension);
-			    $model->login_logo = 'uploads/login_logo/' . $model->file1->baseName . '.' . $model->file1->extension;
+				$model->file1->saveAs('uploads/login_logo/' . $model->file1->baseName . '.' . $model->file1->extension);
+				$model->login_logo = 'uploads/login_logo/' . $model->file1->baseName . '.' . $model->file1->extension;
 			}
 			
 			if($model->file2){
-			    $model->file2->saveAs('uploads/user_logo/' . $model->file2->baseName . '.' . $model->file2->extension);
-			    $model->user_logo = 'uploads/user_logo/' . $model->file2->baseName . '.' . $model->file2->extension;
+				$model->file2->saveAs('uploads/user_logo/' . $model->file2->baseName . '.' . $model->file2->extension);
+				$model->user_logo = 'uploads/user_logo/' . $model->file2->baseName . '.' . $model->file2->extension;
 			}
 			
-		    if($model->file3){
-			    $model->file3->saveAs('uploads/favicon/' . $model->file3->baseName . '.' . $model->file3->extension);
-			    $model->favicon = 'uploads/favicon/' . $model->file3->baseName . '.' . $model->file3->extension;
+			if($model->file3){
+				$model->file3->saveAs('uploads/favicon/' . $model->file3->baseName . '.' . $model->file3->extension);
+				$model->favicon = 'uploads/favicon/' . $model->file3->baseName . '.' . $model->file3->extension;
 			}
 
 			if ($model->save()) {
-			    return $this->redirect(['update']);
+				return $this->redirect(['update']);
 			}
-           
-        }
+		   
+		}
 
-        return $this->render('update', [
-            'model' => $model,
-        ]);
+		return $this->render('update', [
+			'model' => $model,
+			'type'=>'account',
+		]);
+    }
+	
+	
+	public function actionEmail($id=1)
+    {
+		$this->layout = 'frontend';
+			
+		$id = Yii::$app->db->createCommand( 'SELECT id FROM settings where id > 0 limit 1' )->queryScalar();
+
+		$model = $this->findModel($id);
+
+		if ($model->load($this->request->post())) {
+			
+			$model->file1 = UploadedFile::getInstance($model, 'file1');
+			$model->file2 = UploadedFile::getInstance($model, 'file2');
+			$model->file3 = UploadedFile::getInstance($model, 'file3');
+			
+			if($model->file1){
+				$model->file1->saveAs('uploads/login_logo/' . $model->file1->baseName . '.' . $model->file1->extension);
+				$model->login_logo = 'uploads/login_logo/' . $model->file1->baseName . '.' . $model->file1->extension;
+			}
+			
+			if($model->file2){
+				$model->file2->saveAs('uploads/user_logo/' . $model->file2->baseName . '.' . $model->file2->extension);
+				$model->user_logo = 'uploads/user_logo/' . $model->file2->baseName . '.' . $model->file2->extension;
+			}
+			
+			if($model->file3){
+				$model->file3->saveAs('uploads/favicon/' . $model->file3->baseName . '.' . $model->file3->extension);
+				$model->favicon = 'uploads/favicon/' . $model->file3->baseName . '.' . $model->file3->extension;
+			}
+
+			if ($model->save()) {
+				return $this->redirect(['email']);
+			}
+		}
+
+		return $this->render('update', [
+			'model' => $model,
+			'type'=>'email',
+		]);
     }
 
     /**

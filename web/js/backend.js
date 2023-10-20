@@ -19,7 +19,7 @@ let limit = 50;
 let offset = 0;
 let reportType = '';
 
-//document.addEventListener('contextmenu', event => event.preventDefault());
+document.addEventListener('contextmenu', event => event.preventDefault());
 
 $(document).ready(function(){
 	
@@ -162,13 +162,13 @@ function commonSearch(type)
 					if(day_duration['diffDays'] == 0 && day_duration['diffHrs']  <= 5){
 						generateLogData(type);
 					}else{
-						alert('You can able to download PDF report for any 5 hours');
+						alert('You can able to download PDF report for maximum 5 hours');
 					}
 				}else{
-					if(day_duration['diffDays']  <= 2){
+					if(day_duration['diffDays']  <= 1){
 				        generateLogData(type);
 					}else{
-						alert('You can able to download CSV/Excel report for any 2 days');
+						alert('You can able to download CSV/Excel report for maximum 24 hours');
 					}
 				}
 			}

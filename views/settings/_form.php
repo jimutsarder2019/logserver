@@ -39,9 +39,9 @@ input[type=file]::file-selector-button:hover {
     <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
 
     <div class="row">
-	    <div class="col-md-6"><h3><strong>Account</strong></h3></div>
-	    <div class="col-md-6"><h3><strong>Email</strong></h3></div>
-		<div class="col-md-6">
+	    <?php if(isset($type)){ ?>
+	    <?php if($type == 'account'){ ?>
+		<div class="col-md-12">
 			<?= $form->field($model, 'company_name')->textInput(['maxlength' => true]) ?>
 			
 			<?= $form->field($model, 'license_number')->textInput(['maxlength' => true]) ?>
@@ -74,12 +74,16 @@ input[type=file]::file-selector-button:hover {
 				<img src="<?=$baseUrl?>/<?=$model->favicon?>" width="150" height="150">
 			<?php } ?>
 		</div>
-		<div class="col-md-6">
+		
+		<?php }else{ ?>
+		<div class="col-md-12">
 		    <?= $form->field($model, 'email_username')->textInput(['maxlength' => true]) ?>
 			<?= $form->field($model, 'email_password')->textInput(['maxlength' => true]) ?>
 			<?= $form->field($model, 'email_port')->textInput(['maxlength' => true]) ?>
 			<?= $form->field($model, 'email_smtp_secure')->textInput(['maxlength' => true]) ?>
 		</div>
+		<?php } ?>
+		<?php } ?>
 	</div>
 	
 	</br>
