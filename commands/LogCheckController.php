@@ -8,6 +8,8 @@ use yii\web\Controller;
 use yii\elasticsearch\Query;
 use app\components\ApplicationHelper;
 use app\components\CustomController;
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
 class LogCheckController extends Controller
 {	
@@ -20,6 +22,9 @@ class LogCheckController extends Controller
 	
 	public function actionProcess()
     {
+		self::send_mail();
+		
+		die;
 		ApplicationHelper::logger('Start Checking router log...');
 
 		$router_list = ApplicationHelper::getRouters();
@@ -64,7 +69,7 @@ class LogCheckController extends Controller
 				}
 			}
 		}
-		//self::sendMail($router_ip, $to_email);
+		self::send_mail();
 		ApplicationHelper::logger('End Checking router log...');
     }
 	
@@ -97,4 +102,46 @@ class LogCheckController extends Controller
 		
 		curl_close ($ch);
 	}
+	
+	
+	//Business partner registration using this mail function:
+    private function send_mail()
+    {
+        $mail = new PHPMailer(true);
+        try {
+            //Server settings
+            //$mail->SMTPDebug = 2;                                       // Enable verbose debug output
+            $mail->isSMTP();                                            // Set mailer to use SMTP
+             $mail->Host = 'smtp.gmail.com';  // Specify main and backup SMTP servers
+                $mail->SMTPAuth = true;                                   // Enable SMTP authentication
+                $mail->Username = 'travellersgurubd@gmail.com';                     // SMTP username
+                $mail->Password = 'tguru@2019combd';                               // SMTP password
+                $mail->SMTPSecure = 'tls';                                  // Enable TLS encryption, `ssl` also accepted
+                $mail->Port = 587; 
+            $mail->setFrom('jimutsarder@gmail.com', 'Jimut sarder');
+            $mail->addAddress('engrahuldeb@gmail.com', 'Rahul deb');     // Add a recipient
+            if(0){
+                $mail->addBCC('admin@travellersguru.com.bd', 'Admin');
+                $mail->addBCC('support@travellersguru.com.bd', 'Support');
+                $mail->addBCC('sales@travellersguru.com.bd', 'Sales');
+                $mail->addBCC('business@travellersguru.com.bd', 'Business');
+            }
+            // Attachments
+            //$mail->addAttachment(sys_get_temp_dir() . '/' . $file_name . '.pdf');         // Add attachments
+            //$mail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Optional name
+            // Content
+            $mail->isHTML(true);                                  // Set email format to HTML
+            $mail->Subject = 'Travellers Guru Registration';
+            $mail_body = 'Dear Sir/Madam,<br>';
+            $mail_body = $mail_body . 'Your registration has been completed successfully. Thanks for choosing Travellers Guru. ';
+            $mail->Body = $mail_body;
+            //$mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+            if ($mail->send()) {
+                return true;
+            }
+        } catch (Exception $e) {
+            return false;
+        }
+
+    }
 }
