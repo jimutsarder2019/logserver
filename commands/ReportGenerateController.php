@@ -25,6 +25,8 @@ class ReportGenerateController extends Controller
 	public function actionProcess()
     {
 		$report_backup_list = $this->getReportBackupList();
+		print 'Report generate process start...';
+		print "\n";
 		ApplicationHelper::logger('Report generate process start...');
 		if(!empty($report_backup_list)){
 		
@@ -85,9 +87,11 @@ class ReportGenerateController extends Controller
 			
 			ApplicationHelper::logger('All the report generated successfully!');
 			print "All the report generated successfully!";
+			print "\n";
 	    }else{
 			ApplicationHelper::logger('No report generate request found!');
 			print "No report generate request found!";
+			print "\n";
 		}
     }
 	
@@ -372,9 +376,14 @@ class ReportGenerateController extends Controller
 		
 		if($report_type == 'pdf'){
 			$mpdf->WriteHTML('</tbody></table></body>');
+			
+			print 'log data write into pdf file done';
+			print "\n";
 			ApplicationHelper::logger('log data write into pdf file done');
 			$mpdf->Output(__DIR__ . '/../web/uploads/report/'.$report_file_name);
 		}else{
+			print 'log data write into '.$report_type.' file done';
+			print "\n";
 			ApplicationHelper::logger('log data write into '.$report_type.' file done');
 			fclose($fh);
 		}
