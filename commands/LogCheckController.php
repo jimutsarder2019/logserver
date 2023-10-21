@@ -110,41 +110,49 @@ class LogCheckController extends Controller
 	//Business partner registration using this mail function:
     private function send_mail($subject, $message, $to_email)
     {
+		
+		$settings = Yii::$app->db->createCommand( "SELECT email_username, email_password, email_port, email_smtp_secure FROM settings order by id desc limit 1" )->queryOne();
 		//hofj rhjy wnpr pssu
-        $mail = new PHPMailer(true);
-        try {
-            //Server settings
-            //$mail->SMTPDebug = 2;                                       // Enable verbose debug output
-            $mail->isSMTP();                                            // Set mailer to use SMTP
-            $mail->Host = 'smtp.gmail.com';  // Specify main and backup SMTP servers
-			$mail->SMTPAuth = true;                                   // Enable SMTP authentication
-			$mail->Username = 'jimutsarder@gmail.com';                     // SMTP username
-			//$mail->Username = 'travellersgurubd@gmail.com';                     // SMTP username
-			$mail->Password = 'hofj rhjy wnpr pssu';                               // SMTP password
-			//$mail->Password = 'tguru@2019combd';                               // SMTP password
-			$mail->SMTPSecure = 'tls';                                  // Enable TLS encryption, `ssl` also accepted
-			$mail->Port = 587; 
-            $mail->setFrom('support@cloudhub.com.bd', 'CloudHub');
-            $mail->addAddress($to_email, 'Admin');     // Add a recipient
-            if(0){
-                $mail->addBCC('admin@travellersguru.com.bd', 'Admin');
-                $mail->addBCC('support@travellersguru.com.bd', 'Support');
-                $mail->addBCC('sales@travellersguru.com.bd', 'Sales');
-                $mail->addBCC('business@travellersguru.com.bd', 'Business');
-            }
-            // Attachments
-            //$mail->addAttachment(sys_get_temp_dir() . '/' . $file_name . '.pdf');         // Add attachments
-            //$mail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Optional name
-            // Content
-            $mail->isHTML(true);                                  // Set email format to HTML
-            $mail->Subject = $subject;
-            $mail->Body = $message;
-            //$mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
-            if ($mail->send()) {
-                return true;
-            }
-        } catch (Exception $e) {
-            return false;
-        }
+		
+		if(isset($settings['email_username'], $settings['email_password'], $settings['email_port'], $settings['email_smtp_secure'])){
+			$mail = new PHPMailer(true);
+			try {
+				//Server settings
+				//$mail->SMTPDebug = 2;                                       // Enable verbose debug output
+				$mail->isSMTP();                                            // Set mailer to use SMTP
+				$mail->Host = 'smtp.gmail.com';  // Specify main and backup SMTP servers
+				$mail->SMTPAuth = true;                                   // Enable SMTP authentication
+				$mail->Username = 'jimutsarder@gmail.com';                     // SMTP username
+				//$mail->Username = 'travellersgurubd@gmail.com';                     // SMTP username
+				$mail->Password = 'hofj rhjy wnpr pssu';                               // SMTP password
+				//$mail->Password = 'tguru@2019combd';                               // SMTP password
+				$mail->SMTPSecure = 'tls';                                  // Enable TLS encryption, `ssl` also accepted
+				$mail->Port = 587; 
+				$mail->setFrom('support@cloudhub.com.bd', 'CloudHub');
+				$mail->addAddress($to_email, 'Admin');     // Add a recipient
+				if(0){
+					$mail->addBCC('admin@travellersguru.com.bd', 'Admin');
+					$mail->addBCC('support@travellersguru.com.bd', 'Support');
+					$mail->addBCC('sales@travellersguru.com.bd', 'Sales');
+					$mail->addBCC('business@travellersguru.com.bd', 'Business');
+				}
+				// Attachments
+				//$mail->addAttachment(sys_get_temp_dir() . '/' . $file_name . '.pdf');         // Add attachments
+				//$mail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Optional name
+				// Content
+				$mail->isHTML(true);                                  // Set email format to HTML
+				$mail->Subject = $subject;
+				$mail->Body = $message;
+				//$mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+				if ($mail->send()) {
+					return true;
+				}
+			} catch (Exception $e) {
+				return false;
+			}
+		}else{
+			print 'Email configuration not found!';
+			ApplicationHelper::logger('Email configuration not found!');
+		}
     }
 }
