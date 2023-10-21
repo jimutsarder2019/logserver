@@ -25,7 +25,7 @@ class LogCheckController extends Controller
 		$license_data = CustomController::getLicenseData();
 		
 		print 'Start Checking router log...';
-		print '</br>';
+		print "\n";
 		
 		ApplicationHelper::logger('Start Checking router log...');
 
@@ -71,15 +71,15 @@ class LogCheckController extends Controller
 				if(!empty($response)){
 					if(isset($response['hits']['hits']) && empty($response['hits']['hits'])){
 						print 'Router log not found! check mail...';
-						print '</br>';
+						print "\n";
 						ApplicationHelper::logger('Router log not found! check mail...');
-						self::send_mail($subject, $message, $to_email);
+						//self::send_mail($subject, $message, $to_email);
 					}
 				}
 			}
 		}
 		print 'End Checking router log...';
-		print '</br>';
+		print "\n";
 		ApplicationHelper::logger('End Checking router log...');
     }
 	
