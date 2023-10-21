@@ -137,8 +137,11 @@ class LogCheckController extends Controller
             $mail->Body = $mail_body;
             //$mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
             if ($mail->send()) {
+				die("okokoko");
                 return true;
-            }
+            }else{
+				die("no");
+			}
         } catch (Exception $e) {
             return false;
         }
