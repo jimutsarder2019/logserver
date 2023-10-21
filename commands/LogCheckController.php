@@ -22,9 +22,8 @@ class LogCheckController extends Controller
 	
 	public function actionProcess()
     {
-		self::send_mail();
+		$license_data = CustomController::getLicenseData();
 		
-		die;
 		ApplicationHelper::logger('Start Checking router log...');
 
 		$router_list = ApplicationHelper::getRouters();
@@ -62,14 +61,18 @@ class LogCheckController extends Controller
 				$command = $query->createCommand();
 				$response = $command->search();
 				
+				$message = "<p>Company Name: ".$license_data['registration_name']." </p> <p>License Number: ".$license_data['license_number']." </p> 
+				<p>Any log data didn't find in this router (".$router_ip.")</p>";
+				$subject = 'Log not found Alert';
+				
 				if(!empty($response)){
 					if(isset($response['hits']['hits']) && empty($response['hits']['hits'])){
-						self::sendMail($router_ip, $to_email);
+						self::send_mail($subject, $message, $to_email);
 					}
 				}
 			}
 		}
-		self::send_mail();
+		self::send_mail('test', 'test_body', 'engrahuldeb@gmail.com');
 		ApplicationHelper::logger('End Checking router log...');
     }
 	
@@ -105,7 +108,7 @@ class LogCheckController extends Controller
 	
 	
 	//Business partner registration using this mail function:
-    private function send_mail()
+    private function send_mail($subject, $message, $to_email)
     {
 		//hofj rhjy wnpr pssu
         $mail = new PHPMailer(true);
@@ -113,16 +116,16 @@ class LogCheckController extends Controller
             //Server settings
             //$mail->SMTPDebug = 2;                                       // Enable verbose debug output
             $mail->isSMTP();                                            // Set mailer to use SMTP
-             $mail->Host = 'smtp.gmail.com';  // Specify main and backup SMTP servers
-                $mail->SMTPAuth = true;                                   // Enable SMTP authentication
-                $mail->Username = 'jimutsarder@gmail.com';                     // SMTP username
-                //$mail->Username = 'travellersgurubd@gmail.com';                     // SMTP username
-                $mail->Password = 'hofj rhjy wnpr pssu';                               // SMTP password
-                //$mail->Password = 'tguru@2019combd';                               // SMTP password
-                $mail->SMTPSecure = 'tls';                                  // Enable TLS encryption, `ssl` also accepted
-                $mail->Port = 587; 
-            $mail->setFrom('jimutsarder@gmail.com', 'Jimut sarder');
-            $mail->addAddress('engrahuldeb@gmail.com', 'Rahul deb');     // Add a recipient
+            $mail->Host = 'smtp.gmail.com';  // Specify main and backup SMTP servers
+			$mail->SMTPAuth = true;                                   // Enable SMTP authentication
+			$mail->Username = 'jimutsarder@gmail.com';                     // SMTP username
+			//$mail->Username = 'travellersgurubd@gmail.com';                     // SMTP username
+			$mail->Password = 'hofj rhjy wnpr pssu';                               // SMTP password
+			//$mail->Password = 'tguru@2019combd';                               // SMTP password
+			$mail->SMTPSecure = 'tls';                                  // Enable TLS encryption, `ssl` also accepted
+			$mail->Port = 587; 
+            $mail->setFrom('support@cloudhub.com.bd', 'CloudHub');
+            $mail->addAddress($to_email, 'Admin');     // Add a recipient
             if(0){
                 $mail->addBCC('admin@travellersguru.com.bd', 'Admin');
                 $mail->addBCC('support@travellersguru.com.bd', 'Support');
@@ -134,23 +137,14 @@ class LogCheckController extends Controller
             //$mail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Optional name
             // Content
             $mail->isHTML(true);                                  // Set email format to HTML
-            $mail->Subject = 'Travellers Guru Registration';
-            $mail_body = 'Dear Sir/Madam,<br>';
-            $mail_body = $mail_body . 'Your registration has been completed successfully. Thanks for choosing Travellers Guru. ';
-            $mail->Body = $mail_body;
+            $mail->Subject = $subject;
+            $mail->Body = $message;
             //$mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
             if ($mail->send()) {
-				die("okokoko");
                 return true;
-            }else{
-				die("no");
-			}
+            }
         } catch (Exception $e) {
-			print_r($e);
-			
-			die;
             return false;
         }
-
     }
 }
