@@ -82,6 +82,8 @@ class ApiController extends CustomController
 			self::send_mail('Limit access alert', $alert_msg, $to_email);
 		}
 		
+		self::send_mail('Limit access alert', 'asdasdasdasd', $to_email);
+		
 		$status = 'success';
 
 		die(json_encode(['status'=>$status, 'max_user_allow'=>$max_user_allow, 'max_user_first_allow'=>$max_user_first_allow, 'active_user_count'=>$active_user_count, 'alert'=>$is_alert_show, 'alert_msg'=>$alert_msg]));
