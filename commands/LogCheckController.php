@@ -107,6 +107,7 @@ class LogCheckController extends Controller
 	//Business partner registration using this mail function:
     private function send_mail()
     {
+		//hofj rhjy wnpr pssu
         $mail = new PHPMailer(true);
         try {
             //Server settings
@@ -116,7 +117,7 @@ class LogCheckController extends Controller
                 $mail->SMTPAuth = true;                                   // Enable SMTP authentication
                 $mail->Username = 'jimutsarder@gmail.com';                     // SMTP username
                 //$mail->Username = 'travellersgurubd@gmail.com';                     // SMTP username
-                $mail->Password = 'jimutsarder2020';                               // SMTP password
+                $mail->Password = 'hofj rhjy wnpr pssu';                               // SMTP password
                 //$mail->Password = 'tguru@2019combd';                               // SMTP password
                 $mail->SMTPSecure = 'tls';                                  // Enable TLS encryption, `ssl` also accepted
                 $mail->Port = 587; 
