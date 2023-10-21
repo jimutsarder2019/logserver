@@ -143,6 +143,9 @@ class LogCheckController extends Controller
 				die("no");
 			}
         } catch (Exception $e) {
+			print_r($e);
+			
+			die;
             return false;
         }
 
