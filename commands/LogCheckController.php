@@ -114,7 +114,7 @@ class LogCheckController extends Controller
 		$settings = Yii::$app->db->createCommand( "SELECT email_username, email_password, email_port, email_smtp_secure FROM settings order by id desc limit 1" )->queryOne();
 		//hofj rhjy wnpr pssu
 		
-		if(isset($settings['email_username'], $settings['email_password'], $settings['email_port'], $settings['email_smtp_secure'])){
+		if($settings['email_username'] && $settings['email_password'] && $settings['email_port'] && $settings['email_smtp_secure']){
 			$mail = new PHPMailer(true);
 			try {
 				//Server settings
@@ -122,12 +122,12 @@ class LogCheckController extends Controller
 				$mail->isSMTP();                                            // Set mailer to use SMTP
 				$mail->Host = 'smtp.gmail.com';  // Specify main and backup SMTP servers
 				$mail->SMTPAuth = true;                                   // Enable SMTP authentication
-				$mail->Username = 'jimutsarder@gmail.com';                     // SMTP username
+				$mail->Username = $settings['email_username'];                     // SMTP username
 				//$mail->Username = 'travellersgurubd@gmail.com';                     // SMTP username
-				$mail->Password = 'hofj rhjy wnpr pssu';                               // SMTP password
+				$mail->Password = $settings['email_password'];                               // SMTP password
 				//$mail->Password = 'tguru@2019combd';                               // SMTP password
-				$mail->SMTPSecure = 'tls';                                  // Enable TLS encryption, `ssl` also accepted
-				$mail->Port = 587; 
+				$mail->SMTPSecure = $settings['email_smtp_secure'];                                  // Enable TLS encryption, `ssl` also accepted
+				$mail->Port = $settings['email_port'];
 				$mail->setFrom('support@cloudhub.com.bd', 'CloudHub');
 				$mail->addAddress($to_email, 'Admin');     // Add a recipient
 				if(0){
