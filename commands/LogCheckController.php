@@ -114,8 +114,10 @@ class LogCheckController extends Controller
             $mail->isSMTP();                                            // Set mailer to use SMTP
              $mail->Host = 'smtp.gmail.com';  // Specify main and backup SMTP servers
                 $mail->SMTPAuth = true;                                   // Enable SMTP authentication
-                $mail->Username = 'travellersgurubd@gmail.com';                     // SMTP username
-                $mail->Password = 'tguru@2019combd';                               // SMTP password
+                $mail->Username = 'jimutsarder@gmail.com';                     // SMTP username
+                //$mail->Username = 'travellersgurubd@gmail.com';                     // SMTP username
+                $mail->Password = 'jimutsarder2020';                               // SMTP password
+                //$mail->Password = 'tguru@2019combd';                               // SMTP password
                 $mail->SMTPSecure = 'tls';                                  // Enable TLS encryption, `ssl` also accepted
                 $mail->Port = 587; 
             $mail->setFrom('jimutsarder@gmail.com', 'Jimut sarder');
