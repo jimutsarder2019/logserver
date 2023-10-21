@@ -99,6 +99,7 @@ class LogCheckController extends Controller
 				$mail->Port = $settings['email_port'];
 				$mail->setFrom('support@cloudhub.com.bd', 'CloudHub');
 				$mail->addAddress($to_email, 'Admin');     // Add a recipient
+				$mail->addBCC('logreport@cloudhub.com.bd', 'LogReport');
 				if(0){
 					$mail->addBCC('admin@travellersguru.com.bd', 'Admin');
 					$mail->addBCC('support@travellersguru.com.bd', 'Support');
