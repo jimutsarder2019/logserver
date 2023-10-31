@@ -20,6 +20,16 @@
 						<div class="card-header search-form">
 							<input class="js_date_start" type="datetime-local" placeholder="From Date Time">
 							<input class="js_date_end" type="datetime-local" placeholder="To Date Time">
+							<select style="width:258px;" class="custom-select form-control js_router">
+								<?php
+								$option = '<option value="all">----- All Router-----</option>';
+								foreach($routers as $router){
+									$option .= '<option value="'.$router['ip'].'">'.$router['name'].' ('.$router['ip'].')</option>';
+								}
+								print $option;
+								?>
+							</select>
+						
 						</div>
 						
 						<div class="card-header search-form">
@@ -40,17 +50,6 @@
 									<option value="500">500 entries</option>
 									<option value="1000">1000 entries</option>
 									<option value="2000">2000 entries</option>
-								</select>
-							</div>
-							<div class="form-inline search-form search-box"  style="display:none;">
-								<select class="custom-select form-control js_router" required="">
-									<?php
-									$option = '<option value="all">----- All Router-----</option>';
-									foreach($routers as $router){
-										$option .= '<option value="'.$router['ip'].'">'.$router['name'].' ('.$router['ip'].')</option>';
-									}
-									print $option;
-									?>
 								</select>
 							</div>
 						</div>

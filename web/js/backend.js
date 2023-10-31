@@ -41,7 +41,7 @@ $(document).ready(function(){
 	});
 	
 	$(".js_router").change(function(){
-		generateLogData();
+		//generateLogData();
 	});
 	
 	$('.js_search_btn').click(function(){
