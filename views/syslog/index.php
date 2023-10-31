@@ -59,7 +59,7 @@
 						</div>
 						
 						<div class="form-inline search-form search-box">
-							<select class="custom-select form-control js_router" required=""  style="display:none;">
+							<select class="custom-select form-control js_router js_router_change">
 							    <?php
 								$option = '<option value="all">----- All Router-----</option>';
 								foreach($routers as $router){

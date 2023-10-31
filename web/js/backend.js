@@ -40,8 +40,8 @@ $(document).ready(function(){
 		generateLogData();
 	});
 	
-	$(".js_router").change(function(){
-		//generateLogData();
+	$(".js_router_change").change(function(){
+		generateLogData();
 	});
 	
 	$('.js_search_btn').click(function(){
