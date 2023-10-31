@@ -78,7 +78,7 @@ input[type=file]::file-selector-button:hover {
 		<?php }else{ ?>
 		<div class="col-md-12">
 		    <?= $form->field($model, 'email_username')->textInput(['maxlength' => true]) ?>
-			<?= $form->field($model, 'email_password')->passwordInput(['maxlength' => true]) ?>
+			<?= $form->field($model, 'email_password')->textInput(['maxlength' => true]) ?>
 			<?= $form->field($model, 'email_port')->textInput(['maxlength' => true]) ?>
 			<?= $form->field($model, 'email_smtp_secure')->textInput(['maxlength' => true]) ?>
 		</div>
