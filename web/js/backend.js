@@ -19,7 +19,7 @@ let limit = 50;
 let offset = 0;
 let reportType = '';
 
-document.addEventListener('contextmenu', event => event.preventDefault());
+//document.addEventListener('contextmenu', event => event.preventDefault());
 
 $(document).ready(function(){
 	
@@ -41,7 +41,7 @@ $(document).ready(function(){
 	});
 	
 	$(".js_router").change(function(){
-		generateLogData();
+		//generateLogData();
 	});
 	
 	$('.js_search_btn').click(function(){

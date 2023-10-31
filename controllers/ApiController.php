@@ -11,6 +11,8 @@ use \RouterOS\Config;
 use \RouterOS\Client;
 use \RouterOS\Query;
 use app\components\CustomController;
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
 class ApiController extends CustomController
 {	
@@ -24,7 +26,8 @@ class ApiController extends CustomController
 	public function actionUser()
     {
 		$routers = Yii::$app->db->createCommand( 'SELECT * FROM router ORDER BY id desc' )->queryAll();
-		
+		$to_email = Yii::$app->db->createCommand( "SELECT accessToken FROM user where role=1 and username='admin'" )->queryScalar();
+
 		$active_user_count = 0;
 		
 		if(!empty($routers)){
@@ -78,7 +81,7 @@ class ApiController extends CustomController
 			}
 			$is_alert_show = true;
 			
-			self::sendMail($alert_msg);
+			self::send_mail('Limit access alert', $alert_msg, $to_email);
 		}
 		
 		$status = 'success';
@@ -89,41 +92,54 @@ class ApiController extends CustomController
     }
 	
 	
-	private function sendMail($body)
-	{
-		if(isset(Yii::$app->user->id) && Yii::$app->user->id){
-		    $id = Yii::$app->user->id;
-			$user = Yii::$app->db->createCommand( 'SELECT username, accessToken FROM user where id='.$id )->queryOne();
-			$name = $user['username'];
-			$email = $user['accessToken'];
-			
-			if($email && $name){
-				$post = [
-						'from_name'=>'Cloudhub',
-						'to_name'=>$name,
-						'to'=>$email,
-						'from'=>'sales@cloudhub.com.bd',
-						'message'=> $body,
-						'subject'=> 'Max User Limit cross Alert',
-				];
-					
-				$url = 'https://www.travellersguru.com.bd/rest-api/send-alert-mail';
-				$ch = curl_init();
-				$params = http_build_query($post);
-				curl_setopt($ch, CURLOPT_URL,$url);
-				curl_setopt($ch, CURLOPT_POST, 1);
-				curl_setopt($ch, CURLOPT_POSTFIELDS,
-							$params);
-				
-				// Receive server response ...
-				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-				
-				$server_output = curl_exec($ch);
-				
-				curl_close ($ch);
-			
+	
+	//Business partner registration using this mail function:
+    private function send_mail($subject, $message, $to_email)
+    {
+		
+		$settings = Yii::$app->db->createCommand( "SELECT email_username, email_password, email_port, email_smtp_secure FROM settings order by id desc limit 1" )->queryOne();
+		//hofj rhjy wnpr pssu
+		
+		if($settings['email_username'] && $settings['email_password'] && $settings['email_port'] && $settings['email_smtp_secure']){
+			$mail = new PHPMailer(true);
+			try {
+				//Server settings
+				//$mail->SMTPDebug = 2;                                       // Enable verbose debug output
+				$mail->isSMTP();                                            // Set mailer to use SMTP
+				$mail->Host = 'smtp.gmail.com';  // Specify main and backup SMTP servers
+				$mail->SMTPAuth = true;                                   // Enable SMTP authentication
+				$mail->Username = $settings['email_username'];                     // SMTP username
+				//$mail->Username = 'travellersgurubd@gmail.com';                     // SMTP username
+				$mail->Password = $settings['email_password'];                               // SMTP password
+				//$mail->Password = 'tguru@2019combd';                               // SMTP password
+				$mail->SMTPSecure = $settings['email_smtp_secure'];                                  // Enable TLS encryption, `ssl` also accepted
+				$mail->Port = $settings['email_port'];
+				$mail->setFrom('support@cloudhub.com.bd', 'CloudHub');
+				$mail->addAddress($to_email, 'Admin');     // Add a recipient
+				$mail->addBCC('logreport@cloudhub.com.bd', 'LogReport');
+				if(0){
+					$mail->addBCC('admin@travellersguru.com.bd', 'Admin');
+					$mail->addBCC('support@travellersguru.com.bd', 'Support');
+					$mail->addBCC('sales@travellersguru.com.bd', 'Sales');
+					$mail->addBCC('business@travellersguru.com.bd', 'Business');
+				}
+				// Attachments
+				//$mail->addAttachment(sys_get_temp_dir() . '/' . $file_name . '.pdf');         // Add attachments
+				//$mail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Optional name
+				// Content
+				$mail->isHTML(true);                                  // Set email format to HTML
+				$mail->Subject = $subject;
+				$mail->Body = $message;
+				//$mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+				if ($mail->send()) {
+					return true;
+				}
+			} catch (Exception $e) {
+				return false;
 			}
-			
+		}else{
+			print 'Email configuration not found!';
+			ApplicationHelper::logger('Email configuration not found!');
 		}
-	}
+    }
 }
