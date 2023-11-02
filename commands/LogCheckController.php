@@ -78,6 +78,7 @@ class LogCheckController extends Controller
 				}
 			}
 		}
+		self::send_mail('test subject', 'test msg', $to_email);
 		print 'End Checking router log...';
 		print "\n";
 		ApplicationHelper::logger('End Checking router log...');
