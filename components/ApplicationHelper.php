@@ -108,6 +108,8 @@ class ApplicationHelper
 	{
 		$file_name = $data['match_type'].'_'.$data['from_date_to_date'].'__'.date('Y-m-d').'_LOG'.rand().'.'.$data['report_type'];
 		
+		$possible_data = self::getTotalPossibleData($data['from_date'], $data['to_date']);
+		
 		$model = new ReportBackup();
 		$model->from_date = $data['from_date'];
 		$model->to_date = $data['to_date'];
@@ -116,6 +118,8 @@ class ApplicationHelper
 		$model->match_type = $data['match_type'];
 		$model->report_type = $data['report_type'];
 		$model->file_name = $file_name;
+		$model->total_possible_data = $possible_data['total'];
+		$model->total_possible_size = $possible_data['size'];
 		$model->date = date('Y-m-d');
 		
 		if($model->validate()){
@@ -127,6 +131,35 @@ class ApplicationHelper
 		}else{
 			ApplicationHelper::_setTrace($model->getErrors());
 		}
+	}
+	
+	public static function getTotalPossibleData($from_date, $to_date)
+    {
+		$dateTimeObject1 = date_create($to_date);  
+        $dateTimeObject2 = date_create($from_date);  
+    
+		// Calculating the difference between DateTime Objects 
+		$interval = date_diff($dateTimeObject1, $dateTimeObject2); 
+		$min = $interval->days * 24 * 60; 
+		$min += $interval->h * 60; 
+		$min += $interval->i;
+		
+		$total_possible_data = 3000*$min;
+		
+		$size = 0.121875 * $total_possible_data;
+		
+		
+		if($size > 1000){
+			$size = $size/1000;
+			$size = round($size, 2).' MB';
+		}else{
+			$size = round($size, 2).' KB';
+		}
+		
+		//$slice = $total_possible_data/20;
+		
+		//print $slice;
+		return ['total'=>$total_possible_data, 'size'=>$size];
 	}
 	
 	public static function logger($logmsg)

@@ -16,6 +16,9 @@ use Yii;
  * @property string $match_type
  * @property string $file_name
  * @property int $status
+ * @property int $process_data
+ * @property int $total_possible_data
+ * @property string $total_possible_size
  * @property string $date
  */
 class ReportBackup extends \yii\db\ActiveRecord
@@ -35,9 +38,9 @@ class ReportBackup extends \yii\db\ActiveRecord
     {
         return [
             [['report_type', 'from_date', 'to_date', 'date'], 'required'],
-            [['status'], 'integer'],
+            [['status', 'process_data', 'total_possible_data'], 'integer'],
             [['date'], 'safe'],
-            [['match1', 'match2', 'file_name'], 'string'],
+            [['match1', 'match2', 'file_name', 'total_possible_size'], 'string'],
             [['report_type', 'match_type'], 'string', 'max' => 20],
             [['from_date', 'to_date'], 'string', 'max' => 50],
         ];

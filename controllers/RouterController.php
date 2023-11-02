@@ -73,6 +73,24 @@ class RouterController extends CustomController
      */
     public function actionIndex()
     {
+		$dateTimeObject1 = date_create('2023-11-01T19:24:59');  
+        $dateTimeObject2 = date_create('2023-11-01T19:20:00');  
+    
+		// Calculating the difference between DateTime Objects 
+		$interval = date_diff($dateTimeObject1, $dateTimeObject2); 
+		$min = $interval->days * 24 * 60; 
+		$min += $interval->h * 60; 
+		$min += $interval->i;
+		
+		$min = 22;
+		
+		$total_possible_data = 3000*$min;
+		
+		$slice = $total_possible_data/20;
+		
+		print $slice;
+
+		die;
 		$this->layout = 'frontend';
         $searchModel = new RouterSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
