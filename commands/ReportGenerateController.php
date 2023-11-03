@@ -140,6 +140,8 @@ class ReportGenerateController extends Controller
 	{
 		$all_syslog_data = [];
 		
+		$xlsx = [];
+		
         $tr = '';
 
 		foreach($all_data as $key=>$data){
@@ -262,12 +264,18 @@ class ReportGenerateController extends Controller
                 $FILE->WriteHTML($tr);				
 			}else if($report_type == 'csv'){
 				self::csvXlsxGenerate($FILE, $all_syslog_data, $key);		
+			}else{
+				$return_process_data = self::xlsxGenerate($all_syslog_data, $key);
+				$xlsx[] = $return_process_data;
 			}
 			
 			$all_syslog_data = [];
 		}
 		
 		
+		if($report_type == 'xlsx'){
+		    return $xlsx;
+		}
 	}
 	
 	private function processLogFromDB($match, $index = 'cloud-log-nat', $missing_find, $report_backup_id, $report_type, $report_file_name, $date_start, $date_end, $licenseInfo)
@@ -278,6 +286,7 @@ class ReportGenerateController extends Controller
 		$query->orderBy(['@timestamp' => SORT_ASC]);
 		$query->limit = 500;
 		
+		$xlsx_all_data = [];
 		$FILE = '';
 		
 		if($report_type == 'pdf'){
@@ -332,20 +341,21 @@ class ReportGenerateController extends Controller
 
             $FILE = $mpdf;
 		}else if($report_type == 'xlsx'){
-			$books = [
-    ['ISBN', 'title', 'author', 'publisher', 'ctry' ],
-    [618260307, 'The Hobbit', 'J. R. R. Tolkien', 'Houghton Mifflin', 'USA'],
-    [908606664, 'Slinky Malinki', 'Lynley Dodd', 'Mallinson Rendel', 'NZ']
-];
-
-$books2 = [
-    ['ISBN2', 'title3', 'author4', 'publisher5', 'ctry5' ],
-    [6182603073534, 'The Hobbit6', 'J. R. R. Tolkien6', 'Houghton Mifflin6', 'USA6'],
-    [908606664, 'Slinky Malinki', 'Lynley Dodd', 'Mallinson Rendel', 'NZ']
-];
-$xlsx = \Shuchkin\SimpleXLSXGen::fromArray( $books );
-$xlsx = \Shuchkin\SimpleXLSXGen::fromArray( $books2 );
-$xlsx->saveAs(__DIR__ . '/../web/uploads/report/'.$report_file_name); // or downloadAs('books.xlsx') or $xlsx_content = (string) $xlsx 
+			$xlsx_all_data = [
+				[
+				  'DateTime',
+				  'Router IP',
+				  'User',
+				  'Protocol',
+				  'Mac',
+				  'Src IP',
+				  'Port',
+				  'Destination IP',
+				  'Port',
+				  'NAT IP',
+				  'Port',
+				]
+			];
 		}else{
 			ApplicationHelper::logger($report_type.' file create done');
 		    $fh = @fopen(__DIR__ . '/../web/uploads/report/'.$report_file_name, 'wb');
@@ -383,7 +393,12 @@ $xlsx->saveAs(__DIR__ . '/../web/uploads/report/'.$report_file_name); // or down
 		}
 		
 		foreach ($query->batch() as $key=>$rows) {
-			self::dataProcess($rows, $missing_find, $report_backup_id, $report_type, $report_file_name, $date_start, $date_end, $licenseInfo, $FILE);
+			if($report_type == 'xlsx'){
+				$return = self::dataProcess($rows, $missing_find, $report_backup_id, $report_type, $report_file_name, $date_start, $date_end, $licenseInfo, $FILE);
+				$xlsx_all_data = array_merge($xlsx_all_data,$return);
+			}else{
+				self::dataProcess($rows, $missing_find, $report_backup_id, $report_type, $report_file_name, $date_start, $date_end, $licenseInfo, $FILE);
+			}
 		}
 
 		$model1 = ReportBackup::findOne(['id' => $report_backup_id]);
@@ -402,6 +417,9 @@ $xlsx->saveAs(__DIR__ . '/../web/uploads/report/'.$report_file_name); // or down
 			print "\n";
 			ApplicationHelper::logger('log data write into '.$report_type.' file done');
 			fclose($fh);
+		}else{
+			$xlsx = \Shuchkin\SimpleXLSXGen::fromArray( $xlsx_all_data );
+            $xlsx->saveAs(__DIR__ . '/../web/uploads/report/'.$report_file_name); 
 		}
 	}
 	
@@ -454,6 +472,24 @@ $xlsx->saveAs(__DIR__ . '/../web/uploads/report/'.$report_file_name); // or down
 	 
 		// Put the data into the stream
 		fputcsv($fh, $csvValueArray);
+    }
+	
+	private function xlsxGenerate($raw_data, $key)
+    {
+		$csvValueArray = [];
+		$csvValueArray[] = $raw_data[$key]['datetime'];
+		$csvValueArray[] = $raw_data[$key]['host'];
+		$csvValueArray[] = $raw_data[$key]['user'];
+		$csvValueArray[] = $raw_data[$key]['protocol'];
+		$csvValueArray[] = $raw_data[$key]['mac'];
+		$csvValueArray[] = $raw_data[$key]['src_ip'];
+		$csvValueArray[] = $raw_data[$key]['src_port'];
+		$csvValueArray[] = $raw_data[$key]['destination_ip'];
+		$csvValueArray[] = $raw_data[$key]['destination_port'];
+		$csvValueArray[] = $raw_data[$key]['nat_ip'];
+		$csvValueArray[] = $raw_data[$key]['nat_port'];
+	 
+		return $csvValueArray;
     }
 	
 	private function pdfGenerate($raw_data, $key)
