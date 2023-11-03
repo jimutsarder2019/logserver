@@ -260,7 +260,7 @@ class ReportGenerateController extends Controller
 			if($report_type == 'pdf'){
 				$tr = self::pdfGenerate($all_syslog_data, $key);
                 $FILE->WriteHTML($tr);				
-			}else{
+			}else if($report_type == 'csv'){
 				self::csvXlsxGenerate($FILE, $all_syslog_data, $key);		
 			}
 			
@@ -390,7 +390,7 @@ $xlsx->saveAs(__DIR__ . '/../web/uploads/report/'.$report_file_name); // or down
 			print "\n";
 			ApplicationHelper::logger('log data write into pdf file done');
 			$mpdf->Output(__DIR__ . '/../web/uploads/report/'.$report_file_name);
-		}else{
+		}else if($report_type == 'csv'){
 			print 'log data write into '.$report_type.' file done';
 			print "\n";
 			ApplicationHelper::logger('log data write into '.$report_type.' file done');
