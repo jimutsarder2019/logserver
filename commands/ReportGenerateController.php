@@ -12,6 +12,7 @@ use yii\web\Controller;
 use yii\elasticsearch\Query;
 use app\components\ApplicationHelper;
 use app\models\ReportBackup;
+use \Shuchkin\SimpleXLSXGen;
 
 class ReportGenerateController extends Controller
 {	
@@ -330,6 +331,14 @@ class ReportGenerateController extends Controller
 ">'.$table_header.'<tbody class="data-render">');
 
             $FILE = $mpdf;
+		}else if($report_type == 'xlsx'){
+			$books = [
+    ['ISBN', 'title', 'author', 'publisher', 'ctry' ],
+    [618260307, 'The Hobbit', 'J. R. R. Tolkien', 'Houghton Mifflin', 'USA'],
+    [908606664, 'Slinky Malinki', 'Lynley Dodd', 'Mallinson Rendel', 'NZ']
+];
+$xlsx = \Shuchkin\SimpleXLSXGen::fromArray( $books );
+$xlsx->saveAs(__DIR__ . '/../web/uploads/report/'.$report_file_name); // or downloadAs('books.xlsx') or $xlsx_content = (string) $xlsx 
 		}else{
 			ApplicationHelper::logger($report_type.' file create done');
 		    $fh = @fopen(__DIR__ . '/../web/uploads/report/'.$report_file_name, 'wb');
