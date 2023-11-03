@@ -22,7 +22,8 @@
 		"yiisoft/yii2-elasticsearch": "dev-master",
         "psr/log": "^1",
 		"sharkom/yii2-cron": "*",
-        "phpmailer/phpmailer": "^6.8"
+        "phpmailer/phpmailer": "^6.8",
+        "shuchkin/simplexlsxgen": "^1.3"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",
