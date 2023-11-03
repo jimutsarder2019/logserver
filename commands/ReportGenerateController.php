@@ -337,7 +337,14 @@ class ReportGenerateController extends Controller
     [618260307, 'The Hobbit', 'J. R. R. Tolkien', 'Houghton Mifflin', 'USA'],
     [908606664, 'Slinky Malinki', 'Lynley Dodd', 'Mallinson Rendel', 'NZ']
 ];
+
+$books2 = [
+    ['ISBN2', 'title3', 'author4', 'publisher5', 'ctry5' ],
+    [6182603073534, 'The Hobbit6', 'J. R. R. Tolkien6', 'Houghton Mifflin6', 'USA6'],
+    [908606664, 'Slinky Malinki', 'Lynley Dodd', 'Mallinson Rendel', 'NZ']
+];
 $xlsx = \Shuchkin\SimpleXLSXGen::fromArray( $books );
+$xlsx = \Shuchkin\SimpleXLSXGen::fromArray( $books2 );
 $xlsx->saveAs(__DIR__ . '/../web/uploads/report/'.$report_file_name); // or downloadAs('books.xlsx') or $xlsx_content = (string) $xlsx 
 		}else{
 			ApplicationHelper::logger($report_type.' file create done');
