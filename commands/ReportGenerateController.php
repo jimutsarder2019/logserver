@@ -12,6 +12,7 @@ use yii\web\Controller;
 use yii\elasticsearch\Query;
 use app\components\ApplicationHelper;
 use app\models\ReportBackup;
+use \Shuchkin\SimpleXLSXGen;
 
 class ReportGenerateController extends Controller
 {	
@@ -139,6 +140,8 @@ class ReportGenerateController extends Controller
 	{
 		$all_syslog_data = [];
 		
+		$xlsx = [];
+		
         $tr = '';
 
 		foreach($all_data as $key=>$data){
@@ -259,14 +262,20 @@ class ReportGenerateController extends Controller
 			if($report_type == 'pdf'){
 				$tr = self::pdfGenerate($all_syslog_data, $key);
                 $FILE->WriteHTML($tr);				
-			}else{
+			}else if($report_type == 'csv'){
 				self::csvXlsxGenerate($FILE, $all_syslog_data, $key);		
+			}else{
+				$return_process_data = self::xlsxGenerate($all_syslog_data, $key);
+				$xlsx[] = $return_process_data;
 			}
 			
 			$all_syslog_data = [];
 		}
 		
 		
+		if($report_type == 'xlsx'){
+		    return $xlsx;
+		}
 	}
 	
 	private function processLogFromDB($match, $index = 'cloud-log-nat', $missing_find, $report_backup_id, $report_type, $report_file_name, $date_start, $date_end, $licenseInfo)
@@ -277,6 +286,7 @@ class ReportGenerateController extends Controller
 		$query->orderBy(['@timestamp' => SORT_ASC]);
 		$query->limit = 500;
 		
+		$xlsx_all_data = [];
 		$FILE = '';
 		
 		if($report_type == 'pdf'){
@@ -330,6 +340,22 @@ class ReportGenerateController extends Controller
 ">'.$table_header.'<tbody class="data-render">');
 
             $FILE = $mpdf;
+		}else if($report_type == 'xlsx'){
+			$xlsx_all_data = [
+				[
+				  'DateTime',
+				  'Router IP',
+				  'User',
+				  'Protocol',
+				  'Mac',
+				  'Src IP',
+				  'Port',
+				  'Destination IP',
+				  'Port',
+				  'NAT IP',
+				  'Port',
+				]
+			];
 		}else{
 			ApplicationHelper::logger($report_type.' file create done');
 		    $fh = @fopen(__DIR__ . '/../web/uploads/report/'.$report_file_name, 'wb');
@@ -367,7 +393,12 @@ class ReportGenerateController extends Controller
 		}
 		
 		foreach ($query->batch() as $key=>$rows) {
-			self::dataProcess($rows, $missing_find, $report_backup_id, $report_type, $report_file_name, $date_start, $date_end, $licenseInfo, $FILE);
+			if($report_type == 'xlsx'){
+				$return = self::dataProcess($rows, $missing_find, $report_backup_id, $report_type, $report_file_name, $date_start, $date_end, $licenseInfo, $FILE);
+				$xlsx_all_data = array_merge($xlsx_all_data,$return);
+			}else{
+				self::dataProcess($rows, $missing_find, $report_backup_id, $report_type, $report_file_name, $date_start, $date_end, $licenseInfo, $FILE);
+			}
 		}
 
 		$model1 = ReportBackup::findOne(['id' => $report_backup_id]);
@@ -381,11 +412,14 @@ class ReportGenerateController extends Controller
 			print "\n";
 			ApplicationHelper::logger('log data write into pdf file done');
 			$mpdf->Output(__DIR__ . '/../web/uploads/report/'.$report_file_name);
-		}else{
+		}else if($report_type == 'csv'){
 			print 'log data write into '.$report_type.' file done';
 			print "\n";
 			ApplicationHelper::logger('log data write into '.$report_type.' file done');
 			fclose($fh);
+		}else{
+			$xlsx = \Shuchkin\SimpleXLSXGen::fromArray( $xlsx_all_data );
+            $xlsx->saveAs(__DIR__ . '/../web/uploads/report/'.$report_file_name); 
 		}
 	}
 	
@@ -438,6 +472,24 @@ class ReportGenerateController extends Controller
 	 
 		// Put the data into the stream
 		fputcsv($fh, $csvValueArray);
+    }
+	
+	private function xlsxGenerate($raw_data, $key)
+    {
+		$csvValueArray = [];
+		$csvValueArray[] = $raw_data[$key]['datetime'];
+		$csvValueArray[] = $raw_data[$key]['host'];
+		$csvValueArray[] = $raw_data[$key]['user'];
+		$csvValueArray[] = $raw_data[$key]['protocol'];
+		$csvValueArray[] = $raw_data[$key]['mac'];
+		$csvValueArray[] = $raw_data[$key]['src_ip'];
+		$csvValueArray[] = $raw_data[$key]['src_port'];
+		$csvValueArray[] = $raw_data[$key]['destination_ip'];
+		$csvValueArray[] = $raw_data[$key]['destination_port'];
+		$csvValueArray[] = $raw_data[$key]['nat_ip'];
+		$csvValueArray[] = $raw_data[$key]['nat_port'];
+	 
+		return $csvValueArray;
     }
 	
 	private function pdfGenerate($raw_data, $key)
