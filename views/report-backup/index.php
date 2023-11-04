@@ -102,7 +102,7 @@ $this->params['breadcrumbs'][] = $this->title;
 										'headerOptions' => ['style' => 'color:#ff4c3b'],
 										'content' => function ($model) {
 											if($model->status == 1){
-												$bytes = filesize(__DIR__ . '/../../web/uploads/report/csv/'.$model->file_name);
+												$bytes = filesize(__DIR__ . '/../../web/uploads/report/'.$model->report_type.'/'.$model->file_name);
 											    $dec = 2;
 											    $size   = array('B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB');
 												$factor = floor((strlen($bytes) - 1) / 3);
