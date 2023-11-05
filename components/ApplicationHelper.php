@@ -104,11 +104,11 @@ class ApplicationHelper
 		return $router_list;
     }
 	
-	public static function storeReportGenerateRecord($data)
+	public static function storeReportGenerateRecord($data, $count = 0)
 	{
 		$file_name = $data['match_type'].'_'.$data['from_date_to_date'].'__'.date('Y-m-d').'_LOG'.rand().'.'.$data['report_type'];
 		
-		$possible_data = self::getTotalPossibleData($data['from_date'], $data['to_date']);
+		$size = self::getTotalPossibleData($count);
 		
 		$model = new ReportBackup();
 		$model->from_date = $data['from_date'];
@@ -118,8 +118,8 @@ class ApplicationHelper
 		$model->match_type = $data['match_type'];
 		$model->report_type = $data['report_type'];
 		$model->file_name = $file_name;
-		$model->total_possible_data = $possible_data['total'];
-		$model->total_possible_size = $possible_data['size'];
+		$model->total_possible_data = $count;
+		$model->total_possible_size = $size;
 		$model->date = date('Y-m-d');
 		
 		if($model->validate()){
@@ -133,9 +133,9 @@ class ApplicationHelper
 		}
 	}
 	
-	public static function getTotalPossibleData($from_date, $to_date)
+	public static function getTotalPossibleData($count)
     {
-		$dateTimeObject1 = date_create($to_date);  
+		/*$dateTimeObject1 = date_create($to_date);  
         $dateTimeObject2 = date_create($from_date);  
     
 		// Calculating the difference between DateTime Objects 
@@ -144,9 +144,9 @@ class ApplicationHelper
 		$min += $interval->h * 60; 
 		$min += $interval->i;
 		
-		$total_possible_data = 3000*$min;
+		$total_possible_data = 3000*$min;*/
 		
-		$size = 0.121875 * $total_possible_data;
+		$size = 0.121875 * $count;
 		
 		
 		if($size > 1000){
@@ -159,7 +159,8 @@ class ApplicationHelper
 		//$slice = $total_possible_data/20;
 		
 		//print $slice;
-		return ['total'=>$total_possible_data, 'size'=>$size];
+		//return ['total'=>$total_possible_data, 'size'=>$size];
+		return $size;
 	}
 	
 	public static function logger($logmsg)

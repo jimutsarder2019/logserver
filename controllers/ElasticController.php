@@ -350,8 +350,10 @@ class ElasticController extends Controller
 				$report_generate_process = Yii::$app->db->createCommand( 'SELECT COUNT(*) FROM report_backup where status < 2' )->queryScalar();
 				
 				if($report_generate_process == 0){
+					
+					$all_data_count = self::getQueryCount($match, 'cloud-log-nat', $limit, $offset, $page_name);
 					$params = ['from_date_to_date'=>$from_date.$from_hours.$from_mins.'_'.$to_date.$to_hours.$to_mins, 'from_date'=>$from_date."T".$from_hours.":".$from_mins.":00", 'to_date'=>$to_date."T".$to_hours.":".$to_mins.":59", 'report_type'=>$report_type, 'match1'=>$report_match1, 'match2'=>$report_match2, 'match_type'=>$match_type];
-					ApplicationHelper::storeReportGenerateRecord($params);
+					ApplicationHelper::storeReportGenerateRecord($params, $all_data_count);
 					$process = 'yes';
 					$report_status = true;
 				}else{
@@ -550,6 +552,15 @@ class ElasticController extends Controller
 			}
 		}
 		return $all_data;
+	}
+	
+	private function getQueryCount($match, $index = 'cloud-log-nat')
+	{
+		$query = new Query;
+		$query->from($index);
+		$query->query = $match;
+		$count = $query->count();
+		return $count;
 	}
 	
 	private function filter_match_phrase_prefix($search_string){
