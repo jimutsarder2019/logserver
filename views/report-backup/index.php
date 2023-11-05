@@ -113,9 +113,13 @@ $this->params['breadcrumbs'][] = $this->title;
 													$exact_size = sprintf("%.{$dec}f %s", $bytes / (1024 ** $factor), $size[$factor]);
 												
 												    if (str_contains($model->total_possible_size, ' KB')) { 
-														$original_bytes = $model->total_possible_size * 1000;
+													    $total_possible_size = str_replace(' KB', '', $model->total_possible_size);
+														$total_possible_size = (int) $total_possible_size;
+														$original_bytes = $total_possible_size * 1000;
 													}else{
-														$original_bytes = $model->total_possible_size * 1000 * 1000;
+														$total_possible_size = str_replace(' MB', '', $model->total_possible_size);
+													    $total_possible_size = (int) $total_possible_size;
+														$original_bytes = $total_possible_size * 1000 * 1000;
 													}
 												
 												    $processing_data = ($model->total_possible_data/$bytes)*$original_bytes;
