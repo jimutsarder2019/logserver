@@ -123,6 +123,7 @@ $this->params['breadcrumbs'][] = $this->title;
 													}
 												
 												    $processing_data = ($model->total_possible_data/$bytes)*$original_bytes;
+													$processing_data = round($processing_data);
 												}
 												
 												return '<button data-processingdata="'.$processing_data.'" data-exactsize="'.$exact_size.'" data-size="'.$model->total_possible_size.'" data-total="'.$model->total_possible_data.'" id="myBtn">Processing</button>';
