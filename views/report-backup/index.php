@@ -102,12 +102,15 @@ $this->params['breadcrumbs'][] = $this->title;
 										'headerOptions' => ['style' => 'color:#ff4c3b'],
 										'content' => function ($model) {
 											if($model->status == 1){
-												$bytes = filesize(__DIR__ . '/../../web/uploads/report/'.$model->report_type.'/'.$model->file_name);
-											    $dec = 2;
-											    $size   = array('B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB');
-												$factor = floor((strlen($bytes) - 1) / 3);
-												if ($factor == 0) $dec = 0;
-												$exact_size = sprintf("%.{$dec}f %s", $bytes / (1024 ** $factor), $size[$factor]);
+												$exact_size = '-';
+												if(file_exists(__DIR__ . '/../../web/uploads/report/'.$model->report_type.'/'.$model->file_name)){
+													$bytes = filesize(__DIR__ . '/../../web/uploads/report/'.$model->report_type.'/'.$model->file_name);
+													$dec = 2;
+													$size   = array('B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB');
+													$factor = floor((strlen($bytes) - 1) / 3);
+													if ($factor == 0) $dec = 0;
+													$exact_size = sprintf("%.{$dec}f %s", $bytes / (1024 ** $factor), $size[$factor]);
+												}
 												return '<button data-exactsize="'.$exact_size.'" data-size="'.$model->total_possible_size.'" data-total="'.$model->total_possible_data.'" id="myBtn">Processing</button>';
 											}else if($model->status == 2){
 												return 'Ready';
