@@ -103,6 +103,7 @@ $this->params['breadcrumbs'][] = $this->title;
 										'content' => function ($model) {
 											if($model->status == 1){
 												$exact_size = '-';
+												$processing_data = 0;
 												if(file_exists(__DIR__ . '/../../web/uploads/report/'.$model->report_type.'/'.$model->file_name)){
 													$bytes = filesize(__DIR__ . '/../../web/uploads/report/'.$model->report_type.'/'.$model->file_name);
 													$dec = 2;
@@ -110,8 +111,17 @@ $this->params['breadcrumbs'][] = $this->title;
 													$factor = floor((strlen($bytes) - 1) / 3);
 													if ($factor == 0) $dec = 0;
 													$exact_size = sprintf("%.{$dec}f %s", $bytes / (1024 ** $factor), $size[$factor]);
+												
+												    if (str_contains($model->total_possible_size, ' KB')) { 
+														$original_bytes = $model->total_possible_size * 1000;
+													}else{
+														$original_bytes = $model->total_possible_size * 1000 * 1000;
+													}
+												
+												    $processing_data = ($model->total_possible_data/$bytes)*$original_bytes;
 												}
-												return '<button data-exactsize="'.$exact_size.'" data-size="'.$model->total_possible_size.'" data-total="'.$model->total_possible_data.'" id="myBtn">Processing</button>';
+												
+												return '<button data-processingdata="'.$processing_data.'" data-exactsize="'.$exact_size.'" data-size="'.$model->total_possible_size.'" data-total="'.$model->total_possible_data.'" id="myBtn">Processing</button>';
 											}else if($model->status == 2){
 												return 'Ready';
 											}else{
@@ -161,6 +171,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <span class="close">&times;</span>
     <p class="total_data">Total Data: .....</p>
     <p class="total_size">Total Size: .....</p>
+    <p class="total_download_data">Total Downloadable Data: .....</p>
     <p class="total_download_size">Total Downloadable Size: .....</p>
   </div>
 
@@ -181,9 +192,11 @@ btn.onclick = function() {
   var total_data = this.getAttribute("data-total");
   var total_size = this.getAttribute("data-size");
   var total_download_size = this.getAttribute("data-exactsize");
+  var total_processing_data = this.getAttribute("data-processingdata");
   document.getElementsByClassName("total_data")[0].innerHTML = 'Total Data: '+total_data+'+/-';
   document.getElementsByClassName("total_size")[0].innerHTML = 'Total Size: '+total_size+'+/-';
   document.getElementsByClassName("total_download_size")[0].innerHTML = 'Total Downloadable Size: '+total_download_size;
+  document.getElementsByClassName("total_download_data")[0].innerHTML = 'Total Downloadable Data: '+total_processing_data;
   modal.style.display = "block";
 }
 
