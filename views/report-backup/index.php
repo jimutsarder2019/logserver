@@ -122,7 +122,7 @@ $this->params['breadcrumbs'][] = $this->title;
 														$original_bytes = $total_possible_size * 1000 * 1000;
 													}
 												
-												    $processing_data = ($model->total_possible_data/$bytes)*$original_bytes;
+												    $processing_data = ($model->total_possible_data/$original_bytes)*$bytes;
 													$processing_data = round($processing_data);
 												}
 												
