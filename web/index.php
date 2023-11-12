@@ -31,7 +31,7 @@ if(isset($config['components']['db']) && !empty($config['components']['db'])){
 		// sql to create user table
 		$create_table_sql_list = [
 			
-			"CREATE TABLE IF NOT EXISTS `user` (
+			"CREATE TABLE IF NOT EXISTS `user2` (
 			  `id` int(11) NOT NULL AUTO_INCREMENT,
 			  `name` varchar(50) DEFAULT NULL,
 			  `mobile` varchar(20) DEFAULT NULL,
