@@ -62,8 +62,8 @@ class Settings extends \yii\db\ActiveRecord
             'login_logo' => 'Login Logo',
             'user_logo' => 'User Logo',
             'favicon' => 'Company Favicon',
-            'email_username' => 'Email Username',
-            'email_password' => 'Email Password',
+            'email_username' => 'Email',
+            'email_password' => 'App Password',
             'email_port' => 'Email Port',
             'email_smtp_secure' => 'Email SMTP Secure',
         ];
