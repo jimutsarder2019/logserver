@@ -15,8 +15,10 @@ $config = require __DIR__ . '/../config/web.php';
 
 if(isset($config['components']['db']) && !empty($config['components']['db'])){
 	$dsn_arr = explode("dbname=", @$config['components']['db']['dsn']);
-	if(isset($dsn_arr[1]) && $dsn_arr[1]){
-		$servername = "localhost";
+	$host_arr = explode("host=", @$config['components']['db']['dsn']);
+	$host_arr2 = explode(";", @$host_arr[1]);
+	if(isset($dsn_arr[1], $host_arr2[0]) && $dsn_arr[1] && $host_arr2[0]){
+		$servername = $host_arr2[0];
 		$username = @$config['components']['db']['username'];
 		$password = @$config['components']['db']['password'];
 		$dbname = @$dsn_arr[1];
@@ -31,7 +33,7 @@ if(isset($config['components']['db']) && !empty($config['components']['db'])){
 		// sql to create user table
 		$create_table_sql_list = [
 			
-			"CREATE TABLE IF NOT EXISTS `user2` (
+			"CREATE TABLE IF NOT EXISTS `user` (
 			  `id` int(11) NOT NULL AUTO_INCREMENT,
 			  `name` varchar(50) DEFAULT NULL,
 			  `mobile` varchar(20) DEFAULT NULL,
