@@ -73,7 +73,7 @@ class ElasticController extends Controller
 		
 		$router_filter = [];
 		$router_list = ApplicationHelper::getRouters();
-		
+		$data_count = 0;
 		if(!empty($router_list)){
 			
 			foreach($router_list  as $router_ip){
@@ -569,5 +569,27 @@ class ElasticController extends Controller
 			"MESSAGE"=> '.*'.$search_string.'.*'
 		  ]
 		];
+	}
+	
+	public function actionTest()
+	{
+		$date_filter[] = [
+				"range"=>[
+					"@timestamp"=>[
+						   "time_zone"=> "+06:00",
+						   "gte" => "now-24h",
+						   "lt" =>  "now"
+					]
+				]
+		];
+		$match  =	 [
+			"bool"=> [
+			  "must"=>$date_filter	
+			]
+		];
+	    $all_data = self::getQueryData($match, 'cloud-log-nat', 0, 10);
+		
+		ApplicationHelper::_setTrace($all_data);
+
 	}
 }
