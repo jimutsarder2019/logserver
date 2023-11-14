@@ -571,7 +571,7 @@ class ElasticController extends Controller
 		];
 	}
 	
-	public function actionTest()
+	public function actionSearch()
 	{
 		$date_filter[] = [
 				"range"=>[
@@ -587,7 +587,7 @@ class ElasticController extends Controller
 			  "must"=>$date_filter	
 			]
 		];
-	    $all_data = self::getQueryData($match, 'cloud-log-nat', 0, 10);
+	    $all_data = self::getQueryData($match, 'cloud-log-nat', 0, 1000);
 		
 		ApplicationHelper::_setTrace($all_data);
 
