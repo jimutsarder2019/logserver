@@ -597,9 +597,17 @@ class ElasticController extends Controller
 			  "must"=>$date_filter	
 			]
 		];
-	    $all_data = self::getQueryData($match, 'cloud-log-nat', $limit, $offset);
 		
-		ApplicationHelper::_setTrace($all_data);
+		$query = new Query;
+		$query->from('cloud-log-nat');
+		$query->query = $match;
+		$query->orderBy(['@timestamp' => SORT_DESC]);
+		$query->offset = $offset;
+		$query->limit = $limit;
+		$command = $query->createCommand();
+        $response = $command->search();
+				
+		ApplicationHelper::_setTrace($response);
 
 	}
 }
