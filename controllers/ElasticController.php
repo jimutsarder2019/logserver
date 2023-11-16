@@ -573,6 +573,16 @@ class ElasticController extends Controller
 	
 	public function actionSearch()
 	{
+		$offset = Yii::$app->getRequest()->getQueryParam('offset');
+		$limit = Yii::$app->getRequest()->getQueryParam('limit');
+		
+		if(!$offset){
+			$offset = 0;
+		}
+		
+		if(!$limit){
+			$limit = 100;
+		}
 		$date_filter[] = [
 				"range"=>[
 					"@timestamp"=>[
@@ -587,7 +597,7 @@ class ElasticController extends Controller
 			  "must"=>$date_filter	
 			]
 		];
-	    $all_data = self::getQueryData($match, 'cloud-log-nat', 0, 1000);
+	    $all_data = self::getQueryData($match, 'cloud-log-nat', $limit, $offset);
 		
 		ApplicationHelper::_setTrace($all_data);
 
