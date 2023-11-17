@@ -291,9 +291,9 @@ class ElasticController extends Controller
 				$match_type = 'ppp';
 				$report_match1 = json_encode($match);
 				
-				ApplicationHelper::_setTrace($match, 0);
+				//ApplicationHelper::_setTrace($match, 0);
 				$all_data = self::getQueryData($match, 'cloud-log-ppp', 1, 0, $page_name);
-				ApplicationHelper::_setTrace($all_data);
+				//ApplicationHelper::_setTrace($all_data);
 				if(!empty($all_data)){
 					$missing_user_data = $all_data[0]['_source']['MESSAGE'];
 					$main_src_ip = $all_data[0]['_source']['HOST'];
