@@ -195,7 +195,7 @@ class ElasticController extends Controller
 				  }
 			}else{
 				if($page_name == 'log'){
-					
+				
 					if($router && $router != 'all'){
 						$date_filter[] = [
 								"range"=>[
@@ -212,6 +212,7 @@ class ElasticController extends Controller
 							]
 						];
 					}else{
+						
 						$date_filter[] = [
 								"range"=>[
 									"@timestamp"=>[
@@ -221,12 +222,21 @@ class ElasticController extends Controller
 									]
 								]
 						];
-						$match  =	 [
-							"bool"=> [
-							  "must"=> $date_filter,
-							  "should"=> $router_filter
-							]
-						];
+						
+						if(count($router_filter) > 1){
+							$match  =	 [
+								"bool"=> [
+								  "must"=> $date_filter,
+								  "should"=> $router_filter
+								]
+							];
+						}else{
+							$match  =	 [
+								"bool"=> [
+								  "must"=> array_merge($router_filter,$date_filter)	
+								]
+							];
+						}
 					}
 				}else{
 					$match  =	 [
@@ -600,7 +610,7 @@ class ElasticController extends Controller
 		
 		$query = new Query;
 		$query->from('cloud-log-nat');
-		$query->query = $match;
+		//$query->query = $match;
 		$query->orderBy(['@timestamp' => SORT_DESC]);
 		$query->offset = $offset;
 		$query->limit = $limit;
