@@ -291,9 +291,11 @@ class ElasticController extends Controller
 				$match_type = 'ppp';
 				$report_match1 = json_encode($match);
 				
-				//ApplicationHelper::_setTrace($match, 0);
+				ApplicationHelper::_setTrace($match, 0);
 				$all_data = self::getQueryData($match, 'cloud-log-ppp', 1, 0, $page_name);
-				//ApplicationHelper::_setTrace($all_data);
+				print 'ppp data';
+				print '</br>';
+				ApplicationHelper::_setTrace($all_data, 0);
 				if(!empty($all_data)){
 					$missing_user_data = $all_data[0]['_source']['MESSAGE'];
 					$main_src_ip = $all_data[0]['_source']['HOST'];
@@ -341,11 +343,21 @@ class ElasticController extends Controller
 								]
 						];
 						$report_match2 = json_encode($match,1);
-						$all_data = self::getQueryData($match, 'cloud-log-nat', $limit, 0, $page_name);
+						print '</br>';
+						print 'nat match';
+						print '</br>';
+						ApplicationHelper::_setTrace($match, 0);
 						
+						$all_data = self::getQueryData($match, 'cloud-log-nat', $limit, 0, $page_name);
+						ApplicationHelper::_setTrace($all_data, 0);
+						print 'final nat log process data';
+						print '</br>';
 						if(!empty($all_data)){
 							$data_count = count($all_data);
+							
 							$all_syslog_data = self::dataProcess($all_data, false, $from_date, $to_date, $from_hours, $from_mins, $to_hours, $to_mins, $router_list, $user_name, $mac_ip, $main_src_ip);
+						ApplicationHelper::_setTrace($all_syslog_data);
+						
 						}
 					}
 				}
