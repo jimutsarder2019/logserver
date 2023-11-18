@@ -154,24 +154,99 @@ function commonSearch(type)
 		var to_mins = dateEndMyArray2[1];
 		
 		if(long_date_start && long_date_end && date_start && date_end && from_hours && from_mins && to_hours && to_mins){
-			if(type === 'search'){
-				generateLogData();
-			}else{
-				var day_duration = days_between(long_date_start, long_date_end);
-				if(type == 'pdf'){
-					if(day_duration['diffDays'] == 0 && day_duration['diffHrs']  <= 5){
-						generateLogData(type);
-					}else{
-						alert('You can able to download PDF report for maximum 5 hours');
+			
+			var user = $('.user').val();
+			var mac = $('.mac').val();
+			var src_ip = $('.srcip').val();
+			var dst_ip = $('.dstip').val();
+			var nat_ip = $('.natip').val();			
+			let mac_validation = true;
+			let src_validation = true;
+			let dst_validation = true;
+			let nat_validation = true;
+			
+			if(mac){
+				if (mac.includes(':')) { 
+					let mac_count = mac.split(':').length - 1;
+					if(mac_count === 5){
+						mac_validation = true;
+				    }else{
+						mac_validation = false;
+						alert("Please input valid Mac address");
 					}
 				}else{
-					if(day_duration['diffDays']  <= 1){
-				        generateLogData(type);
-					}else{
-						alert('You can able to download CSV/Excel report for maximum 24 hours');
-					}
+					mac_validation = false;
+				    alert("Please input valid Mac address");
 				}
 			}
+			
+			if(src_ip){
+				if (src_ip.includes('.')) { 
+					let IP_count = src_ip.split('.').length - 1;
+					if(IP_count === 3){
+						src_validation = true;
+				    }else{
+						src_validation = false;
+						alert("Please input valid src ip");
+					}
+				}else{
+					src_validation = false;
+				    alert("Please input valid src ip");
+				}
+			}
+			
+			if(dst_ip){
+				if (dst_ip.includes('.')) { 
+					let IP_count = dst_ip.split('.').length - 1;
+					if(IP_count === 3){
+						dst_validation = true;
+				    }else{
+						dst_validation = false;
+						alert("Please input valid dst ip");
+					}
+				}else{
+					dst_validation = false;
+				    alert("Please input valid dst ip");
+				}
+			}
+			
+			if(nat_ip){
+				if (nat_ip.includes('.')) { 
+					let IP_count = nat_ip.split('.').length - 1;
+					if(IP_count === 3){
+						nat_validation = true;
+				    }else{
+						nat_validation = false;
+						alert("Please input valid nat ip");
+					}
+				}else{
+					nat_validation = false;
+				    alert("Please input valid nat ip");
+				}
+			}
+			
+			
+			
+			if(mac_validation && src_validation && dst_validation && nat_validation){
+				if(type === 'search'){
+					generateLogData();
+				}else{
+					var day_duration = days_between(long_date_start, long_date_end);
+					if(type == 'pdf'){
+						if(day_duration['diffDays'] == 0 && day_duration['diffHrs']  <= 5){
+							generateLogData(type);
+						}else{
+							alert('You can able to download PDF report for maximum 5 hours');
+						}
+					}else{
+						if(day_duration['diffDays']  <= 1){
+							generateLogData(type);
+						}else{
+							alert('You can able to download CSV/Excel report for maximum 24 hours');
+						}
+					}
+				}
+		    }
 		}else{
 			alert('Please select From Date-Time and To Date-Time');
 		}
@@ -250,6 +325,7 @@ function getPostParams()
 	var nat_ip = $('.natip').val();
 	var router = $('.js_router').val();
 	var page_name = $('.js_page_name').val();
+
 	return {page_name:page_name, report_type:reportType, offset:offset, limit:limit, search:search_value, from_date:date_start, to_date:date_end, from_hours:from_hours, from_mins:from_mins, to_hours:to_hours, to_mins:to_mins, router:router, user:user, mac:mac, src_ip:src_ip, dst_ip:dst_ip, nat_ip:nat_ip};
 }
 
