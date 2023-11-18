@@ -160,6 +160,7 @@ function commonSearch(type)
 			var src_ip = $('.srcip').val();
 			var dst_ip = $('.dstip').val();
 			var nat_ip = $('.natip').val();			
+			let user_validation = true;
 			let mac_validation = true;
 			let src_validation = true;
 			let dst_validation = true;
@@ -172,11 +173,11 @@ function commonSearch(type)
 						mac_validation = true;
 				    }else{
 						mac_validation = false;
-						alert("Please input valid Mac address");
+						alert("Please search by valid Mac address");
 					}
 				}else{
 					mac_validation = false;
-				    alert("Please input valid Mac address");
+				    alert("Please search by valid Mac address");
 				}
 			}
 			
@@ -187,11 +188,11 @@ function commonSearch(type)
 						src_validation = true;
 				    }else{
 						src_validation = false;
-						alert("Please input valid src ip");
+						alert("Please search by valid src ip");
 					}
 				}else{
 					src_validation = false;
-				    alert("Please input valid src ip");
+				    alert("Please search by valid src ip");
 				}
 			}
 			
@@ -202,11 +203,11 @@ function commonSearch(type)
 						dst_validation = true;
 				    }else{
 						dst_validation = false;
-						alert("Please input valid dst ip");
+						alert("Please search by valid dst ip");
 					}
 				}else{
 					dst_validation = false;
-				    alert("Please input valid dst ip");
+				    alert("Please search by valid dst ip");
 				}
 			}
 			
@@ -217,17 +218,24 @@ function commonSearch(type)
 						nat_validation = true;
 				    }else{
 						nat_validation = false;
-						alert("Please input valid nat ip");
+						alert("Please search by valid nat ip");
 					}
 				}else{
 					nat_validation = false;
-				    alert("Please input valid nat ip");
+				    alert("Please search by valid nat ip");
+				}
+			}
+			
+			if(user){
+				if (user.includes(':') || user.includes('.')) {
+					user_validation = false;
+				    alert("Please search by valid user");
 				}
 			}
 			
 			
 			
-			if(mac_validation && src_validation && dst_validation && nat_validation){
+			if(user_validation && mac_validation && src_validation && dst_validation && nat_validation){
 				if(type === 'search'){
 					generateLogData();
 				}else{
