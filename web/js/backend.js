@@ -106,6 +106,15 @@ $(document).ready(function(){
 		}
 	});
 	
+	$(".delete_download_file").click(function(){
+		var id = $(this).data('id');
+		if(id){
+			if (confirm("Are you sure you want to delete this download request file?") == true) {
+			    window.location = base_url+'/?r=report-backup%2Fdelete&id='+id;
+			}
+		}
+	});
+	
 	$(".close-alert").click(function(){
 		$("#myModal-alert").hide();
 	});

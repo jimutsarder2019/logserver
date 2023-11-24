@@ -60,6 +60,10 @@ $this->params['breadcrumbs'][] = $this->title;
 	background-color:#FF0000;
 	border: 2px solid #FFFFFF;
 }
+
+.table td a span {
+    color: red !important;
+}
 </style>
 
 <div class="page-body">
@@ -153,6 +157,14 @@ $this->params['breadcrumbs'][] = $this->title;
 												}else{
 													return '';
 												}
+											},
+											'delete' => function($url, $model){
+												return Html::a('<span class="fa fa-trash"></span>', 'javascript:void(0)', [
+													'class' => 'delete_download_file',
+													'data' => [
+														'id' => $model->id,
+													],
+												]);
 											}
 										]
 									]
