@@ -1,6 +1,6 @@
 <?php
-
 $params = require __DIR__ . '/params.php';
+$config_params = require __DIR__ . '/configuration.php';
 $db = require __DIR__ . '/db.php';
 
 $config = [
@@ -20,10 +20,7 @@ $config = [
 		'elasticsearch' => [
             'class' => 'yii\elasticsearch\Connection',
             'nodes' => [
-                //['http_address' => '127.0.0.1:9200'],
-                //['http_address' => '103.102.216.134:9200'],
-                //['http_address' => '103.102.247.1:9200'],
-                ['http_address' => 'localhost:9200'],
+                ['http_address' => $config_params['elasticSearchHttpAddress']],
                 // configure more hosts if you have a cluster
             ],
             'dslVersion' => 7, // default is 5
