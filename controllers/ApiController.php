@@ -10,7 +10,7 @@ use yii\web\Controller;
 use \RouterOS\Config;
 use \RouterOS\Client;
 use \RouterOS\Query;
-use app\components\CustomController;
+use app\init\CustomController;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 

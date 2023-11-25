@@ -12,7 +12,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use app\models\UploadForm;
 use yii\web\UploadedFile;
-use app\components\CustomController;
+use app\init\CustomController;
 
 /**
  * UsersController implements the CRUD actions for Users model.

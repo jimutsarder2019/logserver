@@ -1,6 +1,6 @@
 <?php
 
-namespace app\Components; 
+namespace app\init; 
 use Yii; use yii\web\Controller; 
 use yii\web\NotFoundHttpException; 
 

@@ -13,7 +13,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use app\components\ApplicationHelper;
-use app\components\CustomController;
+use app\init\CustomController;
 
 use \RouterOS\Config;
 use \RouterOS\Client;

@@ -7,7 +7,7 @@ use Yii;
 use yii\web\Controller;
 use yii\elasticsearch\Query;
 use app\components\ApplicationHelper;
-use app\components\CustomController;
+use app\init\CustomController;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 

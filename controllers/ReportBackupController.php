@@ -8,7 +8,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
-use app\components\CustomController;
+use app\init\CustomController;
 
 /**
  * ReportBackupController implements the CRUD actions for ReportBackup model.

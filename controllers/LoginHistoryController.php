@@ -7,7 +7,7 @@ use app\models\LoginHistorySearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use app\components\CustomController;
+use app\init\CustomController;
 
 /**
  * LoginHistoryController implements the CRUD actions for LoginHistory model.

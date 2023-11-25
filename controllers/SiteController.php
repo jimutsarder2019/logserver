@@ -11,7 +11,7 @@ use app\models\LoginForm;
 use app\models\ContactForm;
 use app\models\Users;
 use app\components\ApplicationHelper;
-use app\components\CustomController;
+use app\init\CustomController;
 
 
 class SiteController extends CustomController

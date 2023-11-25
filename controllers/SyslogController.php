@@ -8,7 +8,7 @@ use yii\web\Controller;
 //use yii\web\Response;
 use yii\filters\VerbFilter;
 use kartik\mpdf\Pdf;
-use app\components\CustomController;
+use app\init\CustomController;
 use app\components\ApplicationHelper;
 
 class SyslogController extends CustomController

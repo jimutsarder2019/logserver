@@ -12,7 +12,7 @@ use yii\web\Controller;
 use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\Router;
-use app\components\CustomController;
+use app\init\CustomController;
 use \RouterOS\Config;
 use \RouterOS\Client;
 use \RouterOS\Query;
