@@ -109,7 +109,7 @@ class ApplicationHelper
 		//$file_name = $data['match_type'].'_'.$data['from_date_to_date'].'__'.date('Y-m-d').'_LOG'.rand().'.'.$data['report_type'];
 		
 		$company_name = self::getCompanyName();
-		$file_name = $company_name.'LogReport'.date("D M j Y h_i_s").' GMT-0800 (Pacific Standard Time).'.$data['report_type'];
+		$file_name = $company_name.'LogReport'.date('m/d/Y h:i:s A').'-'.rand(0,99999).$data['report_type'];
 		
 		$size = self::getTotalPossibleData($count);
 		

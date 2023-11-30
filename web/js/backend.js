@@ -22,7 +22,6 @@ let reportType = '';
 //document.addEventListener('contextmenu', event => event.preventDefault());
 
 $(document).ready(function(){
-	
 	const queryString = window.location.search;
 	
 	if(queryString.includes('syslog/index')){
@@ -486,7 +485,8 @@ function generateReport(data){
 	$('.js-report-loading').html('');
 	let blob = new Blob([csv.join("\n")],{type:"text/csv"})
 	let download = document.createElement("a")
-	download.download = company_name+"LogReport" + Date();
+	var date = new Date().toLocaleString('en-US')+'-'+Math.floor(Math.random() * 100000);
+	download.download = company_name+"LogReport" + date;
 	download.href = URL.createObjectURL(blob);
 	download.click();
 	csv = [];
@@ -634,7 +634,8 @@ function excelReport(data) {
 	workbook.Sheets["First"] = worksheet;
 
 	  // (C3) "FORCE DOWNLOAD" XLSX FILE
-	XLSX.writeFile(workbook, company_name+"LogReport" + Date()+".xlsx");
+	var date = new Date().toLocaleString('en-US')+'-'+Math.floor(Math.random() * 100000);
+	XLSX.writeFile(workbook, company_name+"LogReport" + date +".xlsx");
 }
 
 
