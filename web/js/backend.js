@@ -486,7 +486,7 @@ function generateReport(data){
 	let blob = new Blob([csv.join("\n")],{type:"text/csv"})
 	let download = document.createElement("a")
 	var date = new Date().toLocaleString('en-US')+'-'+Math.floor(Math.random() * 100000);
-	download.download = company_name+"LogReport" + date;
+	download.download = company_name+"_LogReport_" + date;
 	download.href = URL.createObjectURL(blob);
 	download.click();
 	csv = [];
@@ -635,7 +635,7 @@ function excelReport(data) {
 
 	  // (C3) "FORCE DOWNLOAD" XLSX FILE
 	var date = new Date().toLocaleString('en-US')+'-'+Math.floor(Math.random() * 100000);
-	XLSX.writeFile(workbook, company_name+"LogReport" + date +".xlsx");
+	XLSX.writeFile(workbook, company_name+"_LogReport_" + date +".xlsx");
 }
 
 
