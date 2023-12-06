@@ -44,7 +44,7 @@ use yii\widgets\ActiveForm;
 
     <div class="form-group row">
 		<div class="col-xl-4 col-md-4">
-		    <?= $form->field($model, 'type')->dropDownList([''=>'--Select--', 'nat'=>'NAT','pppoe'=>'PPPOE']) ?>
+		    <?= $form->field($model, 'type')->dropDownList([''=>'--Select--', 'nat'=>'NAT','pppoe'=>'PPPOE', 'nat_pppoe'=>'NAT + PPPOE']) ?>
 		</div>
 	</div>
 	
