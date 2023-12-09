@@ -12,7 +12,7 @@ class CustomController extends Controller {
 	  if(!empty($license_data)){
 		 $today_date = date('Y-m-d');
 		 if(isset($license_data['license_expire']) && $license_data['license_expire'] < $today_date){
-			 die('Your license expired! Please contact with admin.'); 
+			 die('The license has expired. Please contact the technical support. Call: 01617622600, Email: support@cloudhub.com.bd'); 
 		 }
 	 }else{ 
 		 die('You are not registered to this system!'); 
@@ -25,7 +25,7 @@ class CustomController extends Controller {
 	        "registration_name"=> "Cloud Hub",
 	        "license_number"=> 20231112,
 			"license_nic"=> "",
-			"license_expire"=> "2023-12-31",
+			"license_expire"=> "2023-12-31",//hint: 2023-12-06
 			"upgradable_till"=> "2023-12-31",
 			"maximum_number_of_account"=> "unlimited",
 			"maximum_number_of_router"=> "unlimited",
