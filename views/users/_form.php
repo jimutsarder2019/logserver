@@ -62,7 +62,15 @@ input[type=file]::file-selector-button:hover {
 	<?php } ?>
 
     <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-primary']) ?>
+	    <?php if(isset($page) && $page == 'update'){ ?>
+	    <div class="btn btn-primary">
+		Demo software you can't change this settings
+		</br>
+		Call: <strong style="color:#FFFF00; font-size:22px">01617622600</strong>  for more details.
+		</div>
+		<?php }else{ ?>
+            <?= Html::submitButton('Save', ['class' => 'btn btn-primary']) ?>
+		<?php } ?>
     </div>
 
     <?php ActiveForm::end(); ?>
