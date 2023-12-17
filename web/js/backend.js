@@ -234,12 +234,12 @@ function commonSearch(type)
 				}
 			}
 			
-			if(user){
-				if (user.includes(':') || user.includes('.')) {
-					user_validation = false;
-				    alert("Please search by valid user");
-				}
-			}
+			//if(user){
+				//if (user.includes(':') || user.includes('.')) {
+					//user_validation = false;
+				    //alert("Please search by valid user");
+				//}
+			//}
 			
 			
 			
