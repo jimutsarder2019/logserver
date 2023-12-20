@@ -107,7 +107,7 @@ class ReportGenerateController extends Controller
 					"range"=>[
 								"@timestamp"=>[												
 												"time_zone"=> "+06:00", 
-												"gte"=>$date_start,
+												//"gte"=>$date_start,
 												"lte"=>"".$date_end,
 								]
 					]

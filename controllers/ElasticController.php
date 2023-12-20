@@ -403,11 +403,13 @@ class ElasticController extends Controller
 					"range"=>[
 								"@timestamp"=>[												
 												"time_zone"=> "+06:00", 
-												"gte"=>"".$date_start."T".$from_hours.":".$from_mins.":00",
-												"lte"=>"".$date_end."T".$to_hours.":".$to_mins.":59",
+												//"gte"=>"".$date_start."T".$from_hours.":".$from_mins.":00",
+												//"lte"=>"".$date_end."T".$to_hours.":".$to_mins.":59",
+												"lte"=>"".$date_end."T23:59:59",
 								]
 					]
-			];
+			];					
+									
 			$page_name = 'search';
 		}
 		
