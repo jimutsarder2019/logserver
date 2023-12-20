@@ -109,13 +109,13 @@ class ElasticController extends Controller
 						"range"=>[
 									"@timestamp"=>[
 									    "time_zone"=> "+06:00", 
-										"gte"=>"".$from_date."T00:00:00",
+										//"gte"=>"".$from_date."T00:00:00",
 										"lte"=>"".$to_date."T23:59:59",
 									]
 						]
 				];
 				
-				$message_filter_ppp = array_merge($message_filter_ppp, $date_filter);
+				$message_filter_ppp = array_merge($message_filter_ppp, $date_filter_ppp);
 				$message_filter = array_merge($message_filter, $date_filter);
 				
 				if(count($router_filter) > 1){
@@ -147,13 +147,13 @@ class ElasticController extends Controller
 						"range"=>[
 									"@timestamp"=>[
 									    "time_zone"=> "+06:00", 
-										"gte"=>"".$from_date."T00:00:00",
+										//"gte"=>"".$from_date."T00:00:00",
 										"lte"=>"".$to_date."T23:59:59",
 									]
 						]
 				];
 				
-				$message_filter_ppp = $date_filter;
+				$message_filter_ppp = $date_filter_ppp;
 				
 				if(count($router_filter) > 1){
 					$match  =	 [
