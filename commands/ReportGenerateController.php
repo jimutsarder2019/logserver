@@ -232,6 +232,40 @@ class ReportGenerateController extends Controller
 						$all_syslog_data[$key]['destination_port'] = @explode(":", @$ip_data[1])[1];
 						$all_syslog_data[$key]['destination_port'] = str_replace(')','',$all_syslog_data[$key]['destination_port']);
 					}
+					
+					if(!$all_syslog_data[$key]['src_ip'] || !$all_syslog_data[$key]['destination_ip']){
+						$src_dst_message = @$message_array[2];
+						if (str_contains($src_dst_message, '->[')) {
+						
+							$ipv6_data = explode("->", @$src_dst_message);
+							$ipv6_data_1 = explode("]:", @$ipv6_data[0]);
+
+							$src_ip = str_replace('[','',@$ipv6_data_1[0]);
+							$src_ip = str_replace('NAT','',$src_ip);
+							$src_ip = str_replace('(','',$src_ip);
+							$all_syslog_data[$key]['src_ip'] = '='.$src_ip;
+							
+							$src_port = str_replace('[','',@$ipv6_data_1[1]);
+							$all_syslog_data[$key]['src_port'] = $src_port;
+							
+							$ipv6_data_2 = explode("]:", @$ipv6_data[1]);
+							$dest_ip = str_replace('[','',@$ipv6_data_2[0]);
+							$all_syslog_data[$key]['destination_ip'] = $dest_ip;
+							
+							$dest_port = str_replace('[','',@$ipv6_data_2[1]);
+							$dest_port = str_replace(')','',$dest_port);
+							$all_syslog_data[$key]['destination_port'] = $dest_port;
+						}else{
+							$ip_data = explode("->", $src_dst_message);
+							$all_syslog_data[$key]['src_ip'] = @explode(":", @$ip_data[0])[0];
+							$all_syslog_data[$key]['src_ip'] = str_replace('NAT','',$all_syslog_data[$key]['src_ip']);
+							$all_syslog_data[$key]['src_ip'] = "==".str_replace('(','',$all_syslog_data[$key]['src_ip']);
+							$all_syslog_data[$key]['src_port'] = @explode(":", @$ip_data[0])[1];
+							$all_syslog_data[$key]['destination_ip'] = @explode(":", @$ip_data[1])[0];
+							$all_syslog_data[$key]['destination_port'] = @explode(":", @$ip_data[1])[1];
+							$all_syslog_data[$key]['destination_port'] = str_replace(')','',$all_syslog_data[$key]['destination_port']);
+						}
+					}
 				}
 				
 				
@@ -249,6 +283,13 @@ class ReportGenerateController extends Controller
 						$all_syslog_data[$key]['user'] = $missing_user_data['user'];
 						$all_syslog_data[$key]['mac'] = $missing_user_data['mac'];
 						$all_syslog_data[$key]['host'] = $missing_user_data['router_ip'];
+					}
+				//for missing mac	
+				}else if(isset($all_syslog_data[$key]['src_ip'], $data['_source']['@timestamp']) && $missing_find && $all_syslog_data[$key]['src_ip'] && $all_syslog_data[$key]['user'] != 'N/A' && $all_syslog_data[$key]['mac'] == 'N/A'){
+					$missing_user_data = self::getMissingUser($all_syslog_data[$key]['src_ip'], $date_start, $date_end);
+				
+					if(isset($missing_user_data['mac']) && $missing_user_data['mac']){
+						$all_syslog_data[$key]['mac'] = $missing_user_data['mac'];
 					}
 				}else{
 					if($user_name && $mac_ip && $main_src_ip){

@@ -1,3 +1,5 @@
+config/configuration.php
+
 # phpstorm project files
 .idea
 

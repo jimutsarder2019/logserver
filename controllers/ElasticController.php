@@ -430,7 +430,7 @@ class ElasticController extends Controller
 			if(isset($message_array[1],  $message_array[2])){
 				$user_name = $message_array[1];
 				$mac_ip = $message_array[2];
-				return ['user'=>$user_name, 'mac'=>$mac_ip, 'router_ip'=>$src_ip];
+				return ['user'=>$user_name, 'mac'=>$mac_ip.'--', 'router_ip'=>$src_ip];
 			}
 		}
     }
@@ -439,8 +439,8 @@ class ElasticController extends Controller
 	{
 		$all_syslog_data = [];
 		foreach($all_data as $key=>$data){
+			//$data['_source']['MESSAGE'] = 'prerouting: in:<pppoe-!sfc@shop.wifi> out:(unknown 0), proto TCP (ACK,FIN), [2001:df4:d480:f9dc:91ee:36dc:6720:fb4c]:54438->[2620:1ec:c11::239]:443, len 20';			
 			$message_array = explode(", ",$data['_source']['MESSAGE']);
-	
 			$all_syslog_data[$key]['datetime_real'] = @$data['_source']['@timestamp'];
 			$datetime2 = new \DateTime(@$data['_source']['@timestamp']);
 			$all_syslog_data[$key]['datetime'] = $datetime2->format('d-m-Y H:i a');
@@ -449,6 +449,11 @@ class ElasticController extends Controller
 			$all_syslog_data[$key]['nat_ip'] = 'N/A';
 			$all_syslog_data[$key]['nat_port'] = 'N/A';
 			$all_syslog_data[$key]['mac'] = 'N/A';
+			
+			$all_syslog_data[$key]['destination_ip'] = 'N/A';
+			$all_syslog_data[$key]['destination_port'] = 'N/A';
+			$all_syslog_data[$key]['src_port'] = 'N/A';
+			$all_syslog_data[$key]['src_ip'] = 'N/A';
 			
 			foreach($message_array as $k=>$message){
 				if(strpos($message, "Internet_Log:") !== false && strpos($message, "in:<pppoe-") !== false){
@@ -499,8 +504,11 @@ class ElasticController extends Controller
 				if($k === 3){
 					
 					if (str_contains($message, '->[')) {
+						
 						$ipv6_data = explode("->", @$message);
 						$ipv6_data_1 = explode("]:", @$ipv6_data[0]);
+						
+						
 						$src_ip = str_replace('[','',@$ipv6_data_1[0]);
 						$src_ip = str_replace('NAT','',$src_ip);
 						$src_ip = str_replace('(','',$src_ip);
@@ -526,6 +534,42 @@ class ElasticController extends Controller
 						$all_syslog_data[$key]['destination_port'] = @explode(":", @$ip_data[1])[1];
 						$all_syslog_data[$key]['destination_port'] = str_replace(')','',$all_syslog_data[$key]['destination_port']);
 					}
+					
+					
+					if(!$all_syslog_data[$key]['src_ip'] || !$all_syslog_data[$key]['destination_ip']){
+						$src_dst_message = @$message_array[2];
+						if (str_contains($src_dst_message, '->[')) {
+						
+							$ipv6_data = explode("->", @$src_dst_message);
+							$ipv6_data_1 = explode("]:", @$ipv6_data[0]);
+
+							$src_ip = str_replace('[','',@$ipv6_data_1[0]);
+							$src_ip = str_replace('NAT','',$src_ip);
+							$src_ip = str_replace('(','',$src_ip);
+							$all_syslog_data[$key]['src_ip'] = '='.$src_ip;
+							
+							$src_port = str_replace('[','',@$ipv6_data_1[1]);
+							$all_syslog_data[$key]['src_port'] = $src_port;
+							
+							$ipv6_data_2 = explode("]:", @$ipv6_data[1]);
+							$dest_ip = str_replace('[','',@$ipv6_data_2[0]);
+							$all_syslog_data[$key]['destination_ip'] = $dest_ip;
+							
+							$dest_port = str_replace('[','',@$ipv6_data_2[1]);
+							$dest_port = str_replace(')','',$dest_port);
+							$all_syslog_data[$key]['destination_port'] = $dest_port;
+						}else{
+							$ip_data = explode("->", $src_dst_message);
+							$all_syslog_data[$key]['src_ip'] = @explode(":", @$ip_data[0])[0];
+							$all_syslog_data[$key]['src_ip'] = str_replace('NAT','',$all_syslog_data[$key]['src_ip']);
+							$all_syslog_data[$key]['src_ip'] = "==".str_replace('(','',$all_syslog_data[$key]['src_ip']);
+							$all_syslog_data[$key]['src_port'] = @explode(":", @$ip_data[0])[1];
+							$all_syslog_data[$key]['destination_ip'] = @explode(":", @$ip_data[1])[0];
+							$all_syslog_data[$key]['destination_port'] = @explode(":", @$ip_data[1])[1];
+							$all_syslog_data[$key]['destination_port'] = str_replace(')','',$all_syslog_data[$key]['destination_port']);
+						}
+					}
+					
 				}
 				
 				
@@ -543,6 +587,13 @@ class ElasticController extends Controller
 						$all_syslog_data[$key]['user'] = $missing_user_data['user'];
 						$all_syslog_data[$key]['mac'] = $missing_user_data['mac'];
 						$all_syslog_data[$key]['host'] = $missing_user_data['router_ip'];
+					}
+				//for missing mac	
+				}else if(isset($all_syslog_data[$key]['src_ip'], $data['_source']['@timestamp']) && $missing_find && $all_syslog_data[$key]['src_ip'] && $all_syslog_data[$key]['user'] != 'N/A' && $all_syslog_data[$key]['mac'] == 'N/A'){
+					$missing_user_data = self::getMissingUser($all_syslog_data[$key]['src_ip'], $date_start, $date_end, $from_hours, $from_mins, $to_hours, $to_mins);
+				
+					if(isset($missing_user_data['mac']) && $missing_user_data['mac']){
+						$all_syslog_data[$key]['mac'] = $missing_user_data['mac'];
 					}
 				}else{
 					if($user_name && $mac_ip && $main_src_ip){
