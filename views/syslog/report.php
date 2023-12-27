@@ -24,7 +24,9 @@
 								<?php
 								$option = '<option value="all">----- All Router-----</option>';
 								foreach($routers as $router){
-									$option .= '<option value="'.$router['ip'].'">'.$router['name'].' ('.$router['ip'].')</option>';
+									if($router['type'] != 'pppoe'){
+									    $option .= '<option value="'.$router['ip'].'">'.$router['name'].' ('.$router['ip'].')</option>';
+								    }
 								}
 								print $option;
 								?>

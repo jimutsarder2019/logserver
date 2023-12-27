@@ -10,6 +10,7 @@ use Yii;
 use yii\web\Controller;
 use yii\elasticsearch\Query;
 use app\components\ApplicationHelper;
+use app\init\CustomController;
 
 class ElasticController extends Controller
 {	
@@ -430,7 +431,7 @@ class ElasticController extends Controller
 			if(isset($message_array[1],  $message_array[2])){
 				$user_name = $message_array[1];
 				$mac_ip = $message_array[2];
-				return ['user'=>$user_name, 'mac'=>$mac_ip.'--', 'router_ip'=>$src_ip];
+				return ['user'=>$user_name, 'mac'=>$mac_ip, 'router_ip'=>$src_ip];
 			}
 		}
     }
@@ -651,6 +652,7 @@ class ElasticController extends Controller
 	
 	public function actionSearch()
 	{
+		$params = require __DIR__ . '/../config/configuration.php';
 		$offset = Yii::$app->getRequest()->getQueryParam('offset');
 		$limit = Yii::$app->getRequest()->getQueryParam('limit');
 		
@@ -685,6 +687,7 @@ class ElasticController extends Controller
 		$command = $query->createCommand();
         $response = $command->search();
 				
+		ApplicationHelper::_setTrace("API ENDPOINT: ".@$params['elasticSearchHttpAddress'], 0);
 		ApplicationHelper::_setTrace($response);
 
 	}

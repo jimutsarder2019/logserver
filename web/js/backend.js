@@ -188,7 +188,7 @@ function commonSearch(type)
 				    alert("Please search by valid Mac address");
 				}
 			}
-			
+			/*
 			if(src_ip){
 				if (src_ip.includes('.')) { 
 					let IP_count = src_ip.split('.').length - 1;
@@ -218,6 +218,7 @@ function commonSearch(type)
 				    alert("Please search by valid dst ip");
 				}
 			}
+			*/
 			
 			if(nat_ip){
 				if (nat_ip.includes('.')) { 
