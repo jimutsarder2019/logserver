@@ -547,7 +547,7 @@ class ElasticController extends Controller
 							$src_ip = str_replace('[','',@$ipv6_data_1[0]);
 							$src_ip = str_replace('NAT','',$src_ip);
 							$src_ip = str_replace('(','',$src_ip);
-							$all_syslog_data[$key]['src_ip'] = '='.$src_ip;
+							$all_syslog_data[$key]['src_ip'] = $src_ip;
 							
 							$src_port = str_replace('[','',@$ipv6_data_1[1]);
 							$all_syslog_data[$key]['src_port'] = $src_port;
@@ -563,7 +563,7 @@ class ElasticController extends Controller
 							$ip_data = explode("->", $src_dst_message);
 							$all_syslog_data[$key]['src_ip'] = @explode(":", @$ip_data[0])[0];
 							$all_syslog_data[$key]['src_ip'] = str_replace('NAT','',$all_syslog_data[$key]['src_ip']);
-							$all_syslog_data[$key]['src_ip'] = "==".str_replace('(','',$all_syslog_data[$key]['src_ip']);
+							$all_syslog_data[$key]['src_ip'] = str_replace('(','',$all_syslog_data[$key]['src_ip']);
 							$all_syslog_data[$key]['src_port'] = @explode(":", @$ip_data[0])[1];
 							$all_syslog_data[$key]['destination_ip'] = @explode(":", @$ip_data[1])[0];
 							$all_syslog_data[$key]['destination_port'] = @explode(":", @$ip_data[1])[1];
