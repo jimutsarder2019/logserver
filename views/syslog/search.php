@@ -57,31 +57,31 @@
 					<div class="card-header search-form">
 						<input class="mac" type="search" placeholder="Mac">
 						<input class="srcip" type="search" placeholder="Src IP">
-						<input class="dstip" type="search" placeholder="Dst IP">
+						<input class="srcport" type="search" placeholder="Src Port">
 					</div>
+					
 					<div class="card-header search-form">
-						<input class="natip" type="search" placeholder="NAT IP..">
+						<input class="dstip" type="search" placeholder="Dst IP">
+						<input class="dstport" type="search" placeholder="Dst Port">
+					    <input class="natip" type="search" placeholder="NAT IP..">
+					</div>
+					
+					<div class="card-header search-form">	
+						<input class="natport" type="search" placeholder="NAT Port..">
 						<input class="user" type="search" placeholder="User">
-						<select style="width:258px; display:none;" class="custom-select form-control" required="">
-							<option value="">Mikrotik</option>
-							<option value="100">100 entries</option>
-							<option value="1">200 entries</option>
-							<option value="2">500 entries</option>
-							<option value="3">1000 entries</option>
-							<option value="4">2000 entries</option>
-						</select>
 						<div style="display:none;" class="form-inline search-form search-box">
-								<select class="custom-select form-control js_limit_change" required="">
-									<option value="50">50 entries</option>
-									<option value="100">100 entries</option>
-									<option value="200">200 entries</option>
-									<option value="500">500 entries</option>
-									<option value="1000">1000 entries</option>
-									<option value="2000">2000 entries</option>
-								</select>
-							</div>
+							<select class="custom-select form-control js_limit_change" required="">
+								<option value="50">50 entries</option>
+								<option value="100">100 entries</option>
+								<option value="200">200 entries</option>
+								<option value="500">500 entries</option>
+								<option value="1000">1000 entries</option>
+								<option value="2000">2000 entries</option>
+							</select>
+						</div>
 						<button style="width:258px"  type="button" class="btn btn-primary js_search_btn">Search</button>
 					</div>
+
 					<input value="search" type="hidden" class="js_page_name"> 
 					<div class="card-body">
 						<div class="user-status table-responsive latest-order-table">

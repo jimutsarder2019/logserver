@@ -37,11 +37,17 @@
 						<div class="card-header search-form">
 							<input class="mac" type="search" placeholder="Mac">
 							<input class="srcip" type="search" placeholder="Src IP">
-							<input class="dstip" type="search" placeholder="Dst IP">
+							<input class="srcport" type="search" placeholder="Src Port">
 						</div>
 						
 						<div class="card-header search-form">
+						    <input class="dstip" type="search" placeholder="Dst IP">
+						    <input class="dstport" type="search" placeholder="Dst Port">
 							<input class="natip" type="search" placeholder="NAT IP..">
+						</div>
+						
+						<div class="card-header search-form">	
+							<input class="natport" type="search" placeholder="NAT Port..">
 							<div class="js-report-loading"></div>
 							<input class="user" type="search" placeholder="User">
 							<div style="display:none;" class="form-inline search-form search-box">

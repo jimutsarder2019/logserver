@@ -37,6 +37,11 @@ class ElasticController extends Controller
 		$src_ip = Yii::$app->request->post('src_ip');
 		$dst_ip = Yii::$app->request->post('dst_ip');
 		$nat_ip = Yii::$app->request->post('nat_ip');
+		
+		$src_port = Yii::$app->request->post('src_port');
+		$dst_port = Yii::$app->request->post('dst_port');
+		$nat_port = Yii::$app->request->post('nat_port');
+		
 		$limit = Yii::$app->request->post('limit', 50);
 		$date_limit = Yii::$app->request->post('limit_date');
 		$search = Yii::$app->request->post('search');
@@ -51,6 +56,11 @@ class ElasticController extends Controller
 		$src_filter = [];
 		$dst_filter = [];
 		$nat_filter = [];
+		
+		$src_port_filter = [];
+		$dst_port_filter = [];
+		$nat_port_filter = [];
+		
 		$router_filter = [];
 		
 		if($mac){
@@ -69,7 +79,17 @@ class ElasticController extends Controller
 			$nat_filter[] = self::filter_match_phrase_prefix($nat_ip);
 		}
 		
-		$message_filter = array_merge($mac_filter, $user_filter, $src_filter, $dst_filter, $nat_filter);	
+		if($src_port){
+			$src_port_filter[] = self::filter_match_phrase_prefix($src_port);
+		}
+		if($dst_port){
+			$dst_port_filter[] = self::filter_match_phrase_prefix($dst_port);
+		}
+		if($nat_port){
+			$nat_port_filter[] = self::filter_match_phrase_prefix($nat_port);
+		}
+		
+		$message_filter = array_merge($mac_filter, $user_filter, $src_filter, $dst_filter, $nat_filter, $src_port_filter, $dst_port_filter, $nat_port_filter);	
 		$message_filter_ppp = array_merge($mac_filter, $user_filter, $src_filter);	
 		
 		$router_filter = [];
@@ -323,7 +343,17 @@ class ElasticController extends Controller
 							$nat_filter[] = self::filter_match_phrase_prefix($nat_ip);
 						}
 						
-						$src_filter_nat = array_merge($src_filter_nat, $dst_filter, $nat_filter);
+						if($src_port){
+							$src_port_filter[] = self::filter_match_phrase_prefix($src_port);
+						}
+						if($dst_port){
+							$dst_port_filter[] = self::filter_match_phrase_prefix($dst_port);
+						}
+						if($nat_port){
+							$nat_port_filter[] = self::filter_match_phrase_prefix($nat_port);
+						}
+						
+						$src_filter_nat = array_merge($src_filter_nat, $dst_filter, $nat_filter, $src_port_filter, $dst_port_filter, $nat_port_filter);
 						$date_filter_nat = [];
 						
 						if($from_date && $to_date && $from_hours && $from_mins && $to_hours && $to_mins){

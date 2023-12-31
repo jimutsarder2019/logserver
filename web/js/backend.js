@@ -340,10 +340,15 @@ function getPostParams()
 	var src_ip = $('.srcip').val();
 	var dst_ip = $('.dstip').val();
 	var nat_ip = $('.natip').val();
+	
+	var src_port = $('.srcport').val();
+	var dst_port = $('.dstport').val();
+	var nat_port = $('.natport').val();
+	
 	var router = $('.js_router').val();
 	var page_name = $('.js_page_name').val();
 
-	return {page_name:page_name, report_type:reportType, offset:offset, limit:limit, search:search_value, from_date:date_start, to_date:date_end, from_hours:from_hours, from_mins:from_mins, to_hours:to_hours, to_mins:to_mins, router:router, user:user, mac:mac, src_ip:src_ip, dst_ip:dst_ip, nat_ip:nat_ip};
+	return {page_name:page_name, report_type:reportType, offset:offset, limit:limit, search:search_value, from_date:date_start, to_date:date_end, from_hours:from_hours, from_mins:from_mins, to_hours:to_hours, to_mins:to_mins, router:router, user:user, mac:mac, src_ip:src_ip, dst_ip:dst_ip, nat_ip:nat_ip, src_port:src_port, dst_port:dst_port, nat_port:nat_port};
 }
 
 function generateLogData(type=false)
