@@ -72,11 +72,15 @@ class ApiController extends CustomController
 		$alert_msg = '';
 		if(($active_user_count > $max_user_first_allow) || ($active_user_count > $max_user_allow)){
 			$alert_msg = 'Currently you are  using Cloud Hub log software.  We are requested to increase your user limit very soon.
+                        </br> Company Name: '.@$license_data['registration_name'].'
+                        </br> License Number: '.@$license_data['license_number'].'
                         </br> Call: +8801617622600, +8809610203060
                         </br> Email: sales@cloudhub.com.bd';
 			if($active_user_count > $max_user_allow){
 				$alert_msg = 'Currently you are  using Cloud Hub log software. You have already exceed your limit. We are requested to increase your user limit with in 48 hours.
-                        </br> Call: +8801617622600, +8809610203060
+                        </br> Company Name: '.@$license_data['registration_name'].'
+                        </br> License Number: '.@$license_data['license_number'].'
+						</br> Call: +8801617622600, +8809610203060
                         </br> Email: sales@cloudhub.com.bd';
 			}
 			$is_alert_show = true;
