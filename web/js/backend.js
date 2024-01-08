@@ -363,23 +363,25 @@ function generateLogData(type=false)
         dataType: 'JSON',
         data:getPostParams(),		
 		success: function(response) {   
-            
+            console.log(response.data.length);
 			if(response.data && response.data.length > 0){
 				let tr = '';
 				$.each( response.data, function( key, value ) {
-					tr += '<tr>'+
-								'<td class="digits">'+value['datetime']+'</td>'+
-								'<td class="digits">'+value['host']+'</td>'+
-								'<td class="digits">'+value['user']+'</td>'+
-								'<td class="digits">'+value['protocol']+'</td>'+
-								'<td class="digits">'+value['mac']+'</td>'+
-								'<td class="digits">'+value['src_ip']+'</td>'+
-								'<td class="digits">'+value['src_port']+'</td>'+
-								'<td class="digits">'+value['destination_ip']+'</td>'+
-								'<td class="digits">'+value['destination_port']+'</td>'+
-								'<td class="digits">'+value['nat_ip']+'</td>'+
-								'<td class="digits">'+value['nat_port']+'</td>'+
-							'</tr>';
+					if(value['status']){
+						tr += '<tr>'+
+									'<td class="digits">'+value['datetime']+'</td>'+
+									'<td class="digits">'+value['host']+'</td>'+
+									'<td class="digits">'+value['user']+'</td>'+
+									'<td class="digits">'+value['protocol']+'</td>'+
+									'<td class="digits">'+value['mac']+'</td>'+
+									'<td class="digits">'+value['src_ip']+'</td>'+
+									'<td class="digits">'+value['src_port']+'</td>'+
+									'<td class="digits">'+value['destination_ip']+'</td>'+
+									'<td class="digits">'+value['destination_port']+'</td>'+
+									'<td class="digits">'+value['nat_ip']+'</td>'+
+									'<td class="digits">'+value['nat_port']+'</td>'+
+								'</tr>';
+					}
 				});
 			
 				if(tr){

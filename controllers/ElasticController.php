@@ -80,12 +80,16 @@ class ElasticController extends Controller
 		}
 		
 		if($src_port){
+			$src_port = (string) $src_port;
+			$src_port = ":".$src_port.'->';
 			$src_port_filter[] = self::filter_match_phrase_prefix($src_port);
 		}
 		if($dst_port){
+			$dst_port = ":".$dst_port.",";
 			$dst_port_filter[] = self::filter_match_phrase_prefix($dst_port);
 		}
 		if($nat_port){
+			$nat_port = ":".$nat_port."->";
 			$nat_port_filter[] = self::filter_match_phrase_prefix($nat_port);
 		}
 		
@@ -288,7 +292,8 @@ class ElasticController extends Controller
             $data_count = 0;
 			if(!empty($all_data)){
 				$data_count = count($all_data);
-				$all_syslog_data = self::dataProcess($all_data, true, $from_date, $to_date, $from_hours, $from_mins, $to_hours, $to_mins, $router_list);	
+				$all_syslog_data = self::dataProcess($all_data, true, $from_date, $to_date, $from_hours, $from_mins, $to_hours, $to_mins, $router_list, false, false, false, $_POST);	
+			    //ApplicationHelper::_setTrace($all_syslog_data);
 			}else{
 				if($search){
 					$_filter[] = [
@@ -466,7 +471,7 @@ class ElasticController extends Controller
 		}
     }
 
-	private function dataProcess($all_data, $missing_find=true, $date_start = false, $date_end = false, $from_hours = false, $from_mins = false, $to_hours = false, $to_mins = false, $router_list = [], $user_name = false, $mac_ip = false,  $main_src_ip = false)
+	private function dataProcess($all_data, $missing_find=true, $date_start = false, $date_end = false, $from_hours = false, $from_mins = false, $to_hours = false, $to_mins = false, $router_list = [], $user_name = false, $mac_ip = false,  $main_src_ip = false, $params = [])
 	{
 		$all_syslog_data = [];
 		foreach($all_data as $key=>$data){
@@ -485,6 +490,7 @@ class ElasticController extends Controller
 			$all_syslog_data[$key]['destination_port'] = 'N/A';
 			$all_syslog_data[$key]['src_port'] = 'N/A';
 			$all_syslog_data[$key]['src_ip'] = 'N/A';
+			$all_syslog_data[$key]['status'] = true;
 			
 			foreach($message_array as $k=>$message){
 				if(strpos($message, "Internet_Log:") !== false && strpos($message, "in:<pppoe-") !== false){
@@ -633,7 +639,36 @@ class ElasticController extends Controller
 						$all_syslog_data[$key]['host'] = $main_src_ip;
 					}
 				}
-			}			
+				
+				
+			}
+			
+			
+			if(isset($all_syslog_data[$key]['destination_port'], $_POST['src_port']) && $all_syslog_data[$key]['destination_port'] && $_POST['src_port']){
+					if($_POST['src_port'] === $all_syslog_data[$key]['destination_port']){
+						if(isset($all_syslog_data[$key])){
+						    $all_syslog_data[$key]['status'] = false;
+						}
+					}
+			}else if(isset($all_syslog_data[$key]['src_port'], $_POST['dst_port']) && $all_syslog_data[$key]['src_port'] && $_POST['dst_port']){
+					if($_POST['dst_port'] === $all_syslog_data[$key]['src_port']){
+						if(isset($all_syslog_data[$key])){
+						    $all_syslog_data[$key]['status'] = false;
+						}
+					}
+			}else if(isset($_POST['nat_port'], $all_syslog_data[$key]['nat_port'], $all_syslog_data[$key]['destination_port'], $all_syslog_data[$key]['src_port']) && $_POST['nat_port']){
+				if($all_syslog_data[$key]['nat_port'] == 'N/A'){
+					$all_syslog_data[$key]['status'] = false;
+				}else if(($all_syslog_data[$key]['nat_port'] == 'N/A' && ($_POST['nat_port'] === $all_syslog_data[$key]['destination_port'])) || ($all_syslog_data[$key]['nat_port'] == 'N/A' && ($all_syslog_data[$key]['destination_port'] === $all_syslog_data[$key]['src_port']))){
+					if(isset($all_syslog_data[$key])){
+						$all_syslog_data[$key]['status'] = false;
+					}
+				}
+			}
+			
+
+
+			
 		}
 		
 		return $all_syslog_data;
@@ -674,7 +709,7 @@ class ElasticController extends Controller
 	
 	private function filter_match_phrase_prefix($search_string){
 		return [
-		  "match_phrase_prefix"=> [
+		  "match_phrase"=> [
 			"MESSAGE"=> '.*'.$search_string.'.*'
 		  ]
 		];
