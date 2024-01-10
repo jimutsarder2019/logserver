@@ -5,13 +5,16 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
+use app\components\ApplicationHelper;
 
 /** @var yii\web\View $this */
 /** @var app\models\ReportBackupSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = 'Downlaod Report';
+$this->title = 'Download Report';
 $this->params['breadcrumbs'][] = $this->title;
+
+$isAdmin = ApplicationHelper::isAdmin();
 ?>
 
 <style>
@@ -142,6 +145,7 @@ $this->params['breadcrumbs'][] = $this->title;
 									
 									[
 										'class' => 'yii\grid\ActionColumn',
+										'visible' => ($isAdmin)?true:false,
 										'template' => '{delete}{download}',
 										'buttons' => [
 											'download' => function($url, $model){

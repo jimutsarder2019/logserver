@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use app\components\ApplicationHelper;
 
 /** @var yii\web\View $this */
 /** @var app\models\Users $model */
@@ -9,6 +10,7 @@ use yii\widgets\ActiveForm;
 use yii\helpers\Url;
 
 $baseUrl = Url::base();
+$isAdmin = ApplicationHelper::isAdmin();
 ?>
 <style>
 input[type=file] {
@@ -46,6 +48,8 @@ input[type=file]::file-selector-button:hover {
 	
     <?= $form->field($model, 'accessToken')->textInput(['maxlength' => true]) ?>
 	
+	
+	<?php if($isAdmin){ ?>
 	<?= $form->field($model, 'role')->dropDownList([
 		1 => 'Admin',
 		2 => 'User',
@@ -55,6 +59,7 @@ input[type=file]::file-selector-button:hover {
 		1 => 'Active',
 		0 => 'Inactive',
 	]) ?>
+	<?php } ?>
 	
 	<?= $form->field($model, 'file')->fileInput()->label('User Picture [Hints: width:150px; Height:50px]'); ?>
 	<?php if($model->authKey){ ?>
