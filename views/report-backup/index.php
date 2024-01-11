@@ -145,7 +145,7 @@ $isAdmin = ApplicationHelper::isAdmin();
 									
 									[
 										'class' => 'yii\grid\ActionColumn',
-										'visible' => ($isAdmin)?true:false,
+										//'visible' => ($isAdmin)?true:false,
 										'template' => '{delete}{download}',
 										'buttons' => [
 											'download' => function($url, $model){
@@ -162,13 +162,17 @@ $isAdmin = ApplicationHelper::isAdmin();
 													return '';
 												}
 											},
-											'delete' => function($url, $model){
-												return Html::a('<span class="fa fa-trash"></span>', 'javascript:void(0)', [
-													'class' => 'delete_download_file',
-													'data' => [
-														'id' => $model->id,
-													],
-												]);
+											'delete' => function($url, $model) use ($isAdmin){
+												if($isAdmin){
+													return Html::a('<span class="fa fa-trash"></span>', 'javascript:void(0)', [
+														'class' => 'delete_download_file',
+														'data' => [
+															'id' => $model->id,
+														],
+													]);
+												}else{
+													return '';
+												}
 											}
 										]
 									]
