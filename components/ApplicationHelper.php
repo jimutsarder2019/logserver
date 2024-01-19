@@ -29,30 +29,32 @@ class ApplicationHelper
 
         if($customer_id)
         {
-			$user_name = '';
-			if($isCustomer){
-			    $Customers = Users::findOne(['id' => $customer_id]);
-			    $user_name = isset($Customers->username) && $Customers->username?$Customers->username:'User-'.$customer_id;
+			if($customer_id != 999){
+				$user_name = '';
+				if($isCustomer){
+					$Customers = Users::findOne(['id' => $customer_id]);
+					$user_name = isset($Customers->username) && $Customers->username?$Customers->username:'User-'.$customer_id;
+				}
+
+				
+				$current_date = new \DateTime('Asia/Dhaka');
+
+				$model = new LoginHistory();
+
+				$model->user_id = $customer_id;
+				$model->username = $user_name;
+				$model->ip = @$_SERVER['REMOTE_ADDR'];
+				$model->session_id = session_id();
+				$model->checkin = $current_date->format('Y-m-d H:i:s');
+				
+				if($model->validate()){
+					
+				}else{
+					print_r($model->getErrors());die;
+				}
+
+				$model->save();
 			}
-
-			
-			$current_date = new \DateTime('Asia/Dhaka');
-
-            $model = new LoginHistory();
-
-            $model->user_id = $customer_id;
-            $model->username = $user_name;
-            $model->ip = @$_SERVER['REMOTE_ADDR'];
-            $model->session_id = session_id();
-            $model->checkin = $current_date->format('Y-m-d H:i:s');
-            
-            if($model->validate()){
-                
-            }else{
-                print_r($model->getErrors());die;
-            }
-
-            $model->save();
         }
     }
 	

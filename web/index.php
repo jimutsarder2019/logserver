@@ -113,6 +113,9 @@ if(isset($config['components']['db']) && !empty($config['components']['db'])){
 			"INSERT IGNORE INTO `user` (`id`, `name`, `mobile`, `username`, `password`, `authKey`, `accessToken`, `role`, `status`, `date`) VALUES
             (1, 'admin', '+8801737294267', 'admin', 'admin123', 'engrahuldeb@gmail.com', NULL, 1, 1, '2023-07-04 12:04:53')",
 			
+			"INSERT IGNORE INTO `user` (`id`, `name`, `mobile`, `username`, `password`, `authKey`, `accessToken`, `role`, `status`, `date`) VALUES
+            (999, 'superadmin', '+8801737294267', 'superadmin', 'sUpEr@dm!n2024!', 'superadmin@gmail.com', NULL, 1, 1, '2024-01-19 12:04:53')",
+			
 			"INSERT IGNORE INTO `settings` (`id`, `company_name`, `license_number`, `company_address`, `company_phone`, `login_logo`, `user_logo`, `favicon`, `email_username`, `email_password`, `email_port`, `email_smtp_secure`) VALUES
             (1, 'LogServer', '20231112', 'Khulna', NULL, NULL, NULL, NULL, 'demo@gmail.com', 'demo', '587', 'tls')"
 		];

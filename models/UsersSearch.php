@@ -41,6 +41,7 @@ class UsersSearch extends Users
     public function search($params)
     {
         $query = Users::find();
+		$query->where(['not', ['username' => 'superadmin']]);
 
         // add conditions that should always apply here
 
