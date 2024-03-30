@@ -108,8 +108,6 @@ class ApplicationHelper
 	
 	public static function storeReportGenerateRecord($data, $count = 0)
 	{
-		//$file_name = $data['match_type'].'_'.$data['from_date_to_date'].'__'.date('Y-m-d').'_LOG'.rand().'.'.$data['report_type'];
-		
 		$company_name = self::getCompanyName();
 		$file_name = $company_name.'_LogReport_'.date('Y-m-d').'-'.rand(0,99999).'.'.$data['report_type'];
 		$file_name = str_replace(' ','__', $file_name);
@@ -141,31 +139,13 @@ class ApplicationHelper
 	
 	public static function getTotalPossibleData($count)
     {
-		/*$dateTimeObject1 = date_create($to_date);  
-        $dateTimeObject2 = date_create($from_date);  
-    
-		// Calculating the difference between DateTime Objects 
-		$interval = date_diff($dateTimeObject1, $dateTimeObject2); 
-		$min = $interval->days * 24 * 60; 
-		$min += $interval->h * 60; 
-		$min += $interval->i;
-		
-		$total_possible_data = 3000*$min;*/
-		
 		$size = 0.121875 * $count;
-		
-		
 		if($size > 1000){
 			$size = $size/1000;
 			$size = round($size, 2).' MB';
 		}else{
 			$size = round($size, 2).' KB';
 		}
-		
-		//$slice = $total_possible_data/20;
-		
-		//print $slice;
-		//return ['total'=>$total_possible_data, 'size'=>$size];
 		return $size;
 	}
 	

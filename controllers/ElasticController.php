@@ -292,8 +292,7 @@ class ElasticController extends Controller
             $data_count = 0;
 			if(!empty($all_data)){
 				$data_count = count($all_data);
-				$all_syslog_data = self::dataProcess($all_data, true, $from_date, $to_date, $from_hours, $from_mins, $to_hours, $to_mins, $router_list, false, false, false, $_POST);	
-			    //ApplicationHelper::_setTrace($all_syslog_data);
+				$all_syslog_data = self::dataProcess($all_data, true, $from_date, $to_date, $from_hours, $from_mins, $to_hours, $to_mins, $router_list, false, false, false, $_POST);
 			}else{
 				if($search){
 					$_filter[] = [
@@ -317,11 +316,7 @@ class ElasticController extends Controller
 				$match_type = 'ppp';
 				$report_match1 = json_encode($match);
 				
-				//ApplicationHelper::_setTrace($match, 0);
 				$all_data = self::getQueryData($match, 'cloud-log-ppp', 1, 0, $page_name);
-				//print 'ppp data';
-				//print '</br>';
-				//ApplicationHelper::_setTrace($all_data, 0);
 				if(!empty($all_data)){
 					$missing_user_data = $all_data[0]['_source']['MESSAGE'];
 					$main_src_ip = $all_data[0]['_source']['HOST'];
@@ -379,21 +374,10 @@ class ElasticController extends Controller
 								]
 						];
 						$report_match2 = json_encode($match,1);
-						//print '</br>';
-						//print 'nat match';
-						//print '</br>';
-						//ApplicationHelper::_setTrace($match, 0);
-						
 						$all_data = self::getQueryData($match, 'cloud-log-nat', $limit, 0, $page_name);
-						//ApplicationHelper::_setTrace($all_data, 0);
-						//print 'final nat log process data';
-						//print '</br>';
 						if(!empty($all_data)){
 							$data_count = count($all_data);
-							
 							$all_syslog_data = self::dataProcess($all_data, false, $from_date, $to_date, $from_hours, $from_mins, $to_hours, $to_mins, $router_list, $user_name, $mac_ip, $main_src_ip);
-						//ApplicationHelper::_setTrace($all_syslog_data);
-						
 						}
 					}
 				}
@@ -439,8 +423,6 @@ class ElasticController extends Controller
 					"range"=>[
 								"@timestamp"=>[												
 												"time_zone"=> "+06:00", 
-												//"gte"=>"".$date_start."T".$from_hours.":".$from_mins.":00",
-												//"lte"=>"".$date_end."T".$to_hours.":".$to_mins.":59",
 												"lte"=>"".$date_end."T23:59:59",
 								]
 					]
@@ -754,19 +736,6 @@ class ElasticController extends Controller
 				
 		ApplicationHelper::_setTrace("API ENDPOINT: ".@$params['elasticSearchHttpAddress'], 0);
 		ApplicationHelper::_setTrace($response);
-
-	}
-	
-	
-	public function actionDate()
-	{
-		print date('Y-m-d H:i:s');
-		
-		print '</br>';
-		
-		$date = new \DateTime();
-		$timeZone = $date->getTimezone();
-		print $timeZone->getName();
 
 	}
 }
