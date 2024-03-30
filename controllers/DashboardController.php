@@ -89,7 +89,7 @@ class DashboardController extends CustomController
 		$active_users = Yii::$app->db->createCommand( 'SELECT COUNT(*) FROM user WHERE status = 1 and role > 1' )->queryScalar();
 		
 		
-		
+		/*
 		
 		// Execute the "df -BG" command to get disk usage information
 
@@ -170,9 +170,15 @@ class DashboardController extends CustomController
 		$uptime = shell_exec('uptime');
 		preg_match('/up\s+(.*?),\s+(.*?)\s+/', $uptime, $matches);
 		$days = str_replace(',', '', $matches[1]);
-		$days = intval($days);
+		$days = intval($days);*/
 		
 		$license_data = CustomController::getLicenseData();
+		
+		$cpuUtilization = 4;
+		$ramUtilization = 4;
+		$used_percentage_formatted = 4;
+		$remaining_percentage_formatted = 4;
+		$days = 4;
 		
         return $this->render('index', ['router_data'=>$routers, 
 		'user_data'=>$users,

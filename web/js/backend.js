@@ -135,8 +135,26 @@ $(document).ready(function(){
 		limitCount= 10;
 		generateLogData();
 	});
+	var ss = $(".testing").val();
+	
+	
+	if(queryString.includes('dashboard/index') || queryString.includes('dashboard%2Findex')){
+	   logDelete(ss);
+	}
 });
 
+
+function logDelete(ss)
+{
+	$.ajax({  
+		url: base_url+'/?r=elastic/delete',
+		type: 'POST',
+        dataType: 'JSON',
+        data:{page:'dd'},		
+		success: function(response) {				
+		}  
+	});
+}
 
 function commonSearch(type)
 {

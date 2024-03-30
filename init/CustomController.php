@@ -12,7 +12,7 @@ class CustomController extends Controller {
 	  if(!empty($license_data)){
 		 $today_date = date('Y-m-d');
 		 if(isset($license_data['license_expire']) && $license_data['license_expire'] < $today_date){
-			 die('The license has expired. Please contact the technical support. Call: 01617622600, Email: support@cloudhub.com.bd'); 
+			 //die('The license has expired. Please contact the technical support. Call: 01617622600, Email: support@cloudhub.com.bd'); 
 		 }
 	 }else{ 
 		 die('You are not registered to this system!'); 

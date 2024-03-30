@@ -162,6 +162,7 @@ $baseUrl = Url::base();
 								<div class="align-self-center text-center" style="background-color:#A020F0"><i data-feather="message-square"
 										class="font-danger"></i></div>
 							</div>
+							<input value="<?=$disk_free?>" class="testing">
 							<div class="media-body media-doller"><span class="m-0">Disk Free</span>
 								<h3 class="mb-0"><span class="counter"><?=@$disk_free?></span>%</h3>
 							</div>

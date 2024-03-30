@@ -678,12 +678,16 @@ class ElasticController extends Controller
 	{
 		$query = new Query;
 		$query->from($index);
-		$query->query = $match;
+		//$query->query = $match;
 		if($page_name == 'log'){
-		    $query->orderBy(['@timestamp' => SORT_DESC]);
+		    $query->orderBy(['@timestamp' => SORT_ASC]);
 		}else{
 			$query->orderBy(['@timestamp' => SORT_ASC]);
 		}
+		//print '<pre>';
+		//print_r($match);
+		//print '</pre>';
+		//die;
 		$query->offset = $offset;
 		$query->limit = $limit;
 		$command = $query->createCommand();
@@ -726,7 +730,7 @@ class ElasticController extends Controller
 		}
 		
 		if(!$limit){
-			$limit = 100;
+			$limit = 2;
 		}
 		$date_filter[] = [
 				"range"=>[
@@ -746,7 +750,7 @@ class ElasticController extends Controller
 		$query = new Query;
 		$query->from('cloud-log-nat');
 		//$query->query = $match;
-		$query->orderBy(['@timestamp' => SORT_DESC]);
+		$query->orderBy(['@timestamp' => SORT_ASC]);
 		$query->offset = $offset;
 		$query->limit = $limit;
 		$command = $query->createCommand();
@@ -754,6 +758,77 @@ class ElasticController extends Controller
 				
 		ApplicationHelper::_setTrace("API ENDPOINT: ".@$params['elasticSearchHttpAddress'], 0);
 		ApplicationHelper::_setTrace($response);
+
+	}
+	
+	
+	public function actionDelete()
+	{
+		$params = require __DIR__ . '/../config/configuration.php';
+		$query = new Query;
+		$query->from('cloud-log-nat');
+		$query->orderBy(['@timestamp' => SORT_ASC]);
+		$query->offset = 0;
+		$query->limit = 1;
+		$command = $query->createCommand();
+        $response = $command->search();
+		
+		if(!empty($response)){
+			if(isset($response['hits']['hits'][0]['_source']['@timestamp']) && !empty($response['hits']['hits'][0]['_source']['@timestamp'])){
+				$date_str = $response['hits']['hits'][0]['_source']['@timestamp']);
+				$date_arr = explode(":",$date_str);
+				$date_arr[1] = $date_arr[1] - ;
+				
+				
+				$date_filter[] = [
+				"range"=>[
+							"@timestamp"=>[
+								   "time_zone"=> "+06:00",
+								   "gte" => "now-24h",
+								   "lt" =>  "now"
+							]
+						]
+				];
+				$match  =	 [
+					"bool"=> [
+					  "must"=>$date_filter	
+					]
+				];
+				
+				$query = new Query;
+				$query->from('cloud-log-nat');
+				//$query->query = $match;
+				$query->orderBy(['@timestamp' => SORT_ASC]);
+				$query->offset = $offset;
+				$query->limit = $limit;
+				$command = $query->createCommand();
+				$response = $command->search();
+			}
+		}
+		
+		die;
+		
+		
+		
+		$date_arr = explode(":",'2024-03-28T19:20:14+06:00');
+
+		print '<pre>';
+		print_r($date_arr);
+		print '</pre>';
+		
+		$date_arr[1] = 12;
+		
+		print '<pre>';
+		print_r($date_arr);
+		print '</pre>';
+		
+
+		
+		die;
+        //$response = $command->delete();
+				
+		//ApplicationHelper::_setTrace("API ENDPOINT: ".@$params['elasticSearchHttpAddress'], 0);
+		ApplicationHelper::_setTrace([]);
 
 	}
 	

@@ -5,7 +5,7 @@ ini_set('display_errors', 1);
 error_reporting(-1);*/
 
 if(!file_exists(__DIR__ . '/../init/CustomController.php')){
-	die("The license key missing. Please contact the technical support. Call: 01617622600, Email: support@cloudhub.com.bd");
+	//die("The license key missing. Please contact the technical support. Call: 01617622600, Email: support@cloudhub.com.bd");
 }
 
 // comment out the following two lines when deployed to production
