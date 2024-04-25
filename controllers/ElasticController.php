@@ -49,6 +49,8 @@ class ElasticController extends Controller
 		$offset = Yii::$app->request->post('offset', 0);
 		$page_name = Yii::$app->request->post('page_name', 'log');
 		$report_type = Yii::$app->request->post('report_type', '');
+		
+		$date_list = [];
 
 		$message_filter = [];
 		$mac_filter = [];
@@ -120,7 +122,7 @@ class ElasticController extends Controller
 			}
 			
 			if($from_date && $to_date && $from_hours && $from_mins && $to_hours && $to_mins && !empty($message_filter)){
-				
+				$date_list = ApplicationHelper::getDatesFromRange($from_date, $to_date);
 				$date_filter[] = [
 					"range"=>[
 						"@timestamp"=>[
@@ -158,7 +160,7 @@ class ElasticController extends Controller
 					];
 				}
 			}else if($from_date && $to_date && $from_hours && $from_mins && $to_hours && $to_mins){
-				
+				$date_list = ApplicationHelper::getDatesFromRange($from_date, $to_date);
 				$date_filter[] = [
 					"range"=>[
 						"@timestamp"=>[
@@ -220,7 +222,7 @@ class ElasticController extends Controller
 				  }
 			}else{
 				if($page_name == 'log'){
-				
+					$date_list = [date('Y-m-d')];
 					if($router && $router != 'all'){
 						$date_filter[] = [
 								"range"=>[
@@ -271,6 +273,9 @@ class ElasticController extends Controller
 					];
 				}
 			}
+			
+			print_r($date_list);
+			die;
 			
 			if($page_name == 'search'){
 				$limit = 10000;

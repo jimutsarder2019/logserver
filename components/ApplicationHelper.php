@@ -166,4 +166,26 @@ class ApplicationHelper
     		file_put_contents($mainDirPath,$e->getMessage(),FILE_APPEND);
     	}
     }
+
+	// Function to get all the dates in given range 
+	public static function getDatesFromRange($start, $end) { 
+		
+		// Declare an empty array 
+		$array = array(); 
+		  
+		// Use strtotime function 
+		$Variable1 = strtotime($start); 
+		$Variable2 = strtotime($end); 
+		  
+		// Use for loop to store dates into array 
+		// 86400 sec = 24 hrs = 60*60*24 = 1 day 
+		for ($currentDate = $Variable1; $currentDate <= $Variable2;  
+										$currentDate += (86400)) {
+											  
+			$Store = date('Y-m-d', $currentDate); 
+			$array[] = $Store; 
+		}
+		
+		return $array;
+	}
 }

@@ -25,8 +25,8 @@ class CustomController extends Controller {
 	        "registration_name"=> "Cloud Hub",
 	        "license_number"=> 20231112,
 			"license_nic"=> "",
-			"license_expire"=> "2023-12-31",//hint: 2023-12-06
-			"upgradable_till"=> "2023-12-31",
+			"license_expire"=> "2024-12-31",//hint: 2023-12-06
+			"upgradable_till"=> "2024-12-31",
 			"maximum_number_of_account"=> "unlimited",
 			"maximum_number_of_router"=> "unlimited",
 			"maximum_number_of_user_allow"=> 1000,
