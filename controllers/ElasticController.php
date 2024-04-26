@@ -505,6 +505,15 @@ class ElasticController extends Controller
 						$user = $last_user_data[0];
 						$all_syslog_data[$key]['user'] = $user;
 					}
+				}else if(strpos($message, "in:<pppoe-") !== false){
+					$user_data = @explode("in:<pppoe-",$message);
+					$last_user_data = @explode("out:", @$user_data[1]);
+					if(!empty($last_user_data)){
+						$user = str_replace('>','',@$last_user_data[0]);
+						if($user != ''){
+							$all_syslog_data[$key]['user'] = $user;
+						}
+					}
 				}
 
 				
