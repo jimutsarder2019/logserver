@@ -274,8 +274,6 @@ class ElasticController extends Controller
 				}
 			}
 			
-			print_r($date_list);
-			die;
 			
 			if($page_name == 'search'){
 				$limit = 10000;
@@ -288,9 +286,16 @@ class ElasticController extends Controller
 			$report_match1 = json_encode($match);
 			$report_match2 = '';
 			$match_type = 'nat';
+			self::demo($match, $date_list, $limit, $offset, $page_name);
+			print_r($date_list);
+			die;
 
 			$all_data = self::getQueryData($match, 'cloud-log-nat', $limit, $offset, $page_name);
+			print '<pre>';
+            print_r($all_data);
+			print '</pre>';
 			
+			die;
 			$all_message = [];
 			$all_syslog_data = [];
 			
@@ -415,6 +420,21 @@ class ElasticController extends Controller
 			die(json_encode(['status'=>'fail', 'report_status'=>false, 'count'=>$data_count, 'data'=>[], 'limit_date'=>'']));
 		}
     }
+	
+	
+	private function demo($match, $date_list, $limit, $offset, $page_name){
+		$final_data = [];
+		$date_list = ['2024-04-26', '2024-04-27', '2024-04-28'];
+		//$dates = ['2024-04-26'=>['name'=>'rahul', 'age'=>34],'2024-04-27'=>['name'=>'rudro', 'age'=>23], '2024-04-28'=>['name'=>'shipon', 'age'=>31]];
+		foreach($date_list as $date){
+			$all_data = self::getQueryData($match, 'cloud-log-nat', $limit, $offset, $page_name);
+			array_push($final_data, $all_data);			
+		}
+		print '<pre>';
+		print_r($final_data);
+		print '</pre>';
+		die;
+	}
 	
 
 	
@@ -674,7 +694,7 @@ class ElasticController extends Controller
 	{
 		$query = new Query;
 		$query->from($index);
-		$query->query = $match;
+		//$query->query = $match;
 		if($page_name == 'log'){
 		    $query->orderBy(['@timestamp' => SORT_DESC]);
 		}else{
