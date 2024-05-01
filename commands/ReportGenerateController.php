@@ -55,9 +55,11 @@ class ReportGenerateController extends Controller
 				$report_type = $report_backup['report_type'];
 				$report_file_name = $report_type.'/'.$report_backup['file_name'];
 				
+				$date_list = ApplicationHelper::getDatesFromRange($from_date, $to_date);
+
 				if($match_type == 'nat'){
 					$match = json_decode($report_backup['match1'], 1);
-					self::processLogFromDB($match, 'cloud-log-nat', true, @$report_backup['id'], $report_type, $report_file_name, $from_date, $to_date, $licenseInfo);
+					self::processLogFromDB($match, $date_list, true, @$report_backup['id'], $report_type, $report_file_name, $from_date, $to_date, $licenseInfo);
 				}else{
 					$match_pp = json_decode($report_backup['match1'], 1);
 					$match_nat = json_decode($report_backup['match2'], 1);
@@ -74,7 +76,7 @@ class ReportGenerateController extends Controller
 							   $user_name = $message_array[1];
 							   $mac_ip = $message_array[2];
 							}
-							self::processLogFromDB($match_nat, 'cloud-log-nat', true, @$report_backup['id'], $report_type, $report_file_name, $from_date, $to_date, $licenseInfo);
+							self::processLogFromDB($match_nat, $date_list, true, @$report_backup['id'], $report_type, $report_file_name, $from_date, $to_date, $licenseInfo);
 						}
 					}else{
 						ApplicationHelper::logger('Log data not found!');
@@ -328,13 +330,9 @@ class ReportGenerateController extends Controller
 		}
 	}
 	
-	private function processLogFromDB($match, $index = 'cloud-log-nat', $missing_find, $report_backup_id, $report_type, $report_file_name, $date_start, $date_end, $licenseInfo)
+	private function processLogFromDB($match, $date_list, $missing_find, $report_backup_id, $report_type, $report_file_name, $date_start, $date_end, $licenseInfo)
 	{
 		$all_data = [];
-		$query = (new Query)->from($index);
-		$query->query = $match;
-		$query->orderBy(['@timestamp' => SORT_ASC]);
-		$query->limit = 500;
 		
 		$xlsx_all_data = [];
 		$FILE = '';
@@ -442,13 +440,21 @@ class ReportGenerateController extends Controller
             $FILE = $fh;			
 		}
 		
-		foreach ($query->batch() as $key=>$rows) {
-			if($report_type == 'xlsx'){
-				$return = self::dataProcess($rows, $missing_find, $report_backup_id, $report_type, $report_file_name, $date_start, $date_end, $licenseInfo, $FILE);
-				$xlsx_all_data = array_merge($xlsx_all_data,$return);
-			}else{
-				self::dataProcess($rows, $missing_find, $report_backup_id, $report_type, $report_file_name, $date_start, $date_end, $licenseInfo, $FILE);
-			}
+		
+		foreach($date_list as $date){
+			$index = 'nat-'.$date;
+			$query = (new Query)->from($index);
+			$query->query = $match;
+			$query->orderBy(['@timestamp' => SORT_ASC]);
+			$query->limit = 500;
+			foreach ($query->batch() as $key=>$rows) {
+				if($report_type == 'xlsx'){
+					$return = self::dataProcess($rows, $missing_find, $report_backup_id, $report_type, $report_file_name, $date_start, $date_end, $licenseInfo, $FILE);
+					$xlsx_all_data = array_merge($xlsx_all_data,$return);
+				}else{
+					self::dataProcess($rows, $missing_find, $report_backup_id, $report_type, $report_file_name, $date_start, $date_end, $licenseInfo, $FILE);
+				}
+			}			
 		}
 
 		$model1 = ReportBackup::findOne(['id' => $report_backup_id]);

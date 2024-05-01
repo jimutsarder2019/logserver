@@ -287,28 +287,13 @@ class ElasticController extends Controller
 			$report_match2 = '';
 			$match_type = 'nat';
 			$all_data = self::getLogData($match, $date_list, $limit, $offset, $page_name);
-			//print_r($date_list);
-			//die;
-			
-			
 
-			//$all_data = self::getQueryData($match, 'cloud-log-nat', $limit, $offset, $page_name);
-			//print '<pre>';
-            //print_r($all_data);
-			//print '</pre>';
-			
-			//die;
 			$all_message = [];
 			$all_syslog_data = [];
 			
             $data_count = 0;
 			if(!empty($all_data)){
-				//$data_count = count($all_data);
 				$all_syslog_data = self::dataProcess($all_data, true, $from_date, $to_date, $from_hours, $from_mins, $to_hours, $to_mins, $router_list, false, false, false, $_POST);
-				//print '<pre>';
-				//print_r($all_syslog_data);
-				//print '</pre>';
-				//die;
 				$data_count = count($all_syslog_data);
 			}else{
 				if($search){
@@ -391,10 +376,8 @@ class ElasticController extends Controller
 								]
 						];
 						$report_match2 = json_encode($match,1);
-						//$all_data = self::getQueryData($match, 'cloud-log-nat', $limit, 0, $page_name);
 						$all_data = self::getLogData($match, $date_list, $limit, 0, $page_name);
 						if(!empty($all_data)){
-							//$data_count = count($all_data);
 							$all_syslog_data = self::dataProcess($all_data, false, $from_date, $to_date, $from_hours, $from_mins, $to_hours, $to_mins, $router_list, $user_name, $mac_ip, $main_src_ip);
 						    $data_count = count($all_syslog_data);
 						}
@@ -433,8 +416,6 @@ class ElasticController extends Controller
 	
 	private function getLogData($match, $date_list, $limit, $offset, $page_name){
 		$final_data = [];
-		//$date_list = ['2024-04-26', '2024-04-27', '2024-04-28'];
-		//$dates = ['2024-04-26'=>['name'=>'rahul', 'age'=>34],'2024-04-27'=>['name'=>'rudro', 'age'=>23], '2024-04-28'=>['name'=>'shipon', 'age'=>31]];
 		foreach($date_list as $date){
 			$index = 'nat-'.$date;
 			$all_data = self::getQueryData($match, $index, $limit, $offset, $page_name);
@@ -749,6 +730,7 @@ class ElasticController extends Controller
 		$params = require __DIR__ . '/../config/configuration.php';
 		$offset = Yii::$app->getRequest()->getQueryParam('offset');
 		$limit = Yii::$app->getRequest()->getQueryParam('limit');
+		$date = Yii::$app->getRequest()->getQueryParam('date');
 		
 		if(!$offset){
 			$offset = 0;
@@ -773,7 +755,11 @@ class ElasticController extends Controller
 		];
 		
 		$query = new Query;
-		$query->from('cloud-log-nat');
+		if(!$date){
+			$date = date('Y-m-d');
+		}
+		$index = 'nat-'.$date;
+		$query->from($index);
 		//$query->query = $match;
 		$query->orderBy(['@timestamp' => SORT_DESC]);
 		$query->offset = $offset;
