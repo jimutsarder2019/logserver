@@ -323,6 +323,41 @@ $baseUrl = Url::base();
 					</div>
 				</div>
 			</div>
+			
+			<div class="col-md-12">
+				<div class="card height-equal">
+					<div class="card-header">
+						<h5>Index List</h5>
+					</div>
+					<div class="card-body">
+						<div class="user-status table-responsive products-table">
+							<table class="table table-bordernone mb-0" style="table-layout:fixed">
+								<thead>
+									<tr>
+										<th scope="col">Date</th>
+										<th scope="col">Data Count</th>
+										<th scope="col">Size</th>
+									</tr>
+								</thead>
+								<tbody>
+								
+								    <?php
+									$index_tr = '';
+									foreach($index_data as $k=>$index){
+										$index_tr .= '<tr>
+													<td>'.$k.'</td>
+													<td>'.$index['count'].'</td>
+													<td>'.$index['size'].'</td>
+												</tr>';
+									}
+									print $index_tr;
+									?>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
 
 
 

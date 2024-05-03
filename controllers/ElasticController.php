@@ -1,7 +1,7 @@
 <?php
 //TODO:: CODE OPTIMIZE
 namespace app\controllers;
-
+///my-index-000001/_stats
 ini_set('max_execution_time', '300');
 
 require_once __DIR__ . '/../api/vendor/autoload.php';
@@ -770,5 +770,28 @@ class ElasticController extends Controller
 		ApplicationHelper::_setTrace("API ENDPOINT: ".@$params['elasticSearchHttpAddress'], 0);
 		ApplicationHelper::_setTrace($response);
 
+	}
+	
+	
+	public function actionIndex()
+    {
+		$final_data = [];
+		$date_list = ['2024-05-01', '2024-05-02', '2024-05-03', '2024-05-04'];
+		foreach($date_list as $key=>$date){
+			$data =  @file_get_contents('http://103.102.216.134:9200/nat-'.$date.'/_stats');
+			if($data){
+				$file_data = json_decode($data, 1);
+				$file_data['_all']['primaries']['docs']['count'];
+				$file_data['_all']['primaries']['store']['size_in_bytes'];
+				$final_data[$date]['count'] = $file_data['_all']['primaries']['docs']['count'];
+				$final_data[$date]['size'] = number_format($file_data['_all']['primaries']['store']['size_in_bytes']/1000000, 2).' MB';
+			}
+		}
+		
+		print '<pre>';
+		print_r($final_data);
+		print '</pre>';
+		die("ASDASD");
+		
 	}
 }

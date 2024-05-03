@@ -92,7 +92,7 @@ class DashboardController extends CustomController
 		
 		
 		// Execute the "df -BG" command to get disk usage information
-
+        /*
 		exec("df -BG /", $output);
 
 		 
@@ -171,20 +171,36 @@ class DashboardController extends CustomController
 		preg_match('/up\s+(.*?),\s+(.*?)\s+/', $uptime, $matches);
 		$days = str_replace(',', '', $matches[1]);
 		$days = intval($days);
-		
+		*/
 		$license_data = CustomController::getLicenseData();
 		
+		//INDEX STATS
+		
+		$final_data = [];
+		$date_list = ['2024-05-01', '2024-05-02', '2024-05-03', '2024-05-04'];
+		foreach($date_list as $key=>$date){
+			$data =  @file_get_contents('http://103.102.216.134:9200/nat-'.$date.'/_stats');
+			if($data){
+				$file_data = json_decode($data, 1);
+				$file_data['_all']['primaries']['docs']['count'];
+				$file_data['_all']['primaries']['store']['size_in_bytes'];
+				$final_data[$date]['count'] = $file_data['_all']['primaries']['docs']['count'];
+				$final_data[$date]['size'] = number_format($file_data['_all']['primaries']['store']['size_in_bytes']/1000000, 2).' MB';
+			}
+		}
+		
         return $this->render('index', ['router_data'=>$routers, 
-		'user_data'=>$users,
+		'user_data'=>@$users,
 		'users_count'=>0, 
-		'router_count'=>count($routers),
-		'cpu'=>$cpuUtilization,
-		'ram'=>round($ramUtilization, 2),
-		'disk_use'=>round($used_percentage_formatted, 2),
-		'disk_free'=>round($remaining_percentage_formatted, 2),
-		'uptime'=>$days,
+		'router_count'=>count(@$routers),
+		'cpu'=>@$cpuUtilization,
+		'ram'=>round(@$ramUtilization, 2),
+		'disk_use'=>round(@$used_percentage_formatted, 2),
+		'disk_free'=>round(@$remaining_percentage_formatted, 2),
+		'uptime'=>@$days,
 		'max_user_count_limit'=>@$license_data['maximum_number_of_user_allow'],
-		'license_expire'=>@$license_data['license_expire']
+		'license_expire'=>@$license_data['license_expire'],
+		'index_data'=>@$final_data
 		]);
     }
 }
