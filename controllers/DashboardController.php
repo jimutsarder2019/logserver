@@ -92,7 +92,7 @@ class DashboardController extends CustomController
 		
 		
 		// Execute the "df -BG" command to get disk usage information
-        /*
+        
 		exec("df -BG /", $output);
 
 		 
@@ -171,14 +171,14 @@ class DashboardController extends CustomController
 		preg_match('/up\s+(.*?),\s+(.*?)\s+/', $uptime, $matches);
 		$days = str_replace(',', '', $matches[1]);
 		$days = intval($days);
-		*/
+		
 		$license_data = CustomController::getLicenseData();
 		
 		//INDEX STATS
 		
-		$final_data = [];
-		$date_list = ['2024-05-01', '2024-05-02', '2024-05-03', '2024-05-04'];
-		foreach($date_list as $key=>$date){
+		$final_data = [];		
+		for($i=0; $i<7; $i++){
+			$date = date('Y-m-d', strtotime('-'.$i.' days'));
 			$data =  @file_get_contents('http://103.102.216.134:9200/nat-'.$date.'/_stats');
 			if($data){
 				$file_data = json_decode($data, 1);
@@ -188,7 +188,6 @@ class DashboardController extends CustomController
 				$final_data[$date]['size'] = number_format($file_data['_all']['primaries']['store']['size_in_bytes']/1000000, 2).' MB';
 			}
 		}
-		
         return $this->render('index', ['router_data'=>$routers, 
 		'user_data'=>@$users,
 		'users_count'=>0, 
