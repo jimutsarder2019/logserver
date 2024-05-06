@@ -92,7 +92,7 @@ class DashboardController extends CustomController
 		
 		
 		// Execute the "df -BG" command to get disk usage information
-        
+        /*
 		exec("df -BG /", $output);
 
 		 
@@ -171,7 +171,7 @@ class DashboardController extends CustomController
 		preg_match('/up\s+(.*?),\s+(.*?)\s+/', $uptime, $matches);
 		$days = str_replace(',', '', $matches[1]);
 		$days = intval($days);
-		
+		*/
 		$license_data = CustomController::getLicenseData();
 		
 		//INDEX STATS

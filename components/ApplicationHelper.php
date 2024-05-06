@@ -94,6 +94,21 @@ class ApplicationHelper
     }
 	
 	
+	public static function getRole()
+    {
+		if(Yii::$app->session->get('user_role')){
+			return Yii::$app->session->get('user_role');
+		}else{
+			$customer_id = Yii::$app->user->id;
+			if($customer_id){
+				$role = Yii::$app->db->createCommand( 'SELECT role FROM user where id='.$customer_id )->queryScalar();
+				return $role;
+			}
+		}
+		return 1;
+    }
+	
+	
 	public static function getRouterList()
     {
         $router_list = Yii::$app->db->createCommand( 'SELECT id, name, ip, type FROM router where status=1' )->queryAll();

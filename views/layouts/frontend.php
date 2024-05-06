@@ -15,6 +15,7 @@ $company_phone = ApplicationHelper::getCompanyName('company_phone');
 $favicon_logo = ApplicationHelper::getCompanyName('favicon');
 $user_picture = ApplicationHelper::getLoginUserInfo();
 $isAdmin = ApplicationHelper::isAdmin();
+$role = ApplicationHelper::getRole();
 ?>
 
 <!DOCTYPE html>
@@ -290,7 +291,7 @@ $isAdmin = ApplicationHelper::isAdmin();
                         </li>
 
 
-
+                        <?php if($role != 3){ ?>
                         <li>
                             <a class="sidebar-header" href="javascript:void(0)">
                                 <i data-feather="users"></i>
@@ -310,6 +311,7 @@ $isAdmin = ApplicationHelper::isAdmin();
                                 </li>
                             </ul>
                         </li>
+						<?php } ?>
 						
 						<?php if($isAdmin){ ?>
 						<li>
@@ -351,11 +353,12 @@ $isAdmin = ApplicationHelper::isAdmin();
                             </ul>
                         </li>
 						<?php } ?>
-
+                        <?php if($role != 3){ ?>
                         <li>
                             <a class="sidebar-header" href="<?=$baseUrl ?>/?r=site/system"><i
                                     data-feather="archive"></i><span>System Information</span></a>
                         </li>
+						<?php } ?>
 						
 						
 						<?php

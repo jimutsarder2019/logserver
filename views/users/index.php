@@ -71,7 +71,13 @@ $baseUrl = Url::base();
 										'label' => 'Role',
 										'headerOptions' => ['style' => 'color:#ff4c3b'],
 										'content' => function ($model) {
-											return ($model->role == 1)?'Admin':'User';
+											if($model->role == 1){
+												return 'Admin';
+											}else if($model->role == 2){
+												return 'User';
+											}else{
+												return 'Others';
+											}
 										}
 									],
 									[

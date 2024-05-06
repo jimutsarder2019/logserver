@@ -1,8 +1,9 @@
 <?php
 use yii\helpers\Url;
+use app\components\ApplicationHelper;
 
 $baseUrl = Url::base();
-
+$role = ApplicationHelper::getRole();
 ?>
 <style>
 .fa{
@@ -87,6 +88,7 @@ $baseUrl = Url::base();
 	<!-- Container-fluid starts-->
 	<div class="container-fluid">
 		<div class="row">
+		    <?php if($role != 3){ ?>
 			<div class="col-xxl-3 col-md-3 xl-25">
 				<div class="card o-hidden widget-cards">
 					<div class="success-box card-body">
@@ -105,6 +107,7 @@ $baseUrl = Url::base();
 					</div>
 				</div>
 			</div>
+			<?php } ?> 
 			<div class="col-xxl-3 col-md-3 xl-25">
 				<div class="card o-hidden widget-cards">
 					<div class="secondary-box card-body">
@@ -123,6 +126,7 @@ $baseUrl = Url::base();
 					</div>
 				</div>
 			</div>
+			<?php if($role != 3){ ?>
 			<div class="col-xxl-3 col-md-3 xl-25">
 				<div class="card o-hidden widget-cards">
 					<div class="primary-box card-body">
@@ -138,7 +142,7 @@ $baseUrl = Url::base();
 					</div>
 				</div>
 			</div>
-			
+			<?php } ?> 
 			<div class="col-xxl-3 col-md-3 xl-25">
 				<div class="card o-hidden widget-cards">
 					<div class="primary-box card-body">
@@ -188,7 +192,7 @@ $baseUrl = Url::base();
 					</div>
 				</div>
 			</div>
-			
+			<?php if($role != 3){ ?>
 			<div class="col-xxl-3 col-md-3 xl-25">
 				<div class="card o-hidden widget-cards">
 					<div class="secondary-box card-body">
@@ -207,7 +211,8 @@ $baseUrl = Url::base();
 					</div>
 				</div>
 			</div>
-			
+			<?php } ?>
+			<?php if($role != 3){ ?>
 			<div class="col-xxl-3 col-md-3 xl-25">
 				<div class="card o-hidden widget-cards">
 					<div class="danger-box card-body">
@@ -223,6 +228,7 @@ $baseUrl = Url::base();
 					</div>
 				</div>
 			</div>
+			<?php } ?>
 			
 			
 			
@@ -286,7 +292,7 @@ $baseUrl = Url::base();
 				</div>
 			</div>
 
-
+            <?php if($role != 3){ ?>
 			<div class="col-md-12">
 				<div class="card height-equal">
 					<div class="card-header">
@@ -323,11 +329,12 @@ $baseUrl = Url::base();
 					</div>
 				</div>
 			</div>
+			<?php } ?>
 			
 			<div class="col-md-12">
 				<div class="card height-equal">
 					<div class="card-header">
-						<h5>Index List</h5>
+						<h5>Index List (Last 7 days)</h5>
 					</div>
 					<div class="card-body">
 						<div class="user-status table-responsive products-table">

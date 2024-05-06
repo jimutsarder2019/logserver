@@ -53,6 +53,7 @@ input[type=file]::file-selector-button:hover {
 	<?= $form->field($model, 'role')->dropDownList([
 		1 => 'Admin',
 		2 => 'User',
+		3 => 'Others',
 	]) ?>	
 	
 	<?= $form->field($model, 'status')->dropDownList([
