@@ -111,7 +111,7 @@ class ApplicationHelper
 	
 	public static function getRouterList()
     {
-        $router_list = Yii::$app->db->createCommand( 'SELECT id, name, ip, type FROM router where status=1' )->queryAll();
+        $router_list = Yii::$app->db->createCommand( 'SELECT id, name, ip, type FROM router where status=1 and (type="nat" or type="nat_pppoe")' )->queryAll();
 		return $router_list;
     }
 	

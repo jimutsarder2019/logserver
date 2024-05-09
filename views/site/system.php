@@ -27,6 +27,10 @@
 						    <div class="col-md-6">ISP Name:</div>
 						    <div class="col-md-6"><?=@$license_data['registration_name']?></div>
 						</div>
+						<div class="row">
+						    <div class="col-md-6">Version:</div>
+						    <div class="col-md-6">7.1.24.05.05</div>
+						</div>
 						<!-- <div class="row">
 						    <div class="col-md-3">Licensed NIC:</div>
 						    <div class="col-md-9">----</div>
