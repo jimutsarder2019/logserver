@@ -93,7 +93,7 @@ class DashboardController extends CustomController
 		
 		// Execute the "df -BG" command to get disk usage information
 		//exec("df -BG /", $output);
-		exec("df -BG".$license_data['log_disk_path']."", $output);	 
+		exec("df -BG/log_disk", $output);	 
 
 		// Parse the output to get the usage information
 		

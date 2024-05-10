@@ -30,8 +30,7 @@ class CustomController extends Controller {
 			"maximum_number_of_account"=> "unlimited",
 			"maximum_number_of_router"=> "unlimited",
 			"maximum_number_of_user_allow"=> 1000,
-			"maximum_number_of_user_allow_alert_perchantage"=> 80,
-			"log_disk_path"=> "/log_disk",
+			"maximum_number_of_user_allow_alert_perchantage"=> 80
 	   ];
    }	   
 }
