@@ -253,7 +253,7 @@ class ElasticController extends Controller
 						if(count($router_filter) > 1){
 							$match  =	 [
 								"bool"=> [
-								  "must"=> $date_filter,
+								  //"must"=> $date_filter,//temporary..finding solution
 								  "should"=> $router_filter
 								]
 							];
@@ -624,7 +624,7 @@ class ElasticController extends Controller
 						$all_syslog_data[$key]['nat_port'] = @explode(":", @$nat_ip_array)[1];
 					}
 					
-					if(isset($all_syslog_data[$key]['src_ip'], $data['_source']['@timestamp']) && $missing_find && $all_syslog_data[$key]['src_ip'] && $all_syslog_data[$key]['user'] == 'N/A'){
+					if(isset($all_syslog_data[$key]['src_ip'], $data['_source']['@timestamp']) && $missing_find && ($all_syslog_data[$key]['src_ip'] != 'N/A') && $all_syslog_data[$key]['user'] == 'N/A'){
 						$missing_user_data = self::getMissingUser($all_syslog_data[$key]['src_ip'], $date_start, $date_end, $from_hours, $from_mins, $to_hours, $to_mins);
 					
 						if(isset($missing_user_data['user']) && $missing_user_data['user']){
@@ -633,7 +633,7 @@ class ElasticController extends Controller
 							$all_syslog_data[$key]['host'] = $missing_user_data['router_ip'];
 						}
 					//for missing mac	
-					}else if(isset($all_syslog_data[$key]['src_ip'], $data['_source']['@timestamp']) && $missing_find && $all_syslog_data[$key]['src_ip'] && $all_syslog_data[$key]['user'] != 'N/A' && $all_syslog_data[$key]['mac'] == 'N/A'){
+					}else if(isset($all_syslog_data[$key]['src_ip'], $data['_source']['@timestamp']) && $missing_find && ($all_syslog_data[$key]['src_ip'] != 'N/A') && $all_syslog_data[$key]['user'] != 'N/A' && $all_syslog_data[$key]['mac'] == 'N/A'){
 						$missing_user_data = self::getMissingUser($all_syslog_data[$key]['src_ip'], $date_start, $date_end, $from_hours, $from_mins, $to_hours, $to_mins);
 					
 						if(isset($missing_user_data['mac']) && $missing_user_data['mac']){

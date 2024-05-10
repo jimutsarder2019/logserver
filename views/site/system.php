@@ -28,6 +28,10 @@
 						    <div class="col-md-6"><?=@$license_data['registration_name']?></div>
 						</div>
 						<div class="row">
+						    <div class="col-md-6">License Number:</div>
+						    <div class="col-md-6"><?=@$license_data['license_number']?></div>
+						</div>
+						<div class="row">
 						    <div class="col-md-6">Version:</div>
 						    <div class="col-md-6">7.1.24.05.05</div>
 						</div>

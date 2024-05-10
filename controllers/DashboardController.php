@@ -89,13 +89,11 @@ class DashboardController extends CustomController
 		$active_users = Yii::$app->db->createCommand( 'SELECT COUNT(*) FROM user WHERE status = 1 and role > 1' )->queryScalar();
 		
 		
-		
+		$license_data = CustomController::getLicenseData();
 		
 		// Execute the "df -BG" command to get disk usage information
-        
-		exec("df -BG /", $output);
-
-		 
+		//exec("df -BG /", $output);
+		exec("df -BG".$license_data['log_disk_path']."", $output);	 
 
 		// Parse the output to get the usage information
 		
@@ -154,9 +152,10 @@ class DashboardController extends CustomController
 		
 		//die;
 		$usedMemory = intval($totalMemory) - intval($freeMemory);
-		$ramUtilization = (intval($usedMemory) / intval($totalMemory)) * 100;
 
-
+		if($usedMemory && $totalMemory){
+		    $ramUtilization = (intval($usedMemory) / intval($totalMemory)) * 100;
+		}
 
 		// Geeting free Space info
 
@@ -169,10 +168,8 @@ class DashboardController extends CustomController
 		// uptime
 		$uptime = shell_exec('uptime');
 		preg_match('/up\s+(.*?),\s+(.*?)\s+/', $uptime, $matches);
-		$days = str_replace(',', '', $matches[1]);
+		$days = str_replace(',', '', @$matches[1]);
 		$days = intval($days);
-		
-		$license_data = CustomController::getLicenseData();
 		
 		//INDEX STATS
 		
