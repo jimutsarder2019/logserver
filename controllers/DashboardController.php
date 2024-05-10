@@ -90,10 +90,11 @@ class DashboardController extends CustomController
 		
 		
 		$license_data = CustomController::getLicenseData();
+		$params = require __DIR__ . '/../config/configuration.php';
 		
 		// Execute the "df -BG" command to get disk usage information
 		//exec("df -BG /", $output);
-		exec("df -BG/log_disk", $output);	 
+		exec("df -BG ".@$params['log_disk_path']."", $output);	 
 
 		// Parse the output to get the usage information
 		
