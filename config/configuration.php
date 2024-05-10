@@ -9,4 +9,5 @@ return [
     'elasticSearchHttpAddress' => '103.102.216.134:9200',
     //'elasticSearchHttpAddress' => '103.154.188.102:9200',
     //'elasticSearchHttpAddress' => '103.155.174.43:9200',
+	'log_disk_path' => '/log_disk',
 ];
