@@ -91,7 +91,6 @@ class DashboardController extends CustomController
 		
 		$license_data = CustomController::getLicenseData();
 		$params = require __DIR__ . '/../config/configuration.php';
-		
 		// Execute the "df -BG" command to get disk usage information
 		//exec("df -BG /", $output);
 		exec("df -BG ".@$params['log_disk_path']."", $output);	 
@@ -174,10 +173,11 @@ class DashboardController extends CustomController
 		
 		//INDEX STATS
 		
-		$final_data = [];		
+		$final_data = [];
+		
 		for($i=0; $i<7; $i++){
 			$date = date('Y-m-d', strtotime('-'.$i.' days'));
-			$data =  @file_get_contents('http://103.102.216.134:9200/nat-'.$date.'/_stats');
+			$data =  @file_get_contents('http://'.@$params['elasticSearchHttpAddress'].'/nat-'.$date.'/_stats');
 			if($data){
 				$file_data = json_decode($data, 1);
 				$file_data['_all']['primaries']['docs']['count'];
