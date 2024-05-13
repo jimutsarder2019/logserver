@@ -81,9 +81,16 @@ class SyslogController extends CustomController
 	
 	public function actionData()
     {
+		$page = Yii::$app->getRequest()->getQueryParam('page');
 		$final_data = [];
 		$params = require __DIR__ . '/../config/configuration.php';
-		for($i=0; $i<10; $i++){
+		$start_number = 0;
+		$end_number = 10;
+		if($page > 1){
+			$end_number = $end_number * $page;
+			$start_number = $end_number - 10;
+		}
+		for($i=$start_number; $i<$end_number; $i++){
 			$date = date('Y-m-d', strtotime('-'.$i.' days'));
 			$data =  @file_get_contents('http://'.@$params['elasticSearchHttpAddress'].'/nat-'.$date.'/_stats');
 			if($data){
