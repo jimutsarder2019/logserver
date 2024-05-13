@@ -83,7 +83,7 @@ class SyslogController extends CustomController
     {
 		$final_data = [];
 		$params = require __DIR__ . '/../config/configuration.php';
-		for($i=0; $i<7; $i++){
+		for($i=0; $i<10; $i++){
 			$date = date('Y-m-d', strtotime('-'.$i.' days'));
 			$data =  @file_get_contents('http://'.@$params['elasticSearchHttpAddress'].'/nat-'.$date.'/_stats');
 			if($data){

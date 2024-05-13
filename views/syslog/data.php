@@ -32,7 +32,7 @@
 			<div class="row">
 				<div class="col-lg-6">
 					<div class="page-header-left">
-						<h3>Index List <span style="font-size:18px;text-transform: capitalize;">(Last 7 days)</span></h3>
+						<h3>Index List <span style="font-size:18px;text-transform: capitalize;">(Last 10 days)</span></h3>
 					</div>
 				</div>
 			</div>
