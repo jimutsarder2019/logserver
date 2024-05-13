@@ -65,7 +65,9 @@
 													<td>'.$k.'</td>
 													<td>'.$index['count'].'</td>
 													<td>'.$index['size'].'</td>
-													<td><a target="_blank" href="'.$index['url'].'"><i class="fa fa-eye"></i></a></td>
+													<td><a target="_blank" href="'.$index['stats_url'].'"><i class="fa fa-eye"></i></a>
+													<a target="_blank" href="'.$index['search_url'].'"><i class="fa fa-search"></i></a>
+													</td>
 												</tr>';
 									}
 									print $index_tr;

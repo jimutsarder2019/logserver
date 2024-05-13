@@ -92,7 +92,8 @@ class SyslogController extends CustomController
 				$file_data['_all']['primaries']['store']['size_in_bytes'];
 				$final_data[$date]['count'] = $file_data['_all']['primaries']['docs']['count'];
 				$final_data[$date]['size'] = number_format($file_data['_all']['primaries']['store']['size_in_bytes']/1000000, 2).' MB';
-				$final_data[$date]['url'] = 'http://'.@$params['elasticSearchHttpAddress'].'/nat-'.$date.'/_stats';
+				$final_data[$date]['stats_url'] = 'http://'.@$params['elasticSearchHttpAddress'].'/nat-'.$date.'/_stats';
+				$final_data[$date]['search_url'] = 'http://'.@$params['elasticSearchHttpAddress'].'/nat-'.$date.'/_search';
 			}
 		}
 		$this->layout = 'frontend';
