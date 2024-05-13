@@ -78,4 +78,23 @@ class SyslogController extends CustomController
 		$this->layout = 'frontend';
         return $this->render('report', array('routers'=>$routers));
     }
+	
+	public function actionData()
+    {
+		$final_data = [];
+		
+		for($i=0; $i<7; $i++){
+			$date = date('Y-m-d', strtotime('-'.$i.' days'));
+			$data =  @file_get_contents('http://'.@$params['elasticSearchHttpAddress'].'/nat-'.$date.'/_stats');
+			if($data){
+				$file_data = json_decode($data, 1);
+				$file_data['_all']['primaries']['docs']['count'];
+				$file_data['_all']['primaries']['store']['size_in_bytes'];
+				$final_data[$date]['count'] = $file_data['_all']['primaries']['docs']['count'];
+				$final_data[$date]['size'] = number_format($file_data['_all']['primaries']['store']['size_in_bytes']/1000000, 2).' MB';
+			}
+		}
+		$this->layout = 'frontend';
+        return $this->render('data', array('data'=>$file_data));
+    }
 }
