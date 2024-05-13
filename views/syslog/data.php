@@ -1,4 +1,11 @@
- <style>
+<?php
+
+use yii\helpers\Url;
+$baseUrl = Url::base();
+
+?>
+
+<style>
 .center {
   text-align: center;
 }
@@ -32,7 +39,7 @@
 			<div class="row">
 				<div class="col-lg-6">
 					<div class="page-header-left">
-						<h3>Index List <span style="font-size:18px;text-transform: capitalize;">(Last 10 days)</span></h3>
+						<h3>Index List <span style="font-size:18px;text-transform: capitalize;">(Last 10 days)</span> <a href="<?=$baseUrl ?>/?r=syslog/data&page=2" style="float:right">>></a></h3>
 					</div>
 				</div>
 			</div>
