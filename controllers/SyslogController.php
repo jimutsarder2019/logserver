@@ -103,7 +103,10 @@ class SyslogController extends CustomController
 				$final_data[$date]['search_url'] = 'http://'.@$params['elasticSearchHttpAddress'].'/nat-'.$date.'/_search';
 			}
 		}
+		if(!$page){
+			$page = 1;
+		}
 		$this->layout = 'frontend';
-        return $this->render('data', array('index_data'=>$final_data));
+        return $this->render('data', array('index_data'=>$final_data, 'page'=>($page+1)));
     }
 }
