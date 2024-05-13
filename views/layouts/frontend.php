@@ -276,6 +276,16 @@ $role = ApplicationHelper::getRole();
                             </a>
                         </li>
 						
+						
+						
+						<li>
+                            <a class="sidebar-header" href="<?=$baseUrl ?>/?r=syslog/data">
+                                <i data-feather="search"></i>
+                                <span>Index List</span>
+                            </a>
+                        </li>
+						
+						
 						<li>
                             <a class="sidebar-header" href="<?=$baseUrl ?>/?r=syslog/report">
                                 <i data-feather="download"></i>
