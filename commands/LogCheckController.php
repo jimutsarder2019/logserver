@@ -73,7 +73,7 @@ class LogCheckController extends Controller
 						print 'Router log not found! check mail...';
 						print "\n";
 						ApplicationHelper::logger('Router log not found! check mail...');
-						self::send_mail($subject, $message, $to_email);
+						//self::send_mail($subject, $message, $to_email);
 					}
 				}
 			}
