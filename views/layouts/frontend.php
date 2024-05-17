@@ -276,16 +276,6 @@ $role = ApplicationHelper::getRole();
                             </a>
                         </li>
 						
-						
-						
-						<li>
-                            <a class="sidebar-header" href="<?=$baseUrl ?>/?r=syslog/data">
-                                <i data-feather="search"></i>
-                                <span>Index List</span>
-                            </a>
-                        </li>
-						
-						
 						<li>
                             <a class="sidebar-header" href="<?=$baseUrl ?>/?r=syslog/report">
                                 <i data-feather="download"></i>
@@ -297,6 +287,13 @@ $role = ApplicationHelper::getRole();
                             <a class="sidebar-header" href="<?=$baseUrl ?>/?r=report-backup/index">
                                 <i data-feather="download"></i>
                                 <span>Request Generated Log</span>
+                            </a>
+                        </li>
+						
+						<li>
+                            <a class="sidebar-header" href="<?=$baseUrl ?>/?r=syslog/data">
+                                <i data-feather="search"></i>
+                                <span>Index List</span>
                             </a>
                         </li>
 
