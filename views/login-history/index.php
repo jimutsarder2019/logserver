@@ -61,8 +61,6 @@ $this->params['breadcrumbs'][] = $this->title;
 											return @$dateTime[1];
 										}
 									],
-									
-									'checkin',
 
 									
 									/*[

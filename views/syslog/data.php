@@ -61,6 +61,7 @@ $baseUrl = Url::base();
 										<th scope="col">Data Count</th>
 										<th scope="col">Size</th>
 										<th scope="col">Action</th>
+										
 									</tr>
 								</thead>
 								<tbody>
@@ -72,9 +73,7 @@ $baseUrl = Url::base();
 													<td>'.$k.'</td>
 													<td>'.$index['count'].'</td>
 													<td>'.$index['size'].'</td>
-													<td><a target="_blank" href="'.$index['stats_url'].'"><i class="fa fa-eye"></i></a>
-													    <a target="_blank" href="'.$index['search_url'].'"><i class="fa fa-search"></i></a>
-													</td>
+													<td><a href="'.$baseUrl.'/?r=syslog/download-request&date='.$k.'&count='.$index['count'].'">Download</a></td>
 												</tr>';
 									}
 									print $index_tr;
