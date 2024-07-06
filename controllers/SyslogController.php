@@ -168,5 +168,6 @@ class SyslogController extends CustomController
 		$params = ['from_date_to_date'=>$from_date.$from_hours.$from_mins.'_'.$to_date.$to_hours.$to_mins, 'from_date'=>$from_date."T".$from_hours.":".$from_mins.":00", 'to_date'=>$to_date."T".$to_hours.":".$to_mins.":59", 'report_type'=>$report_type, 'match1'=>$report_match1, 'match2'=>$report_match2, 'match_type'=>$match_type];
 		//$params = ['from_date_to_date'=>$date.'00:01_'.$date.'23:59', 'from_date'=>$date."T00:01:00", 'to_date'=>$date."T23:59:59", 'report_type'=>'csv', 'match1'=>$report_match1, 'match2'=>$report_match2, 'match_type'=>$match_type];
 		ApplicationHelper::storeReportGenerateRecord($params, $count);
+		return $this->redirect(['data', 'msg' => true]);
 	}
 }

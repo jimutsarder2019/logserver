@@ -40,6 +40,10 @@ $baseUrl = Url::base();
 				<div class="col-lg-6">
 					<div class="page-header-left">
 						<h3>Index List <span style="font-size:18px;text-transform: capitalize;">(Last 10 days)</span></h3>
+						<?php if(isset($_REQUEST['msg']) && $_REQUEST['msg']){ ?>
+						</br>
+						<p style="color:#ff4c3b">Download request has been sent</p>
+						<?php } ?>
 					</div>
 				</div>
 			</div>
@@ -80,9 +84,25 @@ $baseUrl = Url::base();
 									?>
 								</tbody>
 							</table>
-							<div class="page-header-left">
-								<h3><a href="<?=$baseUrl ?>/?r=syslog/data&page=<?=$page?>" style="float:right">>></a></h3>
-							</div>
+						</div>
+						<div class="row">
+						        <?php
+								$class = 'col-md-6';
+								if(isset($_REQUEST['page']) && $_REQUEST['page'] > 1){ ?>
+									<div class="col-md-6">
+										<h3>
+										<a href="<?=$baseUrl ?>/?r=syslog/data&page=<?=($page-2)?>" style="float:left"><<</a></h3>
+									</div>
+								<?php }else{
+									$class = 'col-md-12';
+								}
+								?>
+								<?php if(!empty($index_data)){ ?>
+									<div class="<?=$class?>">
+										<h3>
+										<a href="<?=$baseUrl ?>/?r=syslog/data&page=<?=$page?>" style="float:right">>></a></h3>
+									</div>
+								<?php } ?>
 						</div>
 					</div>
 				</div>
