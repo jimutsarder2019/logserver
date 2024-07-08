@@ -205,6 +205,8 @@ class ElasticController extends Controller
 						]
 				];
 			}else if($search){
+				  $previous_date = date('Y-m-d',strtotime("-1 days"));
+				  $date_list = [$previous_date, date('Y-m-d')];
 				  if(count($router_filter) > 1){
 					  $match  =	 [
 						"bool"=> [
@@ -287,7 +289,9 @@ class ElasticController extends Controller
 			$report_match2 = '';
 			$match_type = 'nat';
 			$all_data = self::getLogData($match, $date_list, $limit, $offset, $page_name);
-
+            //ApplicationHelper::_setTrace($match, false);
+            //ApplicationHelper::_setTrace($date_list, false);
+            //ApplicationHelper::_setTrace($all_data);
 			$all_message = [];
 			$all_syslog_data = [];
 			
