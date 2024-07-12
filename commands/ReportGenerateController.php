@@ -514,17 +514,17 @@ class ReportGenerateController extends Controller
 	private function csvXlsxGenerate($fh, $raw_data, $key)
     {
 		$csvValueArray = [];
-		$csvValueArray[] = $raw_data[$key]['datetime'];
-		$csvValueArray[] = $raw_data[$key]['host'];
-		$csvValueArray[] = $raw_data[$key]['user'];
-		$csvValueArray[] = $raw_data[$key]['protocol'];
-		$csvValueArray[] = $raw_data[$key]['mac'];
-		$csvValueArray[] = $raw_data[$key]['src_ip'];
-		$csvValueArray[] = $raw_data[$key]['src_port'];
-		$csvValueArray[] = $raw_data[$key]['destination_ip'];
-		$csvValueArray[] = $raw_data[$key]['destination_port'];
-		$csvValueArray[] = $raw_data[$key]['nat_ip'];
-		$csvValueArray[] = $raw_data[$key]['nat_port'];
+		$csvValueArray[] = @$raw_data[$key]['datetime'];
+		$csvValueArray[] = @$raw_data[$key]['host'];
+		$csvValueArray[] = @$raw_data[$key]['user'];
+		$csvValueArray[] = @$raw_data[$key]['protocol'];
+		$csvValueArray[] = @$raw_data[$key]['mac'];
+		$csvValueArray[] = @$raw_data[$key]['src_ip'];
+		$csvValueArray[] = @$raw_data[$key]['src_port'];
+		$csvValueArray[] = @$raw_data[$key]['destination_ip'];
+		$csvValueArray[] = @$raw_data[$key]['destination_port'];
+		$csvValueArray[] = @$raw_data[$key]['nat_ip'];
+		$csvValueArray[] = @$raw_data[$key]['nat_port'];
 	 
 		// Put the data into the stream
 		fputcsv($fh, $csvValueArray);
@@ -533,17 +533,17 @@ class ReportGenerateController extends Controller
 	private function xlsxGenerate($raw_data, $key)
     {
 		$csvValueArray = [];
-		$csvValueArray[] = $raw_data[$key]['datetime'];
-		$csvValueArray[] = $raw_data[$key]['host'];
-		$csvValueArray[] = $raw_data[$key]['user'];
-		$csvValueArray[] = $raw_data[$key]['protocol'];
-		$csvValueArray[] = $raw_data[$key]['mac'];
-		$csvValueArray[] = $raw_data[$key]['src_ip'];
-		$csvValueArray[] = $raw_data[$key]['src_port'];
-		$csvValueArray[] = $raw_data[$key]['destination_ip'];
-		$csvValueArray[] = $raw_data[$key]['destination_port'];
-		$csvValueArray[] = $raw_data[$key]['nat_ip'];
-		$csvValueArray[] = $raw_data[$key]['nat_port'];
+		$csvValueArray[] = @$raw_data[$key]['datetime'];
+		$csvValueArray[] = @$raw_data[$key]['host'];
+		$csvValueArray[] = @$raw_data[$key]['user'];
+		$csvValueArray[] = @$raw_data[$key]['protocol'];
+		$csvValueArray[] = @$raw_data[$key]['mac'];
+		$csvValueArray[] = @$raw_data[$key]['src_ip'];
+		$csvValueArray[] = @$raw_data[$key]['src_port'];
+		$csvValueArray[] = @$raw_data[$key]['destination_ip'];
+		$csvValueArray[] = @$raw_data[$key]['destination_port'];
+		$csvValueArray[] = @$raw_data[$key]['nat_ip'];
+		$csvValueArray[] = @$raw_data[$key]['nat_port'];
 	 
 		return $csvValueArray;
     }
@@ -551,17 +551,17 @@ class ReportGenerateController extends Controller
 	private function pdfGenerate($raw_data, $key)
     {
 		$tr = '<tr>
-		       <td style="border:1px solid #000000;">'.$raw_data[$key]['datetime'].'</td>
-		       <td style="border:1px solid #000000;">'.$raw_data[$key]['host'].'</td>
-		       <td style="border:1px solid #000000;">'.$raw_data[$key]['user'].'</td>
-		       <td style="border:1px solid #000000;">'.$raw_data[$key]['protocol'].'</td>
-		       <td style="border:1px solid #000000;">'.$raw_data[$key]['mac'].'</td>
-		       <td style="border:1px solid #000000;">'.$raw_data[$key]['src_ip'].'</td>
-		       <td style="border:1px solid #000000;">'.$raw_data[$key]['src_port'].'</td>
-		       <td style="border:1px solid #000000;">'.$raw_data[$key]['destination_ip'].'</td>
-		       <td style="border:1px solid #000000;">'.$raw_data[$key]['destination_port'].'</td>
-		       <td style="border:1px solid #000000;">'.$raw_data[$key]['nat_ip'].'</td>
-		       <td style="border:1px solid #000000;">'.$raw_data[$key]['nat_port'].'</td>
+		       <td style="border:1px solid #000000;">'.@$raw_data[$key]['datetime'].'</td>
+		       <td style="border:1px solid #000000;">'.@$raw_data[$key]['host'].'</td>
+		       <td style="border:1px solid #000000;">'.@$raw_data[$key]['user'].'</td>
+		       <td style="border:1px solid #000000;">'.@$raw_data[$key]['protocol'].'</td>
+		       <td style="border:1px solid #000000;">'.@$raw_data[$key]['mac'].'</td>
+		       <td style="border:1px solid #000000;">'.@$raw_data[$key]['src_ip'].'</td>
+		       <td style="border:1px solid #000000;">'.@$raw_data[$key]['src_port'].'</td>
+		       <td style="border:1px solid #000000;">'.@$raw_data[$key]['destination_ip'].'</td>
+		       <td style="border:1px solid #000000;">'.@$raw_data[$key]['destination_port'].'</td>
+		       <td style="border:1px solid #000000;">'.@$raw_data[$key]['nat_ip'].'</td>
+		       <td style="border:1px solid #000000;">'.@$raw_data[$key]['nat_port'].'</td>
 		      </tr>';
 			  
 		return $tr;
