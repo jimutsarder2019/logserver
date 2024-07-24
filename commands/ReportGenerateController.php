@@ -456,10 +456,11 @@ class ReportGenerateController extends Controller
 				}
 			}			
 		}
-
-		$model1 = ReportBackup::findOne(['id' => $report_backup_id]);
-		$model1->status = 2;
-		$model1->save();
+        if($report_type == 'csv'){
+			$model1 = ReportBackup::findOne(['id' => $report_backup_id]);
+			$model1->status = 2;
+			$model1->save();
+		}
 		
 		if($report_type == 'pdf'){
 			$mpdf->WriteHTML('</tbody></table></body>');
