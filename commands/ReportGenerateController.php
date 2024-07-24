@@ -447,13 +447,22 @@ class ReportGenerateController extends Controller
 			$query->query = $match;
 			$query->orderBy(['@timestamp' => SORT_ASC]);
 			$query->limit = 500;
+			$count = 1;
 			foreach ($query->batch() as $key=>$rows) {
 				if($report_type == 'xlsx'){
 					$return = self::dataProcess($rows, $missing_find, $report_backup_id, $report_type, $report_file_name, $date_start, $date_end, $licenseInfo, $FILE);
 					$xlsx_all_data = array_merge($xlsx_all_data,$return);
 				}else{
 					self::dataProcess($rows, $missing_find, $report_backup_id, $report_type, $report_file_name, $date_start, $date_end, $licenseInfo, $FILE);
+				    if($count === 10){
+						if($report_type == 'csv'){
+							$model1 = ReportBackup::findOne(['id' => $report_backup_id]);
+							$model1->status = 2;
+							$model1->save();
+						}
+					}
 				}
+				$count++;
 			}			
 		}
         if($report_type == 'csv'){
