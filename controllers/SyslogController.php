@@ -162,7 +162,7 @@ class SyslogController extends CustomController
 			]
 		];
 		$report_type = 'csv';
-		$match_type = 'ppp';
+		$match_type = 'nat';
 		$report_match1 = json_encode($match);
 		$report_match2 = json_encode($match);
 		$params = ['from_date_to_date'=>$from_date.$from_hours.$from_mins.'_'.$to_date.$to_hours.$to_mins, 'from_date'=>$from_date."T".$from_hours.":".$from_mins.":00", 'to_date'=>$to_date."T".$to_hours.":".$to_mins.":59", 'report_type'=>$report_type, 'match1'=>$report_match1, 'match2'=>$report_match2, 'match_type'=>$match_type];
