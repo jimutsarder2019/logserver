@@ -93,7 +93,7 @@ $isAdmin = ApplicationHelper::isAdmin();
 						<div class="user-status table-responsive latest-order-table">
 							<?= GridView::widget([
 								'dataProvider' => $dataProvider,
-								'filterModel' => $searchModel,
+								//'filterModel' => $searchModel,
 								'columns' => [
 								    'date',
 									[

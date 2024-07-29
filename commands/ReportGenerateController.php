@@ -454,7 +454,7 @@ class ReportGenerateController extends Controller
 					$xlsx_all_data = array_merge($xlsx_all_data,$return);
 				}else{
 					self::dataProcess($rows, $missing_find, $report_backup_id, $report_type, $report_file_name, $date_start, $date_end, $licenseInfo, $FILE);
-				    if($count === 10){
+				    if($count === 50){
 						if($report_type == 'csv'){
 							$model1 = ReportBackup::findOne(['id' => $report_backup_id]);
 							$model1->status = 2;
