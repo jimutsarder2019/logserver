@@ -180,10 +180,12 @@ class DashboardController extends CustomController
 			$data =  @file_get_contents('http://'.@$params['elasticSearchHttpAddress'].'/nat-'.$date.'/_stats');
 			if($data){
 				$file_data = json_decode($data, 1);
-				$file_data['_all']['primaries']['docs']['count'];
-				$file_data['_all']['primaries']['store']['size_in_bytes'];
-				$final_data[$date]['count'] = $file_data['_all']['primaries']['docs']['count'];
-				$final_data[$date]['size'] = number_format($file_data['_all']['primaries']['store']['size_in_bytes']/1000000, 2).' MB';
+				if(isset($file_data['_all']['primaries']['docs'])){
+				    $final_data[$date]['count'] = @$file_data['_all']['primaries']['docs']['count'];
+				}
+				if(isset($file_data['_all']['primaries']['store'])){
+				    $final_data[$date]['size'] = number_format(@$file_data['_all']['primaries']['store']['size_in_bytes']/1000000, 2).' MB';
+			    }
 			}
 		}
         return $this->render('index', ['router_data'=>$routers, 
