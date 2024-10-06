@@ -296,7 +296,8 @@ class ElasticController extends Controller
 			$all_syslog_data = [];
 			
             $data_count = 0;
-			if(!empty($all_data)){
+			//if(!empty($all_data)){
+			if(isset($all_data[0]) && !empty($all_data[0])){
 				$all_syslog_data = self::dataProcess($all_data, true, $from_date, $to_date, $from_hours, $from_mins, $to_hours, $to_mins, $router_list, false, false, false, $_POST);
 				$data_count = count($all_syslog_data);
 			}else{
@@ -322,7 +323,7 @@ class ElasticController extends Controller
 				$match_type = 'ppp';
 				$report_match1 = json_encode($match);
 				
-				$all_data = self::getQueryData($match, 'cloud-log-ppp', 1, 0, $page_name);
+				$all_data = self::getQueryData($match, 'cloud-log-ppp', 1, 0, 'log');
 				if(!empty($all_data)){
 					$missing_user_data = $all_data[0]['_source']['MESSAGE'];
 					$main_src_ip = $all_data[0]['_source']['HOST'];
