@@ -95,10 +95,16 @@ class SyslogController extends CustomController
 			$data =  @file_get_contents('http://'.@$params['elasticSearchHttpAddress'].'/nat-'.$date.'/_stats');
 			if($data){
 				$file_data = json_decode($data, 1);
-				$file_data['_all']['primaries']['docs']['count'];
-				$file_data['_all']['primaries']['store']['size_in_bytes'];
-				$final_data[$date]['count'] = $file_data['_all']['primaries']['docs']['count'];
-				$final_data[$date]['size'] = number_format($file_data['_all']['primaries']['store']['size_in_bytes']/1000000, 2).' MB';
+				if(isset($file_data['_all']['primaries']['docs'])){
+				    $final_data[$date]['count'] = $file_data['_all']['primaries']['docs']['count'];
+				}else{
+					$final_data[$date]['count'] = 0;
+				}
+			    if(isset($file_data['_all']['primaries']['store'])){
+				    $final_data[$date]['size'] = number_format($file_data['_all']['primaries']['store']['size_in_bytes']/1000000, 2).' MB';
+				}else{
+					$final_data[$date]['size'] = '';
+				}
 				$final_data[$date]['stats_url'] = 'http://'.@$params['elasticSearchHttpAddress'].'/nat-'.$date.'/_stats';
 				$final_data[$date]['search_url'] = 'http://'.@$params['elasticSearchHttpAddress'].'/nat-'.$date.'/_search';
 			}
