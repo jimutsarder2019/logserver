@@ -326,6 +326,7 @@ class ElasticController extends Controller
 				$all_data = self::getQueryData($match, 'cloud-log-ppp', 1, 0, 'log');
 				if(!empty($all_data)){
 					$missing_user_data = $all_data[0]['_source']['MESSAGE'];
+					//$missing_user_data = 'in: out:(unknown 0), connection-state:new,snat proto TCP (ACK,FIN), 10.20.40.203:1793->142.250.193.162:443, NAT (10.20.40.203:1793->103.155.118.6:1793)->142.250.193.162:443, len 52';
 					$main_src_ip = $all_data[0]['_source']['HOST'];
 					$message_array = explode(" ",$missing_user_data);
 					if(isset($message_array[0],  $message_array[1])){
@@ -479,6 +480,7 @@ class ElasticController extends Controller
 		foreach($daywise_all_data as $all_data){
 			foreach($all_data as $key2=>$data){
 				//$data['_source']['MESSAGE'] = 'prerouting: in:<pppoe-!sfc@shop.wifi> out:(unknown 0), proto TCP (ACK,FIN), [2001:df4:d480:f9dc:91ee:36dc:6720:fb4c]:54438->[2620:1ec:c11::239]:443, len 20';			
+				//$data['_source']['MESSAGE'] = 'in: out:(unknown 0), connection-state:new,snat proto TCP (ACK,FIN), 10.20.40.203:1793->142.250.193.162:443, NAT (10.20.40.203:1793->103.155.118.6:1793)->142.250.193.162:443, len 52';			
 				$message_array = explode(", ",$data['_source']['MESSAGE']);
 				$all_syslog_data[$key]['datetime_real'] = @$data['_source']['@timestamp'];
 				$datetime2 = new \DateTime(@$data['_source']['@timestamp']);
@@ -552,7 +554,22 @@ class ElasticController extends Controller
 					
 					if($k === 3){
 						
-						if (str_contains($message, '->[')) {
+						if(strpos($message, "NAT") !== false && str_contains($message, ')->')){
+							$nat_data = explode(")->", @$message);
+							$nat_ip_data = explode("->", @$nat_data[0]);
+							$src_ip_port_data = explode(":", @$nat_ip_data[0]);
+							$nat_ip_port_data = explode(":", @$nat_ip_data[1]);
+							$dst_data = explode(":", @$nat_data[1]);
+							$all_syslog_data[$key]['nat_ip'] = @$nat_ip_port_data[0];
+							$all_syslog_data[$key]['nat_port'] = @$nat_ip_port_data[1];
+							$all_syslog_data[$key]['src_ip'] = @$src_ip_port_data[0];
+							$all_syslog_data[$key]['src_ip'] = str_replace('NAT (','',@$all_syslog_data[$key]['src_ip']);
+							$all_syslog_data[$key]['src_port'] = @$src_ip_port_data[1];
+							$all_syslog_data[$key]['destination_ip'] = @$dst_data[0];
+							$all_syslog_data[$key]['destination_port'] = @$dst_data[1];
+							//ApplicationHelper::_setTrace($all_syslog_data, false);
+					        //ApplicationHelper::_setTrace($all_syslog_data, );
+						}else if (str_contains($message, '->[')) {
 							
 							$ipv6_data = explode("->", @$message);
 							$ipv6_data_1 = explode("]:", @$ipv6_data[0]);
@@ -622,7 +639,10 @@ class ElasticController extends Controller
 					}
 					
 					
-					if(strpos($message, "NAT") !== false){
+					
+					
+					if(strpos($message, "NAT") !== false && !$all_syslog_data[$key]['nat_ip']){
+						
 						$nat_ip = str_replace(@$ip_data[1],'',str_replace(@$ip_data[0],'',$message));
 						$nat_ip_array = str_replace(')','',str_replace('(','',str_replace('->','',str_replace('NAT','',$nat_ip))));
 						$all_syslog_data[$key]['nat_ip'] = @explode(":", @$nat_ip_array)[0];
@@ -654,7 +674,7 @@ class ElasticController extends Controller
 					
 					
 				}
-				
+				//die;
 				
 				if(isset($all_syslog_data[$key]['destination_port'], $_POST['src_port']) && $all_syslog_data[$key]['destination_port'] && $_POST['src_port']){
 						if($_POST['src_port'] === $all_syslog_data[$key]['destination_port']){
