@@ -46,7 +46,7 @@ class LogCheckController extends Controller
 							"range"=>[
 								"@timestamp"=>[
 								       "time_zone"=> "+06:00",
-									   "gte" => "now-30s",
+									   "gte" => "now-1m",
 									   "lt" =>  "now"
 								]
 							]
@@ -59,7 +59,9 @@ class LogCheckController extends Controller
 				];
 				
 				$query = new Query;
-				$query->from('cloud-log-nat');
+				$date = date('Y-m-d');
+		        $index = 'nat-'.$date;
+				$query->from($index);
 				$query->query = $match;
 				$command = $query->createCommand();
 				$response = $command->search();
@@ -70,6 +72,7 @@ class LogCheckController extends Controller
 				
 				if(!empty($response)){
 					if(isset($response['hits']['hits']) && empty($response['hits']['hits'])){
+						ApplicationHelper::sendMessageTelegram($router_ip);
 						print 'Router log not found! check mail...';
 						print "\n";
 						ApplicationHelper::logger('Router log not found! check mail...');

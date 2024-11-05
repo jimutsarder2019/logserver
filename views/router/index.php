@@ -18,7 +18,14 @@ $isAdmin = ApplicationHelper::isAdmin();
 
 $baseUrl = Url::base();
 ?>
-
+<style>
+tbody .danger{
+	background-color:#FF0000;
+}
+tbody .danger td{
+	color:#FFFFFF;
+}
+</style>
 <div class="page-body">
 	<!-- Container-fluid starts-->
 	<div class="container-fluid">
@@ -63,6 +70,15 @@ $baseUrl = Url::base();
 							<?= GridView::widget([
 									'dataProvider' => $dataProvider,
 									//'filterModel' => $searchModel,
+									 'rowOptions'=>function($model){
+											if(ApplicationHelper::checkRouterLog($model->ip) == 'not found'){
+												//ApplicationHelper::sendMessageTelegram($model->ip);
+												return ['class' => 'danger'];
+												
+											}else{
+												return ['class' => ''];
+											}
+										},
 									'columns' => [
 										//['class' => 'yii\grid\SerialColumn'],
 

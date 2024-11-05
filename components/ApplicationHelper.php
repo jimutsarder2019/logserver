@@ -5,6 +5,7 @@ namespace app\components;
 use Yii;
 use app\models\LoginHistory;
 use app\models\Users;
+use yii\elasticsearch\Query;
 use app\models\ReportBackup;
 
 class ApplicationHelper
@@ -202,5 +203,74 @@ class ApplicationHelper
 		}
 		
 		return $array;
+	}
+	
+	public static function sendMessageTelegram($ip){
+		$botApiToken = '7608563614:AAHSfehBg-B5W1EdznOjRAhoVadbP72P_Ps';
+		$channelId = 6936880124;
+		$text = 'Router log not found! Router IP: '.$ip;
+
+		$query = http_build_query([
+			'chat_id' => $channelId,
+			'text' => $text,
+		]);
+		$url = "https://api.telegram.org/bot{$botApiToken}/sendMessage?{$query}";
+
+		$curl = curl_init();
+		curl_setopt_array($curl, array(
+			CURLOPT_URL => $url,
+			CURLOPT_RETURNTRANSFER => true,
+			CURLOPT_CUSTOMREQUEST => 'GET',
+		));
+		$dd = curl_exec($curl);
+		curl_close($curl);
+		//ApplicationHelper::_setTrace($dd);
+	}
+	
+	public static function checkRouterLog($router_ip){
+		$router_filter = [
+							  "match"=> [
+								"HOST"=> '.*'.$router_ip.'.*'
+							  ]
+						];
+				
+				$date_filter[] = [
+							"range"=>[
+								"@timestamp"=>[
+								       "time_zone"=> "+06:00",
+									   "gte" => "now-1m",
+									   "lt" =>  "now"
+								]
+							]
+				];
+				$match  =	 [
+					"bool"=> [
+					  "must"=> $date_filter,
+					  "should"=> $router_filter
+					]
+				];
+				
+				$query = new Query;
+				$date = date('Y-m-d');
+		        $index = 'nat-'.$date;
+				$query->from($index);
+				$query->query = $match;
+				$command = $query->createCommand();
+				$response = $command->search();
+				
+				//self::_setTrace($response);
+				
+				if(empty($response)){
+					return 'not found';
+				}else{
+					if(isset($response['hits']['hits']) && empty($response['hits']['hits'])){
+						return 'not found';
+						//print 'Router log not found! check mail...';
+						//print "\n";
+						//ApplicationHelper::logger('Router log not found! check mail...');
+						//self::send_mail($subject, $message, $to_email);
+					}
+				}
+				return 'found';
 	}
 }
