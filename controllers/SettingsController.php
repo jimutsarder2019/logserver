@@ -12,6 +12,7 @@ use yii\filters\VerbFilter;
 use app\models\UploadForm;
 use yii\web\UploadedFile;
 use app\init\CustomController;
+use app\components\ApplicationHelper;
 
 
 /**
@@ -216,6 +217,47 @@ class SettingsController extends CustomController
 		return $this->render('update', [
 			'model' => $model,
 			'type'=>'email',
+		]);
+    }
+	
+	public function actionTelegram($id=1)
+    {
+		ApplicationHelper::sendMessageTelegram('123.33.44.12');
+		$this->layout = 'frontend';
+			
+		$id = Yii::$app->db->createCommand( 'SELECT id FROM settings where id > 0 limit 1' )->queryScalar();
+
+		$model = $this->findModel($id);
+
+		if ($model->load($this->request->post())) {
+			
+			$model->file1 = UploadedFile::getInstance($model, 'file1');
+			$model->file2 = UploadedFile::getInstance($model, 'file2');
+			$model->file3 = UploadedFile::getInstance($model, 'file3');
+			
+			if($model->file1){
+				$model->file1->saveAs('uploads/login_logo/' . $model->file1->baseName . '.' . $model->file1->extension);
+				$model->login_logo = 'uploads/login_logo/' . $model->file1->baseName . '.' . $model->file1->extension;
+			}
+			
+			if($model->file2){
+				$model->file2->saveAs('uploads/user_logo/' . $model->file2->baseName . '.' . $model->file2->extension);
+				$model->user_logo = 'uploads/user_logo/' . $model->file2->baseName . '.' . $model->file2->extension;
+			}
+			
+			if($model->file3){
+				$model->file3->saveAs('uploads/favicon/' . $model->file3->baseName . '.' . $model->file3->extension);
+				$model->favicon = 'uploads/favicon/' . $model->file3->baseName . '.' . $model->file3->extension;
+			}
+
+			if ($model->save()) {
+				return $this->redirect(['telegram']);
+			}
+		}
+
+		return $this->render('update', [
+			'model' => $model,
+			'type'=>'telegram',
 		]);
     }
 

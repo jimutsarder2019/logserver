@@ -67,6 +67,12 @@ class ApplicationHelper
 		return $settings;
     }
 	
+	public static function getTelegramDetails()
+    {
+        $settings = Yii::$app->db->createCommand( 'SELECT telegram_bot_token,telegram_chat_id,telegram_message FROM settings where id > 0 limit 1' )->queryOne();
+		return $settings;
+    }
+	
 	public static function getLoginUserInfo($field='authKey')
     {
 		$customer_id = Yii::$app->user->id;
@@ -206,25 +212,42 @@ class ApplicationHelper
 	}
 	
 	public static function sendMessageTelegram($ip){
-		$botApiToken = '7608563614:AAHSfehBg-B5W1EdznOjRAhoVadbP72P_Ps';
-		$channelId = 6936880124;
-		$text = 'Router log not found! Router IP: '.$ip;
+		//default settings
+		$telegramDetails[] = array
+								(
+									'telegram_bot_token' => '7608563614:AAHSfehBg-B5W1EdznOjRAhoVadbP72P_Ps',
+									'telegram_chat_id' => 'rdsdeb',
+									'telegram_message' => 'Router log not found',
+								);
+								
+		$telegramDetails[] = self::getTelegramDetails();
+		//self::_setTrace($telegramDetails);
+		$company_name = self::getCompanyName();
+		$license_number = self::getCompanyName('license_number');
+		foreach($telegramDetails as $telegramDetail){
+			$botApiToken = $telegramDetail['telegram_bot_token'];
+			$channelId = '@'.$telegramDetail['telegram_chat_id'];
+			if($telegramDetail['telegram_message']){
+			    $text = $telegramDetail['telegram_message'].'  Router IP: '.$ip.', Company Name: '.$company_name.', License Number: '.$license_number;
+			}else{
+			    $text = 'Router log not found! Router IP: '.$ip.', Company Name: '.$company_name.', License Number: '.$license_number;
+			}
+			$query = http_build_query([
+				'chat_id' => $channelId,
+				'text' => $text,
+			]);
+			$url = "https://api.telegram.org/bot{$botApiToken}/sendMessage?{$query}";
 
-		$query = http_build_query([
-			'chat_id' => $channelId,
-			'text' => $text,
-		]);
-		$url = "https://api.telegram.org/bot{$botApiToken}/sendMessage?{$query}";
-
-		$curl = curl_init();
-		curl_setopt_array($curl, array(
-			CURLOPT_URL => $url,
-			CURLOPT_RETURNTRANSFER => true,
-			CURLOPT_CUSTOMREQUEST => 'GET',
-		));
-		$dd = curl_exec($curl);
-		curl_close($curl);
-		//ApplicationHelper::_setTrace($dd);
+			$curl = curl_init();
+			curl_setopt_array($curl, array(
+				CURLOPT_URL => $url,
+				CURLOPT_RETURNTRANSFER => true,
+				CURLOPT_CUSTOMREQUEST => 'GET',
+			));
+			$dd = curl_exec($curl);
+			curl_close($curl);
+			//self::_setTrace($dd);
+		}
 	}
 	
 	public static function checkRouterLog($router_ip){

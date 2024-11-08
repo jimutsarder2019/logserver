@@ -20,6 +20,9 @@ use Yii;
  * @property string|null $email_password
  * @property string|null $email_port
  * @property string|null $email_smtp_secure
+ * @property string|null $telegram_bot_token
+ * @property string|null $telegram_chat_id
+ * @property string|null $telegram_message
  */
 class Settings extends \yii\db\ActiveRecord
 {
@@ -42,7 +45,8 @@ class Settings extends \yii\db\ActiveRecord
     {
         return [
             [['company_name', 'company_address', 'login_logo', 'user_logo','favicon','email_username','email_password',  'email_port', 'email_smtp_secure'], 'string', 'max' => 100],
-            [['license_number'], 'string', 'max' => 50],
+            [['telegram_bot_token', 'telegram_message'], 'string', 'max' => 200],
+            [['license_number', 'telegram_chat_id'], 'string', 'max' => 50],
             [['company_phone'], 'string', 'max' => 20],
 			[['file1','file2','file3'], 'file'],
         ];

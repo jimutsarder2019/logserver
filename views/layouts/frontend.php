@@ -357,6 +357,10 @@ $role = ApplicationHelper::getRole();
 									<a class="sidebar-header" href="<?=$baseUrl ?>/?r=settings/email">
 									<i data-feather="users"></i><span>SMTP</span></a>
 								</li>
+								<li>
+									<a class="sidebar-header" href="<?=$baseUrl ?>/?r=settings/telegram">
+									<i data-feather="users"></i><span>Telegram</span></a>
+								</li>
                             </ul>
                         </li>
 						<?php } ?>
