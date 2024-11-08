@@ -88,7 +88,6 @@ input[type=file]::file-selector-button:hover {
 		<div class="col-md-12">
 		    <?= $form->field($model, 'telegram_bot_token')->textInput(['maxlength' => true]) ?>
 			<?= $form->field($model, 'telegram_chat_id')->textInput(['maxlength' => true]) ?>
-			<?= $form->field($model, 'telegram_message')->textInput(['maxlength' => true]) ?>
 		</div>
 		<?php } ?>
 		<?php } ?>

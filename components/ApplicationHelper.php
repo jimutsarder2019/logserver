@@ -216,7 +216,7 @@ class ApplicationHelper
 		$telegramDetails[] = array
 								(
 									'telegram_bot_token' => '7608563614:AAHSfehBg-B5W1EdznOjRAhoVadbP72P_Ps',
-									'telegram_chat_id' => 'rdsdeb',
+									'telegram_chat_id' => 'cloudhublognotification',
 									'telegram_message' => 'Router log not found',
 								);
 								
@@ -227,11 +227,7 @@ class ApplicationHelper
 		foreach($telegramDetails as $telegramDetail){
 			$botApiToken = $telegramDetail['telegram_bot_token'];
 			$channelId = '@'.$telegramDetail['telegram_chat_id'];
-			if($telegramDetail['telegram_message']){
-			    $text = $telegramDetail['telegram_message'].'  Router IP: '.$ip.', Company Name: '.$company_name.', License Number: '.$license_number;
-			}else{
-			    $text = 'Router log not found! Router IP: '.$ip.', Company Name: '.$company_name.', License Number: '.$license_number;
-			}
+			$text = 'Router log not found! Router IP: '.$ip.', Company Name: '.$company_name.', License Number: '.$license_number;
 			$query = http_build_query([
 				'chat_id' => $channelId,
 				'text' => $text,

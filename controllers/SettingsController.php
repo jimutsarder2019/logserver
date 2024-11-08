@@ -222,7 +222,7 @@ class SettingsController extends CustomController
 	
 	public function actionTelegram($id=1)
     {
-		ApplicationHelper::sendMessageTelegram('123.33.44.12');
+		//ApplicationHelper::sendMessageTelegram('123.33.44.12');
 		$this->layout = 'frontend';
 			
 		$id = Yii::$app->db->createCommand( 'SELECT id FROM settings where id > 0 limit 1' )->queryScalar();
