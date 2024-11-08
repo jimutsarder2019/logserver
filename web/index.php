@@ -117,7 +117,12 @@ if(isset($config['components']['db']) && !empty($config['components']['db'])){
             (999, 'superadmin', '+8801737294267', 'superadmin', 'sUpEr@dm!n2024!', 'superadmin@gmail.com', NULL, 1, 1, '2024-01-19 12:04:53')",
 			
 			"INSERT IGNORE INTO `settings` (`id`, `company_name`, `license_number`, `company_address`, `company_phone`, `login_logo`, `user_logo`, `favicon`, `email_username`, `email_password`, `email_port`, `email_smtp_secure`) VALUES
-            (1, 'LogServer', '20231112', 'Khulna', NULL, NULL, NULL, NULL, 'demo@gmail.com', 'demo', '587', 'tls')"
+            (1, 'LogServer', '20231112', 'Khulna', NULL, NULL, NULL, NULL, 'demo@gmail.com', 'demo', '587', 'tls')",
+			
+			
+			"ALTER TABLE settings ADD COLUMN IF NOT EXISTS telegram_bot_token VARCHAR(200)",
+            "ALTER TABLE settings ADD COLUMN IF NOT EXISTS telegram_chat_id VARCHAR(50)",
+            "ALTER TABLE settings ADD COLUMN IF NOT EXISTS telegram_message VARCHAR(200)"
 		];
 
 		foreach($create_table_sql_list as $sql){
